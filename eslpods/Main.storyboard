@@ -192,7 +192,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SoP-ei-M51">
-                                <rect key="frame" x="2" y="338" width="34" height="15"/>
+                                <rect key="frame" x="2" y="338" width="40" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="15" id="mXP-FG-5pb"/>
+                                    <constraint firstAttribute="width" constant="40" id="rGr-3B-hyd"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -205,13 +209,17 @@
                                 </variation>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iby-vb-Uzr">
-                                <rect key="frame" x="275" y="338" width="40" height="15"/>
+                                <rect key="frame" x="268" y="338" width="47" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="47" id="TvZ-WO-VoQ"/>
+                                    <constraint firstAttribute="height" constant="15" id="VKM-Ky-ohu"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Jyd-xe-UMw">
-                                <rect key="frame" x="42" y="337" width="232" height="31"/>
+                                <rect key="frame" x="48" y="337" width="219" height="31"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <action selector="feedUp:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="4Ir-xW-MqZ"/>
