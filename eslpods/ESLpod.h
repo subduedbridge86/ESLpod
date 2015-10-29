@@ -4,7 +4,7 @@
 //
 //  Created by 金子誠也 on 2015/03/13.
 //  Copyright (c) 2015年 金子誠也. All rights reserved.
-//
+//今度からはこいつを変更してね
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
