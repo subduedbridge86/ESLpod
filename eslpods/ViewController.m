@@ -151,10 +151,13 @@ int maxback;
     switch (audioSessionInterruptionType) {
         case AVAudioSessionInterruptionTypeBegan:
             NSLog(@"割り込みの開始！");
-            NSLog(@"割り込みが入ったので音声が停止された、UIを停止状態のものに変更する。");
+            [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+            [_avPlayer pause];
             break;
         case AVAudioSessionInterruptionTypeEnded:
             NSLog(@"割り込みの終了！");
+            [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
+            [_avPlayer play];
             break;
             
         default:
@@ -230,6 +233,8 @@ int maxback;
     NSUserDefaults *ud3=[NSUserDefaults standardUserDefaults];
     [ud3 setObject:_nameData forKey:@"nameData"];
     }
+    
+    [self startTimer];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -412,7 +417,7 @@ int maxback;
     autoseek.maximumValue=playback;
 }
 -(void)startTimer{
-    _timer=[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(timertext) userInfo:nil repeats:YES];
+    _timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timertext) userInfo:nil repeats:YES];
 }
 -(void)timertext{
     second=fmodf(CMTimeGetSeconds(_avPlayer.currentTime),60);
