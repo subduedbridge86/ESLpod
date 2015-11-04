@@ -43,10 +43,14 @@ int maxback;
     
     _player = [MPMusicPlayerController applicationMusicPlayer];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeAudioSessionRoute:) name:AVAudioSessionRouteChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self selector:@selector(telephoneObserver:) name:AVAudioSessionInterruptionNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didChangeAudioSessionRoute:)
+                                                 name:AVAudioSessionRouteChangeNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(telephoneObserver:)
+                                                 name:AVAudioSessionInterruptionNotification
+                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(avPlayDidFinish:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
@@ -91,7 +95,7 @@ int maxback;
 {
     if(_mediaItemCollection2.count != 0){               //１曲以上選ばれているか
         if (songCount==_mediaItemCollection2.count-1) {//最後なら1曲目へ
-            NSLog(@"b");
+            NSLog(@"次の曲通知");
             songCount=0;
             [self saveCount];
             
@@ -471,6 +475,7 @@ int maxback;
         [self startTimer];
         NSLog(@"aaaaaaaaaa%f",CMTimeGetSeconds(_avPlayer.currentTime));
     }
+    
 
 }
 
