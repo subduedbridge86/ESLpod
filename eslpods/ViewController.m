@@ -55,6 +55,7 @@ int maxback;
                                              selector:@selector(avPlayDidFinish:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:_playerItem];
+    
     ///前回のスラいだー値反映
     NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
     
@@ -464,6 +465,7 @@ int maxback;
     maxtimelabel.text=_maxtimelabelstr;
    // autoseek.value=sender.value;
 }
+
 
 - (IBAction)feedUp:(UISlider *)sender {
     if (![_timer isValid]) {
