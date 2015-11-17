@@ -323,19 +323,19 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="albumlabel" destination="5BX-Jk-qif" id="bEE-Vg-MJq"/>
-                        <outlet property="autoseek" destination="Jyd-xe-UMw" id="hq9-xX-3Qp"/>
-                        <outlet property="fbVolLabel" destination="VLw-jI-0Zl" id="8dV-UT-CuF"/>
-                        <outlet property="feedonoffstate" destination="huK-dB-gbY" id="miS-S9-06A"/>
-                        <outlet property="feedvol" destination="sMb-gi-W26" id="K8q-2K-9hf"/>
-                        <outlet property="ipodVolLabel" destination="YR8-69-XMN" id="hX1-rr-LOn"/>
-                        <outlet property="ipodvol" destination="DnD-02-eLF" id="YFz-3p-WDM"/>
-                        <outlet property="maxtimelabel" destination="Iby-vb-Uzr" id="8TO-Yq-9si"/>
-                        <outlet property="playImage" destination="B8W-7v-9oO" id="E1j-0w-mN9"/>
-                        <outlet property="repeatbtn" destination="ubH-Nf-V3v" id="ch5-Rc-Qmc"/>
-                        <outlet property="timelabel" destination="SoP-ei-M51" id="XyQ-gJ-epo"/>
-                        <outlet property="titlelabel" destination="iMs-yN-2eC" id="bVU-kd-pia"/>
-                        <outlet property="ttableView" destination="M2k-ls-zFo" id="BK6-MX-vRA"/>
+                        <outlet property="albumlabel" destination="5BX-Jk-qif" id="59T-ww-CRs"/>
+                        <outlet property="autoseek" destination="Jyd-xe-UMw" id="aTI-9g-XJx"/>
+                        <outlet property="fbVolLabel" destination="VLw-jI-0Zl" id="3n4-B2-gq4"/>
+                        <outlet property="feedonoffstate" destination="huK-dB-gbY" id="0br-5L-xMa"/>
+                        <outlet property="feedvol" destination="sMb-gi-W26" id="To8-Mh-dEN"/>
+                        <outlet property="ipodVolLabel" destination="YR8-69-XMN" id="PyN-mo-NdG"/>
+                        <outlet property="ipodvol" destination="DnD-02-eLF" id="Jq5-rw-Xhy"/>
+                        <outlet property="maxtimelabel" destination="Iby-vb-Uzr" id="jpv-We-nsv"/>
+                        <outlet property="playImage" destination="B8W-7v-9oO" id="G8h-ak-XSa"/>
+                        <outlet property="repeatbtn" destination="ubH-Nf-V3v" id="0lJ-ke-XI3"/>
+                        <outlet property="songList" destination="M2k-ls-zFo" id="o4K-ou-qyN"/>
+                        <outlet property="timelabel" destination="SoP-ei-M51" id="7Fl-UD-iew"/>
+                        <outlet property="titlelabel" destination="iMs-yN-2eC" id="xdW-GH-tmG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
