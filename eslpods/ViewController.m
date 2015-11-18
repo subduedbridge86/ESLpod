@@ -28,6 +28,7 @@
 @property NSString *timestr;
 @property NSString *name1,*name2;
 
+@property ESLpod *mypod;
 
 @property (weak, nonatomic) IBOutlet UITableView *songList;
 @property (weak, nonatomic) IBOutlet UILabel *titlelabel;
@@ -83,11 +84,11 @@
     _songList.delegate = self;
     _songList.dataSource = self;
     
-    mypod=[[ESLpod alloc]init];
-    [mypod audioSession];
+    _mypod=[[ESLpod alloc]init];
+    [_mypod audioSession];
     
-    [mypod feed];
-    [mypod bufferSet];
+    [_mypod feed];
+    [_mypod bufferSet];
     
     _player = [MPMusicPlayerController applicationMusicPlayer];
     
@@ -112,11 +113,11 @@
     _ipodVolLabel.text=ipodVoltext;
     _ipodvol.value=_ipodVol;
     
-    mypod.feedVol=[ud floatForKey:@"feedvol"];
-    [mypod mixUnitvol];
-    NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", mypod.feedVol*100];
+    _mypod.feedVol=[ud floatForKey:@"feedvol"];
+    [_mypod mixUnitvol];
+    NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
     _fbVolLabel.text=fbVoltext;
-    _feedvol.value=mypod.feedVol;
+    _feedvol.value=_mypod.feedVol;
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
         
@@ -433,23 +434,23 @@
 }
 
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
-    mypod.feedVol=sender.value;
+    _mypod.feedVol=sender.value;
     if (_feedonoffstate.on) {
-        [mypod mixUnitvol];
+        [_mypod mixUnitvol];
     }
-    NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", mypod.feedVol*100];
+    NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
     _fbVolLabel.text=fbVoltext;
     
     NSUserDefaults *ud2=[NSUserDefaults standardUserDefaults];
-    [ud2 setFloat:mypod.feedVol forKey:@"feedvol"];
+    [ud2 setFloat:_mypod.feedVol forKey:@"feedvol"];
 }
 
 - (IBAction)feedonoff:(UISwitch *)sender {
     if (sender.on) {
-        [mypod feed];
-        [mypod mixUnitvol];
+        [_mypod feed];
+        [_mypod mixUnitvol];
     }else{
-        [mypod auClose];
+        [_mypod auClose];
     }
 }
 

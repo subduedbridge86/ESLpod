@@ -9,6 +9,6 @@
 
 @interface ViewController : UIViewController<MPMediaPickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>
 {
-    ESLpod *mypod;
+
 }
 @end
