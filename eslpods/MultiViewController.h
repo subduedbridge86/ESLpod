@@ -12,6 +12,7 @@
 #import "AudioConverter.h"
 #import "MultipeerHost.h"
 #import <MediaPlayer/MediaPlayer.h>
-@interface MultiViewController : UIViewController<MultipeerDataDelegate>
+#import <AVFoundation/AVFoundation.h>
+@interface MultiViewController : UIViewController<MultipeerDataDelegate,MPMediaPickerControllerDelegate,UITableViewDataSource,UITableViewDataSource>
 
 @end
