@@ -258,7 +258,7 @@
     NSUserDefaults *ud4=[NSUserDefaults standardUserDefaults];
     [ud4 setObject:_mediaitemData forKey:@"_mediaitemData"];
     }
-    
+    //このへん編集した
     MPMediaItem *item = [mediaItemCollection.items objectAtIndex:0];
     [self songtext];
     
