@@ -360,7 +360,11 @@
             [self saveCount];
         }
         else{           //次の曲へ
+            
+            if (_repeatCount!=1) {
             _songCount++;
+            }
+            
             [self saveCount];
         }
         if ([_avPlayer rate]==0) {  //曲が停止中なら停止
