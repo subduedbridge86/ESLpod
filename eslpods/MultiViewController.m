@@ -15,6 +15,7 @@
 @property StreamingPlayer * StPlayer;
 @property AudioConverter *converter;
 /////////
+@property MPMediaItemCollection *mediaItemCollection;
 
 @end
 
@@ -28,7 +29,7 @@
     [self.StPlayer start];
     self.converter=[[AudioConverter alloc]init];
     
-    MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
+    MPMediaItem *item = [_mediaItemCollection.items objectAtIndex:0];
     
     
    
@@ -152,6 +153,7 @@
 }
 */
 - (IBAction)StreamBtnTap:(id)sender {
+    
     [self.myMulti startHost];
 }
 
