@@ -259,8 +259,9 @@
     [ud4 setObject:_mediaitemData forKey:@"_mediaitemData"];
     }
     
-    MPMediaItem *item = [mediaItemCollection.items objectAtIndex:0];
     [self songtext];
+    MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
+   
     
     _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
     _playerItem = [[AVPlayerItem alloc] initWithURL:_url];    //変換
