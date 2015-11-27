@@ -9,7 +9,7 @@
 #import "SecondViewController.h"
 
 @interface SecondViewController ()
-
+@property MPMediaItemCollection *mediaItemCollection;
 @end
 
 @implementation SecondViewController
@@ -25,6 +25,37 @@
 }
 -(IBAction)unWindtoSecondScene:(UIStoryboardSegue *)unwindSegue{
     
+}
+- (IBAction)SelectMusicTap:(id)sender {
+    MPMediaPickerController *picker = [[MPMediaPickerController alloc]init];
+    
+    picker.delegate = self;
+    
+    picker.allowsPickingMultipleItems = YES;        // 複数選択可
+    
+    [self presentViewController:picker animated:YES completion:nil];
+
+}
+- (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker{
+    [mediaPicker dismissViewControllerAnimated:YES completion:nil];
+     //キャンセルで曲選択を終わる
+}
+
+- (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection       //曲選択後
+{
+   
+    self.mediaItemCollection=mediaItemCollection;
+    [mediaPicker dismissViewControllerAnimated:YES completion:nil];
+    [self performSegueWithIdentifier:@"SecondToMultiSegue" sender:self];
+}
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //Segueの特定
+    if ( [[segue identifier] isEqualToString:@"SecondToMultiSegue"] ) {
+        MultiViewController *multiViewController = [segue destinationViewController];
+        //ここで遷移先ビューのクラスの変数receiveStringに値を渡している
+        multiViewController.mediaItemCollection = self.mediaItemCollection;
+    }
 }
 /*
 #pragma mark - Navigation

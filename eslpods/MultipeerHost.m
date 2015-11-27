@@ -32,7 +32,7 @@
 
 -(void)startClient{
     if (self.connectedpeer.count==0) {
-    self.connectedpeer=[[NSMutableArray alloc]init];
+    
    
     
     self.nearbyAd=[[MCNearbyServiceAdvertiser alloc]initWithPeer:self.mPeerID discoveryInfo:nil serviceType:@"kurumecs"];
@@ -65,7 +65,7 @@
 -(id)init{
     self=[super init];
        if (self) {
-           
+            self.connectedpeer=[[NSMutableArray alloc]init];
                self.mPeerID = [[MCPeerID alloc] initWithDisplayName:[[UIDevice currentDevice]name]];
                 //セッションを初期化
                 self.mSession= [[MCSession alloc] initWithPeer:self.mPeerID];
@@ -82,15 +82,11 @@
     if (state==MCSessionStateConnected) {
         NSLog(@"接続完了");
         self.solo=NO;
-        [self  stopClient];
+        
         if (!([self.connectedpeer containsObject:peerID])) {
             
             [self.connectedpeer addObject:peerID];
-            self.oStream = [self.mSession startStreamWithName:@"test" toPeer:peerID error:nil];
-            self.oStream.delegate=self;
-            [self.oStream open];
-            [self.oStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-            [self postNotificationc];
+                [self postNotificationc];
 
             
             
@@ -113,6 +109,15 @@
 
 // Received data from remote peer
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
+    
+    
+   
+    _recvData=[_recvData initWithData:data];
+        [self recvDataPacket];
+        
+        
+    
+
    
    
    
@@ -140,18 +145,13 @@
 }
 -(void)sendData:(NSData *)data{
     
-    NSInteger bytesWritten = 0;
+   
     NSInteger d=0;
     int ini;
     u_int8_t buf[BUF];
     _mdata = [[NSMutableData alloc]init];
-    
+     NSError *error;
     for ( ini=0; ini<=data.length; ini=ini+BUF) {
-               while (1) {
-                if ([self.oStream hasSpaceAvailable])
-                    break;
-                
-            }
         
             d=BUF;
             if ((ini>=data.length-BUF)||(data.length<BUF)){
@@ -160,51 +160,22 @@
                 NSLog(@"%ld",(unsigned long)data.length);
                 [data getBytes:buf range:NSMakeRange(ini,d)];
                 _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
-             //   NSData*keyData=[@"EndOfFile" dataUsingEncoding:NSUTF8StringEncoding];
-                
-                NSInteger writebytesremain=0;
-                do{
-                    
-                    _mdata=[_mdata initWithBytes:&buf[writebytesremain] length:sizeof(buf)-writebytesremain];
-                    
-                    bytesWritten=[self.oStream write:_mdata.bytes maxLength:_mdata.length];
-                    if(bytesWritten==-1){
-                        NSLog(@"途中抜け");
-                        
-                        break;
-                    }
-                    writebytesremain=writebytesremain+bytesWritten;
-                    
-                    
-                }while(writebytesremain!=sizeof(buf));
-                
+               
+                [self.mSession sendData:_mdata toPeers:self.connectedpeer withMode:MCSessionSendDataReliable error:&error];
+                if (error) {
+                    NSLog(@"%@",error);
+                }
                 [NSThread sleepForTimeInterval:0.30];
-                //[self.oStream write:keyData.bytes maxLength:keyData.length];
+              
                 NSLog(@"送信完了");
                 
                 
             }else{
                 
                 [data getBytes:buf range:NSMakeRange(ini,d)];
-                NSInteger writebytesremain=0;
-                do{
-                    
-                    _mdata=[_mdata initWithBytes:&buf[writebytesremain] length:sizeof(buf)-writebytesremain];
-                    
-                    bytesWritten=[self.oStream write:_mdata.bytes maxLength:_mdata.length];
-                    if(bytesWritten==-1){
-                        NSLog(@"途中抜け");
-                        
-                        break;
-                    }
-                    
-                    writebytesremain=writebytesremain+bytesWritten;
-                    
-                   
-                    
-                 
-                }while(writebytesremain!=sizeof(buf));
-                
+                _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
+
+                [self.mSession sendData:_mdata toPeers:self.connectedpeer withMode:MCSessionSendDataReliable error:nil];
                 
             }
     }
@@ -346,60 +317,6 @@
     NSData*lastdata=[fm contentsAtPath:path];
     NSLog(@"ファイルおわり%ld",(unsigned long)lastdata.length);
     return flag;
-}
-//NSStream delegate
--(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode{//データを受け取るなどの動作
-    switch (eventCode) {
-        case NSStreamEventOpenCompleted:
-            NSLog(@"空いた");
-            break;
-        case NSStreamEventHasBytesAvailable:{
-            NSUInteger bytesRead;
-            uint8_t buffer[32768];
-            bytesRead = [self.iStream read:buffer maxLength:sizeof(buffer)];
-            if (bytesRead == -1) {
-                
-            }else if(bytesRead == 0){
-                
-                
-            }else{
-               
-                NSInteger bytesWritten;
-                NSInteger bytesWrittenSoFar;
-                bytesWrittenSoFar = 0;
-                _recvData=[_recvData init];
-                do{
-                    
-                    [_recvData appendBytes:&buffer[bytesWrittenSoFar]
-                                  length:bytesRead-bytesWrittenSoFar];
-                    bytesWritten = [_recvData length];
-                if (bytesWritten == -1) {
-                        break;
-                    }else{
-                        bytesWrittenSoFar += bytesRead;
-                    }
-                }while (bytesWrittenSoFar != bytesRead);
-                [self recvDataPacket];
-
-                
-            }
-            break;
-        }
-    
-        case NSStreamEventHasSpaceAvailable:
-            
-            break;
-        case NSStreamEventErrorOccurred:
-            
-            break;
-        case NSStreamEventEndEncountered:{
-            
-            
-            break;
-        }
-        default:
-            break;
-    }
 }
 -(void)recvDataPacket{
     if([self.delegate respondsToSelector:@selector(recvDataPacket:)]){

@@ -13,6 +13,6 @@
 #import "MultipeerHost.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
-@interface MultiViewController : UIViewController<MultipeerDataDelegate,MPMediaPickerControllerDelegate,UITableViewDataSource,UITableViewDataSource>
-
+@interface MultiViewController : UIViewController<MPMediaPickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+@property MPMediaItemCollection *mediaItemCollection;
 @end

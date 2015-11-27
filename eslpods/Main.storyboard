@@ -370,7 +370,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z3D-ha-Idp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1113" y="2041"/>
+            <point key="canvasLocation" x="1179" y="2041"/>
         </scene>
         <!--Stream View Controller-->
         <scene sceneID="eTA-lc-eld">
@@ -423,7 +423,7 @@
                                 <animations/>
                                 <state key="normal" title="曲を選択してストリーミングを開始"/>
                                 <connections>
-                                    <segue destination="drm-Ul-07e" kind="presentation" id="oCo-Ca-v6k"/>
+                                    <action selector="SelectMusicTap:" destination="MqE-m2-V1S" eventType="touchUpInside" id="AR3-yQ-aEi"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jhg-si-QJt">
@@ -455,6 +455,9 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 2" id="BNd-Wr-eRG"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <segue destination="drm-Ul-07e" kind="presentation" identifier="SecondToMultiSegue" id="nBV-wx-wFe"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="slT-Tu-mAB" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="sOp-oo-Fhy" userLabel="Exit" sceneMemberID="exit"/>

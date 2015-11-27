@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface SecondViewController : UIViewController
+#import <MediaPlayer/MediaPlayer.h>
+#import "MultiViewController.h"
+@interface SecondViewController : UIViewController<MPMediaPickerControllerDelegate>
 
 @end

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface StreamViewController : UIViewController
+#import "StreamingPlayer.h"
+#import "MultipeerHost.h"
+@interface StreamViewController : UIViewController<MultipeerDataDelegate>
 
 @end

@@ -67,7 +67,7 @@ void packetsProc( void *inClientData,
                  UInt32                        inNumberPackets,
                  const void                    *inInputData,
                  AudioStreamPacketDescription  *inPacketDescriptions ){
-    NSLog(@"packetsprc");
+    
     StreamInfo* streamInfo = (StreamInfo*)inClientData;
     
     OSStatus err;
@@ -144,7 +144,6 @@ void outputCallback( void                 *inClientData,
                     AudioQueueRef        inAQ,
                     AudioQueueBufferRef  inBuffer ){
     StreamInfo* streamInfo = (StreamInfo*)inClientData;
-    NSLog(@"a");
     //㈰inBufferがstreamInfo->audioQueueBuffer[ ]のどれかを探す
     UInt32 bufIndex = 0;
     for (int i = 0; i < kNumberOfBuffers; ++i){

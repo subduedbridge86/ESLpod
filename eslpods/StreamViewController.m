@@ -9,13 +9,19 @@
 #import "StreamViewController.h"
 
 @interface StreamViewController ()
-
+@property StreamingPlayer * StPlayer;
+@property MultipeerHost * myMulti;
 @end
 
 @implementation StreamViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.StPlayer=[[StreamingPlayer alloc]init];
+    [self.StPlayer start];
+     self.myMulti=[[MultipeerHost alloc]init];
+    self.myMulti.delegate=self;
+    [self.myMulti startClient];
     // Do any additional setup after loading the view.
 }
 
@@ -23,7 +29,10 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)recvDataPacket:(NSData *)data{
+    [self.StPlayer recvAudio:data];
+    
+}
 /*
 #pragma mark - Navigation
 

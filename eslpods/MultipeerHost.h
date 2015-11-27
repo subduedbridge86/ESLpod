@@ -13,7 +13,7 @@
 @protocol MultipeerDataDelegate<NSObject>
 -(void)recvDataPacket:(NSData *)data;
 @end
-@interface MultipeerHost : NSObject<MCSessionDelegate,MCNearbyServiceAdvertiserDelegate,MCNearbyServiceBrowserDelegate,NSStreamDelegate>
+@interface MultipeerHost : NSObject<MCSessionDelegate,MCNearbyServiceAdvertiserDelegate,MCNearbyServiceBrowserDelegate>
 
 @property NSString *recvStr;
 

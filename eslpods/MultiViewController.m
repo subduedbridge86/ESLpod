@@ -10,16 +10,14 @@
 
 @interface MultiViewController ()
 /////////
-@property MPMusicPlayerController * controler;
 @property MultipeerHost * myMulti;
-@property StreamingPlayer * StPlayer;
+
 @property AudioConverter *converter;
 /////////
-@property MPMediaItemCollection *mediaItemCollection;
-@property NSString * mediaTitle;
+
 @property NSMutableArray * titleArray;
 @property int nowPlayingIndex;
-@property BOOL MediaSelectable;
+@property AVAudioPlayer *player;
 @property (weak, nonatomic) IBOutlet UITableView *StreamTable;
 
 @end
@@ -28,26 +26,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"viewdidload");
     self.myMulti=[[MultipeerHost alloc]init];
-    self.myMulti.delegate=self;
-    self.StPlayer=[[StreamingPlayer alloc]init];
-    [self.StPlayer start];
+    [self.myMulti startHost];
     self.converter=[[AudioConverter alloc]init];
-    self.MediaSelectable=NO;
-
-    if (self.MediaSelectable) {
-        MPMediaPickerController *picker = [[MPMediaPickerController alloc]init];
+    self.StreamTable.delegate=self;
+    self.StreamTable.dataSource=self;
+    self.titleArray=[[NSMutableArray alloc]init];
+    for (int i = 0;i < self.mediaItemCollection.count; i++) {
+        MPMediaItem *nameitem=[self.mediaItemCollection.items objectAtIndex:i];
         
-        picker.delegate = self;
+     NSString*title=[nameitem valueForProperty:MPMediaItemPropertyTitle];
+        [self.titleArray addObject:title];
         
-        picker.allowsPickingMultipleItems = YES;        // 複数選択可
         
-        [self presentViewController:picker animated:YES completion:nil];
     }
+    [self.StreamTable reloadData];
     
-    
-
     // Do any additional setup after loading the view.
 }
 
@@ -66,21 +60,7 @@
 }
 */
 //mediapicker関連
-- (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker{
-    [mediaPicker dismissViewControllerAnimated:YES completion:nil];     //キャンセルで曲選択を終わる
-}
 
-- (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection       //曲選択後
-{
-    self.titleArray=[[NSMutableArray alloc]init];
-    self.mediaItemCollection=mediaItemCollection;
-    for (int i = 0;i < self.mediaItemCollection.count; i++) {
-        MPMediaItem *nameitem1=[self.mediaItemCollection.items objectAtIndex:i];
-        NSString*name = [nameitem1 valueForProperty:MPMediaItemPropertyTitle];
-        [self.titleArray addObject:name];
-    }
-    [self.myMulti startHost];
-}
 ///tableView関連
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -109,9 +89,9 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%ld",(long)indexPath.row);
+  
     self.nowPlayingIndex=(int)indexPath.row;
-    MPMediaItem *item = [_mediaItemCollection.items objectAtIndex:self.nowPlayingIndex];
+    MPMediaItem *item = [self.mediaItemCollection.items objectAtIndex:self.nowPlayingIndex];
     NSURL *url=[item valueForProperty:MPMediaItemPropertyAssetURL];
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:nil];
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]
@@ -207,26 +187,20 @@
             
             NSData*data=[[NSData alloc]initWithContentsOfURL:SsaveURL];
             [self.myMulti sendData:data];
+            
         }else{
             NSLog(@"error");
         }
     }];
-    //[ttableView reloadData];
+    self.player=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:nil];
+    [self.player prepareToPlay];
+    [self.player play];
+   
 }
 
-- (IBAction)StreamBtnTap:(id)sender {
-    self.MediaSelectable=YES;
-       //Libraryを開く
 
-    
-}
 
-- (IBAction)ListenBtnTap:(id)sender {
-    self.MediaSelectable=NO;
-    [self.myMulti startClient];
-}
--(void)recvDataPacket:(NSData *)data{
-    [self.StPlayer recvAudio:data];
-}
+
+
 
 @end
