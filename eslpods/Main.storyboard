@@ -10,7 +10,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="unk" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -175,7 +175,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="M2k-ls-zFo">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="M2k-ls-zFo">
                                 <rect key="frame" x="0.0" y="64" width="320" height="262"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -241,23 +241,19 @@
                                     <action selector="feedonoff:" destination="BYZ-38-t0r" eventType="valueChanged" id="O8r-wN-V1i"/>
                                 </connections>
                             </switch>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lEV-1V-efU">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fhv-hL-8kf">
+                                <rect key="frame" x="20" y="28" width="46" height="30"/>
                                 <animations/>
-                                <items>
-                                    <navigationItem title="Title" id="CM3-Ua-J3m">
-                                        <barButtonItem key="leftBarButtonItem" title="Item" id="zPi-9J-9Eh">
-                                            <connections>
-                                                <segue destination="Mjx-lg-5uq" kind="modal" id="Z3i-iz-wRw"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="Wna-L3-wbA" kind="unwind" unwindAction="unWindtoFirstScene:" id="RtD-8g-pe8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="M2k-ls-zFo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="44" id="2eB-bS-VKg"/>
                             <constraint firstItem="B8W-7v-9oO" firstAttribute="leading" secondItem="iwN-IH-naK" secondAttribute="trailing" constant="20" id="3X3-yo-ZtV"/>
                             <constraint firstItem="Iby-vb-Uzr" firstAttribute="leading" secondItem="Jyd-xe-UMw" secondAttribute="trailing" constant="3" id="5t8-Mi-hKo"/>
                             <constraint firstItem="Jyd-xe-UMw" firstAttribute="leading" secondItem="SoP-ei-M51" secondAttribute="trailing" constant="8" id="6Dc-Ox-MBM"/>
@@ -299,11 +295,13 @@
                             <constraint firstItem="VLw-jI-0Zl" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="kZH-E1-Dj6"/>
                             <constraint firstItem="MDX-pb-b3U" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="4" id="lCF-d3-HAW"/>
                             <constraint firstItem="Jyd-xe-UMw" firstAttribute="top" secondItem="M2k-ls-zFo" secondAttribute="bottom" constant="11" id="mst-GB-Cii"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="fhv-hL-8kf" secondAttribute="leading" id="nYi-jH-Poe"/>
                             <constraint firstItem="Iby-vb-Uzr" firstAttribute="top" secondItem="M2k-ls-zFo" secondAttribute="bottom" constant="12" id="o9r-r4-aOF"/>
                             <constraint firstItem="1KA-wW-f2I" firstAttribute="top" secondItem="Jyd-xe-UMw" secondAttribute="bottom" constant="29" id="qdF-ub-rQw"/>
                             <constraint firstItem="SoP-ei-M51" firstAttribute="top" secondItem="M2k-ls-zFo" secondAttribute="bottom" constant="12" id="s1q-Mg-Ie2"/>
                             <constraint firstItem="DnD-02-eLF" firstAttribute="leading" secondItem="MDX-pb-b3U" secondAttribute="trailing" constant="8" id="tOB-Ub-OIT"/>
                             <constraint firstItem="xLi-Td-jls" firstAttribute="top" secondItem="MDX-pb-b3U" secondAttribute="bottom" constant="23" id="twm-an-edP"/>
+                            <constraint firstItem="fhv-hL-8kf" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="uR5-E9-jKx"/>
                             <constraint firstItem="iMs-yN-2eC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="vhp-GH-PZb"/>
                             <constraint firstItem="SoP-ei-M51" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-14" id="xEe-b5-9tN"/>
                         </constraints>
@@ -326,7 +324,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="856" y="1071"/>
+            <point key="canvasLocation" x="1092" y="1259"/>
         </scene>
         <!--Multi View Controller-->
         <scene sceneID="CI8-h8-BuB">
@@ -340,33 +338,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Ek-N2-xYY">
-                                <rect key="frame" x="-4" y="20" width="328" height="44"/>
-                                <animations/>
-                                <items>
-                                    <navigationItem title="Title" id="0jk-Ez-vqT">
-                                        <barButtonItem key="leftBarButtonItem" title="Item" id="YJX-vR-a5C">
-                                            <connections>
-                                                <segue destination="Mjx-lg-5uq" kind="modal" id="VOW-qX-Xs0"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Tng-Sa-Zge">
                                 <rect key="frame" x="-4" y="163" width="328" height="265"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3hH-RE-36k">
+                                <rect key="frame" x="20" y="28" width="46" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="wG2-42-OJQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="3Ek-N2-xYY" firstAttribute="leading" secondItem="0vs-bf-Bbf" secondAttribute="leadingMargin" constant="-20" id="6Eo-F1-vrh"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="3Ek-N2-xYY" secondAttribute="trailing" constant="-20" id="V7B-jk-QFP"/>
-                            <constraint firstItem="3Ek-N2-xYY" firstAttribute="top" secondItem="MMz-3F-EvE" secondAttribute="bottom" id="aZT-VE-FDQ"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="3hH-RE-36k" secondAttribute="leading" id="0Ln-lo-ieM"/>
+                            <constraint firstItem="3hH-RE-36k" firstAttribute="top" secondItem="MMz-3F-EvE" secondAttribute="bottom" constant="8" id="Oon-cF-dpN"/>
                             <constraint firstItem="tkU-ei-fNi" firstAttribute="top" secondItem="Tng-Sa-Zge" secondAttribute="bottom" constant="140" id="eYh-68-5jc"/>
-                            <constraint firstItem="Tng-Sa-Zge" firstAttribute="top" secondItem="3Ek-N2-xYY" secondAttribute="bottom" constant="99" id="iLr-QE-hDU"/>
+                            <constraint firstItem="Tng-Sa-Zge" firstAttribute="top" secondItem="MMz-3F-EvE" secondAttribute="bottom" constant="143" id="jbc-N8-qjL"/>
                             <constraint firstItem="Tng-Sa-Zge" firstAttribute="leading" secondItem="0vs-bf-Bbf" secondAttribute="leadingMargin" constant="-20" id="lAI-y0-R8w"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Tng-Sa-Zge" secondAttribute="trailing" constant="-20" id="vUm-eg-bcv"/>
                         </constraints>
@@ -378,12 +370,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z3D-ha-Idp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1129" y="1869"/>
+            <point key="canvasLocation" x="1113" y="2041"/>
         </scene>
-        <!--View Controller-->
+        <!--Stream View Controller-->
         <scene sceneID="eTA-lc-eld">
             <objects>
-                <viewController id="5rL-YQ-bPH" sceneMemberID="viewController">
+                <viewController id="5rL-YQ-bPH" customClass="StreamViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="d0f-zL-1Hn"/>
                         <viewControllerLayoutGuide type="bottom" id="eWI-5J-VUs"/>
@@ -392,33 +384,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JWx-5d-Scu">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="053-Fh-KpP">
+                                <rect key="frame" x="39" y="54" width="46" height="30"/>
                                 <animations/>
-                                <items>
-                                    <navigationItem title="Title" id="4df-db-BFv">
-                                        <barButtonItem key="leftBarButtonItem" title="Item" id="mx2-T0-4V9">
-                                            <connections>
-                                                <segue destination="Mjx-lg-5uq" kind="modal" id="Yo4-8Y-LzV"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="yHh-l4-z87"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="053-Fh-KpP" firstAttribute="top" secondItem="d0f-zL-1Hn" secondAttribute="bottom" constant="34" id="3qZ-Er-XNR"/>
+                            <constraint firstItem="053-Fh-KpP" firstAttribute="leading" secondItem="sXy-cm-0jJ" secondAttribute="leadingMargin" constant="19" id="HjQ-MM-7hK"/>
+                        </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tpB-nd-zS9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="101" y="2740"/>
+            <point key="canvasLocation" x="481" y="2843"/>
         </scene>
         <!--Item 2-->
         <scene sceneID="3Gw-TF-E4j">
             <objects>
-                <viewController id="MqE-m2-V1S" sceneMemberID="viewController">
+                <viewController id="MqE-m2-V1S" customClass="SecondViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0t2-BU-flN"/>
                         <viewControllerLayoutGuide type="bottom" id="2Qw-WU-ahb"/>
@@ -432,7 +423,7 @@
                                 <animations/>
                                 <state key="normal" title="曲を選択してストリーミングを開始"/>
                                 <connections>
-                                    <segue destination="drm-Ul-07e" kind="modal" id="W1P-YH-54O"/>
+                                    <segue destination="drm-Ul-07e" kind="presentation" id="oCo-Ca-v6k"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jhg-si-QJt">
@@ -440,7 +431,7 @@
                                 <animations/>
                                 <state key="normal" title="近くのストリーミングを視聴開始"/>
                                 <connections>
-                                    <segue destination="5rL-YQ-bPH" kind="modal" id="JGN-Rd-DGr"/>
+                                    <segue destination="5rL-YQ-bPH" kind="presentation" id="aTi-Tc-g9c"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -466,13 +457,14 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="slT-Tu-mAB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="sOp-oo-Fhy" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="437" y="2071"/>
+            <point key="canvasLocation" x="481" y="2041"/>
         </scene>
         <!--Item 1-->
         <scene sceneID="RLk-m2-bYN">
             <objects>
-                <viewController id="RB7-Th-uHE" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="unkk" id="RB7-Th-uHE" customClass="FirstViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7Y8-jJ-drR"/>
                         <viewControllerLayoutGuide type="bottom" id="8kr-PX-dQC"/>
@@ -481,12 +473,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zr6-60-bSx">
-                                <rect key="frame" x="133" y="269" width="54" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zr6-60-bSx">
+                                <rect key="frame" x="115" y="269" width="120" height="30"/>
                                 <animations/>
                                 <state key="normal" title="ソロモードを開始"/>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="modal" id="oeS-6o-GYj"/>
+                                    <segue destination="BYZ-38-t0r" kind="modal" id="rv6-gL-Eic"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -503,8 +495,9 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7zG-NO-E0h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Wna-L3-wbA" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="330" y="1092"/>
+            <point key="canvasLocation" x="450" y="1259"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="dUp-QL-LjX">
@@ -532,7 +525,4 @@
         <image name="nextClear.png" width="78" height="54"/>
         <image name="playClear.png" width="64" height="64"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="VOW-qX-Xs0"/>
-    </inferredMetricsTieBreakers>
 </document>
