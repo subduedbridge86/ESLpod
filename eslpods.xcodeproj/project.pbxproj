@@ -267,7 +267,7 @@
 				TargetAttributes = {
 					43E5A0CC1BE1CBCC0004C60D = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = 69LS254W7V;
+						DevelopmentTeam = 48H33DZC64;
 					};
 					43E5A0E51BE1CBCC0004C60D = {
 						CreatedOnToolsVersion = 7.1;
@@ -485,7 +485,7 @@
 				INFOPLIST_FILE = eslpods/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "kurumecs.eslpods-";
+				PRODUCT_BUNDLE_IDENTIFIER = kurumecs.eslpods;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -501,7 +501,7 @@
 				INFOPLIST_FILE = eslpods/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "kurumecs.eslpods-";
+				PRODUCT_BUNDLE_IDENTIFIER = kurumecs.eslpods;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
