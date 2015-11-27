@@ -12,6 +12,9 @@
 		434A776D1BFC6CBA00A9A606 /* AudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A77681BFC6CBA00A9A606 /* AudioConverter.m */; };
 		434A776E1BFC6CBA00A9A606 /* ExtAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A776A1BFC6CBA00A9A606 /* ExtAudioConverter.m */; };
 		434A78111BFEE20200A9A606 /* MultiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A78101BFEE20200A9A606 /* MultiViewController.m */; };
+		43C806AF1C080BBA0007B1C3 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C806AE1C080BBA0007B1C3 /* FirstViewController.m */; };
+		43C806B21C080BCB0007B1C3 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C806B11C080BCB0007B1C3 /* SecondViewController.m */; };
+		43C806B51C080C0B0007B1C3 /* StreamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C806B41C080C0B0007B1C3 /* StreamViewController.m */; };
 		43E5A0D21BE1CBCC0004C60D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E5A0D11BE1CBCC0004C60D /* main.m */; };
 		43E5A0DD1BE1CBCC0004C60D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43E5A0DC1BE1CBCC0004C60D /* Assets.xcassets */; };
 		43E5A0E01BE1CBCC0004C60D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43E5A0DE1BE1CBCC0004C60D /* LaunchScreen.storyboard */; };
@@ -56,6 +59,12 @@
 		434A776A1BFC6CBA00A9A606 /* ExtAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtAudioConverter.m; sourceTree = "<group>"; };
 		434A780F1BFEE20200A9A606 /* MultiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiViewController.h; sourceTree = "<group>"; };
 		434A78101BFEE20200A9A606 /* MultiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiViewController.m; sourceTree = "<group>"; };
+		43C806AD1C080BBA0007B1C3 /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
+		43C806AE1C080BBA0007B1C3 /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		43C806B01C080BCB0007B1C3 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
+		43C806B11C080BCB0007B1C3 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		43C806B31C080C0B0007B1C3 /* StreamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamViewController.h; sourceTree = "<group>"; };
+		43C806B41C080C0B0007B1C3 /* StreamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamViewController.m; sourceTree = "<group>"; };
 		43E5A0CD1BE1CBCC0004C60D /* eslpods.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eslpods.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E5A0D11BE1CBCC0004C60D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		43E5A0DC1BE1CBCC0004C60D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -152,6 +161,12 @@
 				434A780F1BFEE20200A9A606 /* MultiViewController.h */,
 				434A78101BFEE20200A9A606 /* MultiViewController.m */,
 				43E5A1091BE1CBE90004C60D /* Main.storyboard */,
+				43C806B31C080C0B0007B1C3 /* StreamViewController.h */,
+				43C806B41C080C0B0007B1C3 /* StreamViewController.m */,
+				43C806AD1C080BBA0007B1C3 /* FirstViewController.h */,
+				43C806AE1C080BBA0007B1C3 /* FirstViewController.m */,
+				43C806B01C080BCB0007B1C3 /* SecondViewController.h */,
+				43C806B11C080BCB0007B1C3 /* SecondViewController.m */,
 				43E5A0DE1BE1CBCC0004C60D /* LaunchScreen.storyboard */,
 				43E5A0E11BE1CBCC0004C60D /* Info.plist */,
 				43E5A0D01BE1CBCC0004C60D /* Supporting Files */,
@@ -327,9 +342,12 @@
 				43E5A10B1BE1CBE90004C60D /* ViewController.m in Sources */,
 				434A776E1BFC6CBA00A9A606 /* ExtAudioConverter.m in Sources */,
 				434A776D1BFC6CBA00A9A606 /* AudioConverter.m in Sources */,
+				43C806B51C080C0B0007B1C3 /* StreamViewController.m in Sources */,
 				43E5A10A1BE1CBE90004C60D /* AppDelegate.m in Sources */,
 				434A776B1BFC6CBA00A9A606 /* StreamingPlayer.m in Sources */,
 				43E5A10C1BE1CBE90004C60D /* ESLpod.m in Sources */,
+				43C806AF1C080BBA0007B1C3 /* FirstViewController.m in Sources */,
+				43C806B21C080BCB0007B1C3 /* SecondViewController.m in Sources */,
 				43E5A0D21BE1CBCC0004C60D /* main.m in Sources */,
 				434A776C1BFC6CBA00A9A606 /* MultipeerHost.m in Sources */,
 			);
