@@ -29,6 +29,8 @@
 @property NSString *name1,*name2;
 
 @property ESLpod *mypod;
+@property NSArray *mypodArray;
+
 @property (weak, nonatomic) IBOutlet UITableView *songList;
 @property (weak, nonatomic) IBOutlet UILabel *titlelabel;
 @property (weak, nonatomic) IBOutlet UILabel *albumlabel;
@@ -51,7 +53,7 @@
 @implementation ViewController
 
 
-
+#define feedTimes 2
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
@@ -84,12 +86,20 @@
     
     _songList.delegate = self;
     _songList.dataSource = self;
+    _mypodArray=[[NSArray alloc]init];
+
+    for (int mi=0; mi<1; mi++) {
+        _mypod=[[ESLpod alloc]init];
+       _mypodArray= [_mypodArray arrayByAddingObject:_mypod];
+        [_mypodArray[mi] audioSession];
+        [_mypodArray[mi] feed];
+        [_mypodArray[mi] bufferSet];
+    }
     
-    _mypod=[[ESLpod alloc]init];
-    [_mypod audioSession];
     
-    [_mypod feed];
-    [_mypod bufferSet];
+    
+    
+
     
     _player = [MPMusicPlayerController applicationMusicPlayer];
     
@@ -440,7 +450,10 @@
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
     _mypod.feedVol=sender.value;
     if (_feedonoffstate.on) {
-        [_mypod mixUnitvol];
+        for (int mi=0; mi<1; mi++) {
+
+            [_mypodArray[mi] mixUnitvol];
+        }
     }
     NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
     _fbVolLabel.text=fbVoltext;
