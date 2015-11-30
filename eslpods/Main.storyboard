@@ -241,8 +241,8 @@
                                     <action selector="feedonoff:" destination="BYZ-38-t0r" eventType="valueChanged" id="O8r-wN-V1i"/>
                                 </connections>
                             </switch>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fhv-hL-8kf">
-                                <rect key="frame" x="20" y="28" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fhv-hL-8kf">
+                                <rect key="frame" x="16" y="28" width="46" height="30"/>
                                 <animations/>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -343,8 +343,8 @@
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3hH-RE-36k">
-                                <rect key="frame" x="20" y="28" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3hH-RE-36k">
+                                <rect key="frame" x="16" y="28" width="46" height="30"/>
                                 <animations/>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -384,8 +384,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="053-Fh-KpP">
-                                <rect key="frame" x="39" y="54" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="053-Fh-KpP">
+                                <rect key="frame" x="35" y="54" width="46" height="30"/>
                                 <animations/>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -427,7 +427,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jhg-si-QJt">
-                                <rect key="frame" x="44" y="373" width="233" height="30"/>
+                                <rect key="frame" x="44" y="289" width="233" height="30"/>
                                 <animations/>
                                 <state key="normal" title="近くのストリーミングを視聴開始"/>
                                 <connections>
@@ -439,13 +439,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="lrg-nc-NNU" secondAttribute="trailing" constant="20" id="4Qp-6g-mpY"/>
-                            <constraint firstItem="2Qw-WU-ahb" firstAttribute="top" secondItem="Jhg-si-QJt" secondAttribute="bottom" constant="116" id="8Ce-Wk-1TG"/>
                             <constraint firstItem="Jhg-si-QJt" firstAttribute="leading" secondItem="1gn-iz-LcA" secondAttribute="leadingMargin" constant="28" id="AnZ-eH-r8m"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Jhg-si-QJt" secondAttribute="trailing" constant="27" id="Tda-gG-wpN"/>
                             <constraint firstItem="lrg-nc-NNU" firstAttribute="leading" secondItem="1gn-iz-LcA" secondAttribute="leadingMargin" constant="20" id="U83-Qm-8ux"/>
                             <constraint firstItem="lrg-nc-NNU" firstAttribute="top" secondItem="0t2-BU-flN" secondAttribute="bottom" constant="139" id="XbA-MC-cic"/>
                             <constraint firstItem="Jhg-si-QJt" firstAttribute="leading" secondItem="lrg-nc-NNU" secondAttribute="trailing" constant="-232" id="YzB-dj-QOf"/>
-                            <constraint firstItem="Jhg-si-QJt" firstAttribute="top" secondItem="lrg-nc-NNU" secondAttribute="bottom" constant="184" id="piG-Tp-3v9"/>
+                            <constraint firstItem="Jhg-si-QJt" firstAttribute="top" secondItem="lrg-nc-NNU" secondAttribute="bottom" constant="100" id="piG-Tp-3v9"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -476,8 +475,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zr6-60-bSx">
-                                <rect key="frame" x="115" y="269" width="120" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zr6-60-bSx">
+                                <rect key="frame" x="26" y="269" width="268" height="30"/>
                                 <animations/>
                                 <state key="normal" title="ソロモードを開始"/>
                                 <connections>
@@ -488,10 +487,9 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="8kr-PX-dQC" firstAttribute="top" secondItem="zr6-60-bSx" secondAttribute="bottom" constant="220" id="Gcc-8S-DZZ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="zr6-60-bSx" secondAttribute="trailing" constant="117" id="MxU-zP-bhB"/>
-                            <constraint firstItem="zr6-60-bSx" firstAttribute="leading" secondItem="w4A-PB-MQd" secondAttribute="leadingMargin" constant="117" id="mRH-01-LDk"/>
-                            <constraint firstItem="zr6-60-bSx" firstAttribute="top" secondItem="7Y8-jJ-drR" secondAttribute="bottom" constant="249" id="tHp-6t-8ko"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="zr6-60-bSx" secondAttribute="trailing" constant="10" id="MxU-zP-bhB"/>
+                            <constraint firstItem="zr6-60-bSx" firstAttribute="centerY" secondItem="w4A-PB-MQd" secondAttribute="centerY" id="ied-fb-3z6"/>
+                            <constraint firstItem="zr6-60-bSx" firstAttribute="leading" secondItem="w4A-PB-MQd" secondAttribute="leadingMargin" constant="10" id="mRH-01-LDk"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 1" id="CvR-lx-3gr"/>
