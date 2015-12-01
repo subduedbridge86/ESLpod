@@ -36,6 +36,7 @@
     [self presentViewController:picker animated:YES completion:nil];
 
 }
+
 - (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker{
     [mediaPicker dismissViewControllerAnimated:YES completion:nil];
      //キャンセルで曲選択を終わる

@@ -242,9 +242,9 @@
                                 </connections>
                             </switch>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fhv-hL-8kf">
-                                <rect key="frame" x="16" y="28" width="46" height="30"/>
+                                <rect key="frame" x="16" y="28" width="30" height="30"/>
                                 <animations/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="戻る"/>
                                 <connections>
                                     <segue destination="Wna-L3-wbA" kind="unwind" unwindAction="unWindtoFirstScene:" id="RtD-8g-pe8"/>
                                 </connections>
@@ -344,9 +344,9 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3hH-RE-36k">
-                                <rect key="frame" x="16" y="28" width="46" height="30"/>
+                                <rect key="frame" x="16" y="28" width="30" height="30"/>
                                 <animations/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="戻る"/>
                                 <connections>
                                     <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="wG2-42-OJQ"/>
                                 </connections>
@@ -385,10 +385,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="053-Fh-KpP">
-                                <rect key="frame" x="35" y="54" width="46" height="30"/>
+                                <rect key="frame" x="35" y="54" width="30" height="30"/>
                                 <animations/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="戻る"/>
                                 <connections>
+                                    <action selector="returnBtnTap:" destination="5rL-YQ-bPH" eventType="touchUpInside" id="GE3-CZ-cA9"/>
                                     <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="yHh-l4-z87"/>
                                 </connections>
                             </button>

@@ -33,6 +33,10 @@
     [self.StPlayer recvAudio:data];
     
 }
+- (IBAction)returnBtnTap:(id)sender {
+    [self.myMulti stopClient];
+}
+
 /*
 #pragma mark - Navigation
 

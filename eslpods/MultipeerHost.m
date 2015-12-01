@@ -46,7 +46,6 @@
 }
 -(void)startHost{
     self.nowinvitees=0;
-    [self.nearbyAd stopAdvertisingPeer];
     if (self.browser==nil) {
     self.browser = [[MCNearbyServiceBrowser alloc]
                     initWithPeer:self.mPeerID
@@ -162,13 +161,13 @@
                 _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
                
                 [self.mSession sendData:_mdata toPeers:self.connectedpeer withMode:MCSessionSendDataReliable error:&error];
+                
                 if (error) {
                     NSLog(@"%@",error);
                 }
                 [NSThread sleepForTimeInterval:0.30];
               
-                NSLog(@"送信完了");
-                
+               
                 
             }else{
                 
@@ -294,12 +293,7 @@
 // require delegate method
 
 - (void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID{
-    NSLog(@"input %@",streamName);
-    self.iStream=stream;
-    self.iStream.delegate=self;
-    [self.iStream scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.iStream open];
-    NSLog(@"%lu", (unsigned long)self.iStream.streamStatus);
+   
     
 }
 
