@@ -12,11 +12,8 @@
 @property MCPeerID *mPeerID;
 @property MCSession *mSession;
 @property MCNearbyServiceAdvertiser *nearbyAd;
-@property NSMutableArray *connectedpeer;
 @property NSArray *invitationArr;
 @property MCNearbyServiceBrowser *browser;
-@property int nowinvitees;
-@property BOOL solo;
 @property int count;
 @property NSMutableData *recvData;
 @property NSInputStream *iStream;
@@ -31,8 +28,6 @@
 
 
 -(void)startClient{
-    if (self.connectedpeer.count==0) {
-    
    
     
     self.nearbyAd=[[MCNearbyServiceAdvertiser alloc]initWithPeer:self.mPeerID discoveryInfo:nil serviceType:@"kurumecs"];
@@ -40,12 +35,11 @@
     [self.nearbyAd startAdvertisingPeer];
         _recvData = [[NSMutableData alloc]init];
         
-    }
+    
    
     
 }
 -(void)startHost{
-    self.nowinvitees=0;
     if (self.browser==nil) {
     self.browser = [[MCNearbyServiceBrowser alloc]
                     initWithPeer:self.mPeerID
@@ -64,13 +58,12 @@
 -(id)init{
     self=[super init];
        if (self) {
-            self.connectedpeer=[[NSMutableArray alloc]init];
                self.mPeerID = [[MCPeerID alloc] initWithDisplayName:[[UIDevice currentDevice]name]];
                 //セッションを初期化
                 self.mSession= [[MCSession alloc] initWithPeer:self.mPeerID];
                 //デリゲートを設定
                 self.mSession.delegate = self;
-                self.solo=YES;
+           
             }
       return self;
 }
@@ -80,25 +73,12 @@
     
     if (state==MCSessionStateConnected) {
         NSLog(@"接続完了");
-        self.solo=NO;
-        
-        if (!([self.connectedpeer containsObject:peerID])) {
-            
-            [self.connectedpeer addObject:peerID];
                 [self postNotificationc];
-
-            
-            
-            self.nowinvitees--;
-            
-        }
+        
     }
     if (state==MCSessionStateNotConnected) {
         NSLog(@"抜けた");
-        [self.connectedpeer removeObject:peerID];
-        if (self.connectedpeer.count==0) {
-            self.solo=YES;
-        }
+       
         [self postNotificationc];
         
         
@@ -109,17 +89,9 @@
 // Received data from remote peer
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID{
     
-    
-   
     _recvData=[_recvData initWithData:data];
         [self recvDataPacket];
-        
-        
     
-
-   
-   
-   
 }
 
 
@@ -130,17 +102,14 @@
     
     NSData*keyData=[str dataUsingEncoding:NSUTF8StringEncoding];
     [self.mSession sendData:keyData
-                   toPeers:self.connectedpeer
+                   toPeers:self.mSession.connectedPeers
                   withMode:MCSessionSendDataReliable
                      error:nil];
-      
-    
-
     
 }
 -(void)sendList:(NSArray *)arr{
     NSData*keyData=[NSKeyedArchiver archivedDataWithRootObject:arr];
-    [self.mSession sendData:keyData toPeers:self.connectedpeer withMode:MCSessionSendDataReliable error:nil];
+    [self.mSession sendData:keyData toPeers:self.mSession.connectedPeers withMode:MCSessionSendDataReliable error:nil];
 }
 -(void)sendData:(NSData *)data{
     
@@ -160,21 +129,19 @@
                 [data getBytes:buf range:NSMakeRange(ini,d)];
                 _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
                
-                [self.mSession sendData:_mdata toPeers:self.connectedpeer withMode:MCSessionSendDataReliable error:&error];
+                [self.mSession sendData:_mdata toPeers:self.mSession.connectedPeers withMode:MCSessionSendDataReliable error:&error];
                 
                 if (error) {
                     NSLog(@"%@",error);
                 }
-                [NSThread sleepForTimeInterval:0.30];
-              
-               
+                
                 
             }else{
                 
                 [data getBytes:buf range:NSMakeRange(ini,d)];
                 _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
 
-                [self.mSession sendData:_mdata toPeers:self.connectedpeer withMode:MCSessionSendDataReliable error:nil];
+                [self.mSession sendData:_mdata toPeers:self.mSession.connectedPeers withMode:MCSessionSendDataReliable error:nil];
                 
             }
     }
@@ -189,19 +156,11 @@
 // Found a nearby advertising peer
 - (void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info{
     
-    if (self.nowinvitees==7){
-        
-    }else{
-        
-    
-        
     [browser invitePeer:peerID
               toSession:self.mSession //要変更か　インスタンスを新しく用意する手法に変更。
             withContext:nil
                 timeout:0];//30s
-    self.nowinvitees++;
     
-    }
 }
 
 // A nearby peer has stopped advertising
@@ -285,7 +244,9 @@
     self.browser.delegate=nil;
 }
 
-
+-(void)disconnect{
+    [self.mSession disconnect];
+}
 
 
 

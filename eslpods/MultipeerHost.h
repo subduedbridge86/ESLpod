@@ -26,4 +26,5 @@
 -(void)sendList:(NSArray *)arr;
 -(void)sendData:(NSData *)data;
 -(BOOL)fileCreate:(NSString *)path andData:(NSData*)data;
+-(void)disconnect;
 @end

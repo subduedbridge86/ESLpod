@@ -35,6 +35,7 @@
 }
 - (IBAction)returnBtnTap:(id)sender {
     [self.myMulti stopClient];
+    [self.myMulti disconnect];
 }
 
 /*
