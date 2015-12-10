@@ -16,8 +16,6 @@
 @property MCNearbyServiceBrowser *browser;
 @property int count;
 @property NSMutableData *recvData;
-@property NSInputStream *iStream;
-@property NSOutputStream *oStream;
 @property NSMutableData *mdata;
 @property int datacount;
 -(void)postNotification;
@@ -72,12 +70,12 @@
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state{
     
     if (state==MCSessionStateConnected) {
-        NSLog(@"接続完了");
-                [self postNotificationc];
+        NSLog(@"接続完了,%@",peerID);
+        [self postNotificationc];
         
     }
     if (state==MCSessionStateNotConnected) {
-        NSLog(@"抜けた");
+        NSLog(@"抜けた,%@",peerID);
        
         [self postNotificationc];
         
