@@ -8,5 +8,5 @@
 
 
 @interface ViewController : UIViewController<MPMediaPickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>
-
+@property MPMediaItemCollection *mediaItemCollection;
 @end
