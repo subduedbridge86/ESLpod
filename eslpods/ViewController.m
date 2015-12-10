@@ -70,13 +70,10 @@
 
 - (void)viewDidLoad
 {
-    
-    
     _ipodVol=0.01;
     _systemVol=0;
     _songCount=0;
     _repeatCount=0;
-    
     
     [super viewDidLoad];
     UIImage *imageForThumb = [UIImage imageNamed:@"slider.png"];
@@ -95,11 +92,6 @@
         [_mypodArray[mi] feed];
         [_mypodArray[mi] bufferSet];
     }
-    
-    
-    
-    
-
     
     _player = [MPMusicPlayerController applicationMusicPlayer];
     
@@ -130,14 +122,14 @@
     _fbVolLabel.text=fbVoltext;
     _feedvol.value=_mypod.feedVol;
     
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
+
         
     _nameData=[ud objectForKey:@"nameData"];
     
     _mediaitemData=[ud objectForKey:@"_mediaitemData"];
     _songCount=[ud floatForKey:@"songCount"];
     [self AutoScroll];
-    if (_mediaitemData!=NULL) {
+
         _mediaItemCollection2 = [NSKeyedUnarchiver unarchiveObjectWithData:_mediaitemData];
         MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
         [self songtext];
@@ -147,8 +139,8 @@
         
         _avPlayer.volume=_ipodVol;
         [self startTimer];
-    }
-    }
+    
+    
 }
 
 - (void)avPlayDidFinish:(NSNotification*)notification
@@ -247,7 +239,7 @@
 
 - (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection       //曲選択後
 {
-    
+    [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
     _songCount=0;
     [self saveCount];
     //曲名取得
@@ -282,7 +274,6 @@
         NSLog(@"%@",str1);
         
         _nameData=[_nameData arrayByAddingObject:_name1];
-        
         
         
         
@@ -577,7 +568,8 @@
 }
 
 - (IBAction)BackToTheFirst:(id)sender {
-    
+    [_avPlayer pause];
+    [_mypod auClose];
 }
 
 @end
