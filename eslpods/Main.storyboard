@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Mjx-lg-5uq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Mjx-lg-5uq">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -246,6 +246,7 @@
                                 <animations/>
                                 <state key="normal" title="戻る"/>
                                 <connections>
+                                    <action selector="BackToTheFirst:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hY9-pP-6TA"/>
                                     <segue destination="Wna-L3-wbA" kind="unwind" unwindAction="unWindtoFirstScene:" id="RtD-8g-pe8"/>
                                 </connections>
                             </button>
@@ -476,25 +477,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zr6-60-bSx">
-                                <rect key="frame" x="26" y="269" width="268" height="30"/>
-                                <animations/>
-                                <state key="normal" title="ソロモードを開始"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ソロモード" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Co9-Sf-Kuy">
+                                <rect key="frame" x="76" y="112" width="168" height="39"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M4t-n7-vPl">
+                                <rect key="frame" x="119" y="343" width="83" height="30"/>
+                                <state key="normal" title="はじめから"/>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="modal" id="rv6-gL-Eic"/>
+                                    <action selector="SelectMusicTap:" destination="RB7-Th-uHE" eventType="touchUpInside" id="mPA-bc-9vX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Vq-5k-OQ7">
+                                <rect key="frame" x="115" y="416" width="91" height="30"/>
+                                <state key="normal" title="つづきから"/>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="presentation" id="Bz1-Dv-UYf"/>
                                 </connections>
                             </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="zr6-60-bSx" secondAttribute="trailing" constant="10" id="MxU-zP-bhB"/>
-                            <constraint firstItem="zr6-60-bSx" firstAttribute="centerY" secondItem="w4A-PB-MQd" secondAttribute="centerY" id="ied-fb-3z6"/>
-                            <constraint firstItem="zr6-60-bSx" firstAttribute="leading" secondItem="w4A-PB-MQd" secondAttribute="leadingMargin" constant="10" id="mRH-01-LDk"/>
+                            <constraint firstItem="Co9-Sf-Kuy" firstAttribute="leading" secondItem="w4A-PB-MQd" secondAttribute="leadingMargin" constant="60" id="4re-eB-teV"/>
+                            <constraint firstItem="Co9-Sf-Kuy" firstAttribute="top" secondItem="7Y8-jJ-drR" secondAttribute="bottom" constant="92" id="BEh-IC-ZzH"/>
+                            <constraint firstItem="5Vq-5k-OQ7" firstAttribute="top" secondItem="M4t-n7-vPl" secondAttribute="bottom" constant="43" id="CpA-zJ-D95"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="M4t-n7-vPl" secondAttribute="trailing" constant="102" id="HlO-MG-2iO"/>
+                            <constraint firstItem="8kr-PX-dQC" firstAttribute="top" secondItem="5Vq-5k-OQ7" secondAttribute="bottom" constant="73" id="T21-Zf-VMO"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="5Vq-5k-OQ7" secondAttribute="trailing" constant="98" id="pRz-sx-V13"/>
+                            <constraint firstItem="M4t-n7-vPl" firstAttribute="top" secondItem="Co9-Sf-Kuy" secondAttribute="bottom" constant="192" id="pq7-iy-vQp"/>
+                            <constraint firstItem="5Vq-5k-OQ7" firstAttribute="leading" secondItem="w4A-PB-MQd" secondAttribute="leadingMargin" constant="99" id="qoT-4y-JJE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Co9-Sf-Kuy" secondAttribute="trailing" constant="60" id="s7u-J7-pkT"/>
+                            <constraint firstItem="M4t-n7-vPl" firstAttribute="leading" secondItem="w4A-PB-MQd" secondAttribute="leadingMargin" constant="103" id="smG-gO-bd5"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 1" id="CvR-lx-3gr"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="FirstToSoloSegue" id="yDb-1s-fYu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7zG-NO-E0h" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Wna-L3-wbA" userLabel="Exit" sceneMemberID="exit"/>
@@ -527,4 +550,7 @@
         <image name="nextClear.png" width="78" height="54"/>
         <image name="playClear.png" width="64" height="64"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="yDb-1s-fYu"/>
+    </inferredMetricsTieBreakers>
 </document>
