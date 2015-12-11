@@ -457,8 +457,12 @@
     if (sender.on) {
         [_mypod feed];
         [_mypod mixUnitvol];
+        _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        _fbVolLabel.textColor=[UIColor blackColor];
     }else{
         [_mypod auClose];
+        _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+        _fbVolLabel.textColor=[UIColor lightGrayColor];
     }
 }
 
