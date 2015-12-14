@@ -9,13 +9,30 @@
 #import "FirstViewController.h"
 
 @interface FirstViewController ()
-@property MPMediaItemCollection *mediaItemCollection;
+@property MPMediaItemCollection *mediaItemCollection2;
+@property NSArray *nameData;
+@property NSData *mediaitemData;
+@property NSString *name1;
+@property long songCount;
+
+@property (weak, nonatomic) IBOutlet UIButton *continueButton;
+
+
 @end
 
 @implementation FirstViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
+    _mediaitemData=[ud objectForKey:@"_mediaitemData"];
+    
+    if (_mediaitemData==nil) {
+        NSLog(@"a2");
+        _continueButton.enabled=NO;
+        [_continueButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    }
     // Do any additional setup after loading the view.
 }
 
@@ -44,19 +61,30 @@
 
 - (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection       //曲選択後
 {
+    _songCount=0;
     
-    self.mediaItemCollection=mediaItemCollection;
+    self.mediaItemCollection2=mediaItemCollection;
     [mediaPicker dismissViewControllerAnimated:YES completion:nil];
     [self performSegueWithIdentifier:@"FirstToSoloSegue" sender:self];
+    
+    _mediaitemData = [NSKeyedArchiver archivedDataWithRootObject:_mediaItemCollection2];
+    NSUserDefaults *ud4=[NSUserDefaults standardUserDefaults];
+    [ud4 setObject:_mediaitemData forKey:@"_mediaitemData"];
+    
+    _nameData=[[NSArray alloc]init];
+    for (int i = 0;i < _mediaItemCollection2.count; i++) {
+        MPMediaItem *nameitem1=[_mediaItemCollection2.items objectAtIndex:i];
+        _name1=[nameitem1 valueForProperty:MPMediaItemPropertyTitle];
+        _nameData=[_nameData arrayByAddingObject:_name1];
+    }
+    NSUserDefaults *ud3=[NSUserDefaults standardUserDefaults];
+    [ud3 setObject:_nameData forKey:@"nameData"];
+    NSUserDefaults *ud5=[NSUserDefaults standardUserDefaults];
+    [ud5 setFloat:_songCount forKey:@"songCount"];
 }
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     //Segueの特定
-    if ( [[segue identifier] isEqualToString:@"FirstToSoloSegue"] ) {
-        ViewController *ViewController = [segue destinationViewController];
-        //ここで遷移先ビューのクラスの変数receiveStringに値を渡している
-        ViewController.mediaItemCollection = self.mediaItemCollection;
-    }
 }
 /*
 #pragma mark - Navigation
