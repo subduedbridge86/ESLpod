@@ -92,6 +92,15 @@
   
     self.nowPlayingIndex=(int)indexPath.row;
     MPMediaItem *item = [self.mediaItemCollection.items objectAtIndex:self.nowPlayingIndex];
+   NSURL *URL= [self convertItemtoAAC:item];
+    NSData*data=[[NSData alloc]initWithContentsOfURL:URL];
+    [self.myMulti sendData:data];
+   
+   
+}
+
+-(NSURL *)convertItemtoAAC:(MPMediaItem *)item{
+   
     NSURL *url=[item valueForProperty:MPMediaItemPropertyAssetURL];
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:nil];
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]
@@ -118,15 +127,17 @@
            withIntermediateDirectories:YES
                             attributes:nil
                                  error:nil];
-    
-    
+    NSURL*SaveURL=[NSURL fileURLWithPath:savePath];
+    NSString *ssavePath=[filePath stringByDeletingPathExtension];
+    ssavePath=[ssavePath stringByAppendingPathExtension:@"aac"];
+    NSURL*SsaveURL=[NSURL fileURLWithPath:ssavePath];
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
         
         if (exportSession.status == AVAssetExportSessionStatusCompleted) {
             NSLog(@"export session completed");
             
             NSLog(@"%@",exportSession.outputURL);
-            NSURL*SaveURL=[NSURL fileURLWithPath:savePath];
+            
             UInt32 fileType;
             
             //変換するフォーマット
@@ -160,9 +171,7 @@
                                     sizeof(audioCategory),
                                     &audioCategory);
             
-            NSString *ssavePath=[filePath stringByDeletingPathExtension];
-            ssavePath=[ssavePath stringByAppendingPathExtension:@"aac"];
-            NSURL*SsaveURL=[NSURL fileURLWithPath:ssavePath];
+           
             
             //変換するフォーマット(AAC)
             
@@ -180,13 +189,13 @@
             ExtAudioConverter *extConverter = [[ExtAudioConverter alloc]init];
             [extConverter convertFrom:SaveURL toURL:SsaveURL format:outputFormat];
             
+            
             audioCategory = kAudioSessionCategory_MediaPlayback;
             AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
                                     sizeof(audioCategory),
                                     &audioCategory);
             
-            NSData*data=[[NSData alloc]initWithContentsOfURL:SsaveURL];
-            [self.myMulti sendData:data];
+          
             
         }else{
             NSLog(@"error");
@@ -195,10 +204,9 @@
     self.player=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:nil];
     [self.player prepareToPlay];
     [self.player play];
-   
+    return SsaveURL;
+    
 }
-
-
 
 
 
