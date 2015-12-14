@@ -14,12 +14,25 @@
 @property NSData *mediaitemData;
 @property NSString *name1;
 @property long songCount;
+
+@property (weak, nonatomic) IBOutlet UIButton *continueButton;
+
+
 @end
 
 @implementation FirstViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
+    _mediaitemData=[ud objectForKey:@"_mediaitemData"];
+    
+    if (_mediaitemData==nil) {
+        NSLog(@"a2");
+        _continueButton.enabled=NO;
+        [_continueButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    }
     // Do any additional setup after loading the view.
 }
 
