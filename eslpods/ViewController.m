@@ -53,7 +53,7 @@
 @implementation ViewController
 
 
-#define feedTimes 2
+#define feedTimes 3
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
@@ -85,7 +85,7 @@
     _songList.dataSource = self;
     _mypodArray=[[NSArray alloc]init];
 
-    for (int mi=0; mi<1; mi++) {
+    for (int mi=0; mi<feedTimes; mi++) {
         _mypod=[[ESLpod alloc]init];
        _mypodArray= [_mypodArray arrayByAddingObject:_mypod];
         [_mypodArray[mi] audioSession];
@@ -441,8 +441,8 @@
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
     _mypod.feedVol=sender.value;
     if (_feedonoffstate.on) {
-        for (int mi=0; mi<1; mi++) {
-
+        for (int mi=0; mi<feedTimes; mi++) {
+            NSLog(@"%d",mi);
             [_mypodArray[mi] mixUnitvol];
         }
     }
