@@ -41,7 +41,8 @@
     // Dispose of any resources that can be recreated.
 }
 -(IBAction)unWindtoFirstScene:(UIStoryboardSegue *)unwindSegue{
-    
+    _continueButton.enabled=YES;
+    [_continueButton setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
 }
 - (IBAction)SelectMusicTap:(id)sender {
     MPMediaPickerController *picker = [[MPMediaPickerController alloc]init];
