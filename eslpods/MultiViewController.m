@@ -18,6 +18,7 @@
 @property NSMutableArray * titleArray;
 @property int nowPlayingIndex;
 @property AVAudioPlayer *player;
+@property NSMutableArray * URLarray;
 @property (weak, nonatomic) IBOutlet UITableView *StreamTable;
 
 @end
@@ -32,6 +33,7 @@
     self.StreamTable.delegate=self;
     self.StreamTable.dataSource=self;
     self.titleArray=[[NSMutableArray alloc]init];
+    self.URLarray=[[NSMutableArray alloc]init];
     for (int i = 0;i < self.mediaItemCollection.count; i++) {
         MPMediaItem *nameitem=[self.mediaItemCollection.items objectAtIndex:i];
         
@@ -41,6 +43,13 @@
         
     }
     [self.StreamTable reloadData];
+    [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+        for (int i = 0;i < self.mediaItemCollection.count; i++) {
+        MPMediaItem *item = [self.mediaItemCollection.items objectAtIndex:i];
+        NSURL * url = [self convertItemtoAAC:item];
+        [self.URLarray addObject:url];
+        }
+    }];
     
     // Do any additional setup after loading the view.
 }
@@ -91,9 +100,11 @@
 {
   
     self.nowPlayingIndex=(int)indexPath.row;
-    MPMediaItem *item = [self.mediaItemCollection.items objectAtIndex:self.nowPlayingIndex];
-   NSURL *URL= [self convertItemtoAAC:item];
-    NSData*data=[[NSData alloc]initWithContentsOfURL:URL];
+    NSURL *url = [self.mediaItemCollection.items[self.nowPlayingIndex] valueForProperty:MPMediaItemPropertyAssetURL];
+    self.player=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:nil];
+    [self.player prepareToPlay];
+    [self.player play];
+    NSData*data=[[NSData alloc]initWithContentsOfURL:self.URLarray[self.nowPlayingIndex]];
     [self.myMulti sendData:data];
    
    
@@ -201,9 +212,7 @@
             NSLog(@"error");
         }
     }];
-    self.player=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:nil];
-    [self.player prepareToPlay];
-    [self.player play];
+    
     return SsaveURL;
     
 }
