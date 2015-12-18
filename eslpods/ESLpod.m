@@ -85,7 +85,7 @@
                             );
     
     AUGraphConnectNodeInput(_auGraph,
-                            _mixNode,0, //effectと
+                            _mixNode,0, //mixerと
                             _remoteIONode, 0  //Remote Outputを接続
                             );
     
