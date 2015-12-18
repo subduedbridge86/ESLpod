@@ -20,7 +20,7 @@
 @property NSURL *url;
 @property AVPlayerItem *playerItem;
 @property MPMediaItemCollection *mediaItemCollection2;
-@property NSNotificationCenter *notification;
+//@property NSNotificationCenter *notification;
 @property NSArray *nameData;
 @property NSData *mediaitemData;
 @property NSTimer *timer;
@@ -29,7 +29,7 @@
 @property NSString *name1,*name2;
 
 @property ESLpod *mypod;
-@property NSArray *mypodArray;
+//@property NSArray *mypodArray;
 
 @property (weak, nonatomic) IBOutlet UITableView *songList;
 @property (weak, nonatomic) IBOutlet UILabel *titlelabel;
@@ -83,15 +83,11 @@
     
     _songList.delegate = self;
     _songList.dataSource = self;
-    _mypodArray=[[NSArray alloc]init];
 
-    for (int mi=0; mi<feedTimes; mi++) {
         _mypod=[[ESLpod alloc]init];
-       _mypodArray= [_mypodArray arrayByAddingObject:_mypod];
-        [_mypodArray[mi] audioSession];
-        [_mypodArray[mi] feed];
-        [_mypodArray[mi] bufferSet];
-    }
+        [_mypod audioSession];
+        [_mypod feed];
+        [_mypod bufferSet];
     
     _player = [MPMusicPlayerController applicationMusicPlayer];
     
@@ -112,12 +108,15 @@
     
     _ipodVol = [ud floatForKey:@"ipodvol"];
     _avPlayer.volume=_ipodVol;
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*2000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*20000];
     _ipodVolLabel.text=ipodVoltext;
     _ipodvol.value=_ipodVol;
     
     _mypod.feedVol=[ud floatForKey:@"feedvol"];
+    
+    
     [_mypod mixUnitvol];
+
     NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
     _fbVolLabel.text=fbVoltext;
     _feedvol.value=_mypod.feedVol;
@@ -431,7 +430,7 @@
     _ipodVol = sender.value;
     _avPlayer.volume=_ipodVol;
     
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*2000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*20000];
     _ipodVolLabel.text=ipodVoltext;
     
     NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
@@ -441,10 +440,9 @@
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
     _mypod.feedVol=sender.value;
     if (_feedonoffstate.on) {
-        for (int mi=0; mi<feedTimes; mi++) {
-            NSLog(@"%d",mi);
-            [_mypodArray[mi] mixUnitvol];
-        }
+
+            [_mypod mixUnitvol];
+        
     }
     NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
     _fbVolLabel.text=fbVoltext;
@@ -455,8 +453,10 @@
 
 - (IBAction)feedonoff:(UISwitch *)sender {
     if (sender.on) {
-        [_mypod feed];
-        [_mypod mixUnitvol];
+            _mypod=[[ESLpod alloc]init];
+            [_mypod audioSession];
+            [_mypod feed];
+            [_mypod bufferSet];
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
     }else{
@@ -573,7 +573,10 @@
 
 - (IBAction)BackToTheFirst:(id)sender {
     [_avPlayer pause];
-    [_mypod auClose];
+
+//        [_mypod auClose];
+//自分たち用
+    
 }
 
 @end
