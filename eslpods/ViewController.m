@@ -28,7 +28,7 @@
 @property NSString *timestr;
 @property NSString *name1,*name2;
 
-@property ESLpod *mypod;
+@property ESLpod *mypod,*mypod2;
 //@property NSArray *mypodArray;
 
 @property (weak, nonatomic) IBOutlet UITableView *songList;
@@ -89,6 +89,11 @@
         [_mypod feed];
         [_mypod bufferSet];
     
+    _mypod2=[[ESLpod alloc]init];
+    [_mypod2 audioSession];
+    [_mypod2 feed];
+    [_mypod2 bufferSet];
+    
     _player = [MPMusicPlayerController applicationMusicPlayer];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -113,10 +118,11 @@
     _ipodvol.value=_ipodVol;
     
     _mypod.feedVol=[ud floatForKey:@"feedvol"];
-    
+    _mypod2.feedVol=[ud floatForKey:@"feedvol"];
     
     [_mypod mixUnitvol];
-
+    [_mypod2 mixUnitvol];
+    
     NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
     _fbVolLabel.text=fbVoltext;
     _feedvol.value=_mypod.feedVol;
@@ -439,9 +445,11 @@
 
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
     _mypod.feedVol=sender.value;
+    _mypod2.feedVol=sender.value;
     if (_feedonoffstate.on) {
 
-            [_mypod mixUnitvol];
+        [_mypod mixUnitvol];
+        [_mypod2 mixUnitvol];
         
     }
     NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
@@ -574,7 +582,8 @@
 - (IBAction)BackToTheFirst:(id)sender {
     [_avPlayer pause];
 
-//        [_mypod auClose];
+    [_mypod auClose];
+    [_mypod2 auClose];
 //自分たち用
     
 }
