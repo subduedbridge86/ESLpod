@@ -84,10 +84,10 @@
     _songList.delegate = self;
     _songList.dataSource = self;
 
-        _mypod=[[ESLpod alloc]init];
-        [_mypod audioSession];
-        [_mypod feed];
-        [_mypod bufferSet];
+    _mypod=[[ESLpod alloc]init];
+    [_mypod audioSession];
+    [_mypod feed];
+    [_mypod bufferSet];
     
     _mypod2=[[ESLpod alloc]init];
     [_mypod2 audioSession];
@@ -113,7 +113,7 @@
     
     _ipodVol = [ud floatForKey:@"ipodvol"];
     _avPlayer.volume=_ipodVol;
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*20000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*10000];
     _ipodVolLabel.text=ipodVoltext;
     _ipodvol.value=_ipodVol;
     
@@ -436,7 +436,7 @@
     _ipodVol = sender.value;
     _avPlayer.volume=_ipodVol;
     
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*20000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*10000];
     _ipodVolLabel.text=ipodVoltext;
     
     NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
@@ -457,18 +457,24 @@
     
     NSUserDefaults *ud2=[NSUserDefaults standardUserDefaults];
     [ud2 setFloat:_mypod.feedVol forKey:@"feedvol"];
+    [ud2 setFloat:_mypod2.feedVol forKey:@"feedvol"];
 }
 
 - (IBAction)feedonoff:(UISwitch *)sender {
     if (sender.on) {
-            _mypod=[[ESLpod alloc]init];
-            [_mypod audioSession];
-            [_mypod feed];
-            [_mypod bufferSet];
+        _mypod=[[ESLpod alloc]init];
+        [_mypod audioSession];
+        [_mypod feed];
+        [_mypod bufferSet];
+        _mypod2=[[ESLpod alloc]init];
+        [_mypod2 audioSession];
+        [_mypod2 feed];
+        [_mypod2 bufferSet];
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
     }else{
         [_mypod auClose];
+        [_mypod2 auClose];
         _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
         _fbVolLabel.textColor=[UIColor lightGrayColor];
     }
