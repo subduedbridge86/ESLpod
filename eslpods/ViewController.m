@@ -54,6 +54,7 @@
 
 
 #define feedTimes 3
+#define IPOD_VOL 1000
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
@@ -113,7 +114,7 @@
     
     _ipodVol = [ud floatForKey:@"ipodvol"];
     _avPlayer.volume=_ipodVol;
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*2000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
     _ipodVolLabel.text=ipodVoltext;
     _ipodvol.value=_ipodVol;
     
@@ -436,7 +437,7 @@
     _ipodVol = sender.value;
     _avPlayer.volume=_ipodVol;
     
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*2000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
     _ipodVolLabel.text=ipodVoltext;
     
     NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
