@@ -113,7 +113,7 @@
     
     _ipodVol = [ud floatForKey:@"ipodvol"];
     _avPlayer.volume=_ipodVol;
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*10000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*2000];
     _ipodVolLabel.text=ipodVoltext;
     _ipodvol.value=_ipodVol;
     
@@ -436,7 +436,7 @@
     _ipodVol = sender.value;
     _avPlayer.volume=_ipodVol;
     
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*10000];
+    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*2000];
     _ipodVolLabel.text=ipodVoltext;
     
     NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
