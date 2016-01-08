@@ -48,7 +48,7 @@ OSStatus EncoderDataProc(
 	
     
     UInt32 outNumBytes;
-    OSStatus err = AudioFileReadPackets(audioFileIO->audioFileID, 
+    OSStatus err = AudioFileReadPacketData(audioFileIO->audioFileID,
                                         NO, 
                                         &outNumBytes, 
                                         audioFileIO->packetDescs,

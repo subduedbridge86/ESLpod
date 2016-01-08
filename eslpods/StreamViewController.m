@@ -20,7 +20,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.StPlayer=[[StreamingPlayer alloc]init];
-    
      self.myMulti=[[MultipeerHost alloc]init];
     self.myMulti.delegate=self;
     [self.myMulti startClient];

@@ -108,7 +108,7 @@
     NSData*data=[[NSData alloc]initWithContentsOfURL:self.URLarray[self.nowPlayingIndex]];
     NSData*msgData=[@"sta" dataUsingEncoding:NSUTF8StringEncoding];
     [self.myMulti sendData:msgData];
-    [NSThread sleepForTimeInterval:0.5];
+    [NSThread sleepForTimeInterval:1.0];
     [self.myMulti sendData:data];
    
    
@@ -158,9 +158,6 @@
             //変換するフォーマット
             AudioStreamBasicDescription outputFormat;
             memset(&outputFormat, 0, sizeof(AudioStreamBasicDescription));
-            
-            if(1)
-            {
                 outputFormat.mSampleRate		= 44100.0;
                 outputFormat.mFormatID			= kAudioFormatLinearPCM;
                 outputFormat.mFormatFlags		= kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
@@ -171,13 +168,10 @@
                 outputFormat.mBytesPerFrame		= 4;
                 outputFormat.mReserved			= 0;
                 fileType = kAudioFileCAFType;
-            }
             
             [self.converter convertFrom:exportSession.outputURL toURL:SaveURL format:outputFormat fileType:fileType];
             
             //変換するフォーマット
-            
-            
             AudioSessionInitialize(NULL, NULL, NULL, NULL);
             AudioSessionSetActive(YES);
             UInt32 audioCategory;
@@ -185,11 +179,7 @@
             AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
                                     sizeof(audioCategory),
                                     &audioCategory);
-            
-           
-            
             //変換するフォーマット(AAC)
-            
             memset(&outputFormat, 0, sizeof(AudioStreamBasicDescription));
             outputFormat.mSampleRate       = 44100.0;
             outputFormat.mFormatID         = kAudioFormatMPEG4AAC;//AAC

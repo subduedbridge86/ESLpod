@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 
-#define BUF 32768
+#define BUF 1024
 @protocol MultipeerDataDelegate<NSObject>
 -(void)recvDataPacket:(NSData *)data;
 @end
