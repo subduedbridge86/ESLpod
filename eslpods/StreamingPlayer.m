@@ -19,6 +19,7 @@
                                        kAudioFormatMPEG4AAC,   //AAC
                                        &streamInfo.audioFileStream);
     checkError(err, "AudioFileStreamOpen");
+    streamInfo.started=NO;
     
    }
 void propertyListenerProc(

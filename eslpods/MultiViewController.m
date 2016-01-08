@@ -20,6 +20,7 @@
 @property AVAudioPlayer *player;
 @property NSMutableArray * URLarray;
 @property (weak, nonatomic) IBOutlet UITableView *StreamTable;
+@property (weak, nonatomic) IBOutlet UILabel *StreamerLabel;
 
 @end
 
@@ -105,6 +106,9 @@
     [self.player prepareToPlay];
     [self.player play];
     NSData*data=[[NSData alloc]initWithContentsOfURL:self.URLarray[self.nowPlayingIndex]];
+    NSData*msgData=[@"sta" dataUsingEncoding:NSUTF8StringEncoding];
+    [self.myMulti sendData:msgData];
+    [NSThread sleepForTimeInterval:0.5];
     [self.myMulti sendData:data];
    
    

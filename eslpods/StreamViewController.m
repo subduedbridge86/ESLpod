@@ -11,6 +11,8 @@
 @interface StreamViewController ()
 @property StreamingPlayer * StPlayer;
 @property MultipeerHost * myMulti;
+@property NSString * msgStr;
+@property (weak, nonatomic) IBOutlet UILabel *ConnecedtLabel;
 @end
 
 @implementation StreamViewController
@@ -18,10 +20,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.StPlayer=[[StreamingPlayer alloc]init];
-    [self.StPlayer start];
+    
      self.myMulti=[[MultipeerHost alloc]init];
     self.myMulti.delegate=self;
     [self.myMulti startClient];
+    
     // Do any additional setup after loading the view.
 }
 
@@ -30,7 +33,13 @@
     // Dispose of any resources that can be recreated.
 }
 -(void)recvDataPacket:(NSData *)data{
+     _msgStr=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    if ([_msgStr isEqual:@"sta"]) {
+        [self.StPlayer start];
+        NSLog(@"STREAMING START!!");
+    }else{
     [self.StPlayer recvAudio:data];
+    }
     
 }
 - (IBAction)returnBtnTap:(id)sender {

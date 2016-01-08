@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Mjx-lg-5uq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Mjx-lg-5uq">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -334,20 +334,38 @@
                                     <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="wG2-42-OJQ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="視聴数 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Dd-en-YxH">
+                                <rect key="frame" x="206" y="37" width="68" height="17"/>
+                                <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5VE-xM-xo7">
+                                <rect key="frame" x="188" y="49" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="leadingMargin" secondItem="3hH-RE-36k" secondAttribute="leading" id="0Ln-lo-ieM"/>
+                            <constraint firstItem="1Dd-en-YxH" firstAttribute="top" secondItem="MMz-3F-EvE" secondAttribute="bottom" constant="17" id="3WX-bh-L7m"/>
                             <constraint firstItem="3hH-RE-36k" firstAttribute="top" secondItem="MMz-3F-EvE" secondAttribute="bottom" constant="8" id="Oon-cF-dpN"/>
                             <constraint firstItem="tkU-ei-fNi" firstAttribute="top" secondItem="Tng-Sa-Zge" secondAttribute="bottom" constant="140" id="eYh-68-5jc"/>
                             <constraint firstItem="Tng-Sa-Zge" firstAttribute="top" secondItem="MMz-3F-EvE" secondAttribute="bottom" constant="143" id="jbc-N8-qjL"/>
                             <constraint firstItem="Tng-Sa-Zge" firstAttribute="leading" secondItem="0vs-bf-Bbf" secondAttribute="leadingMargin" constant="-20" id="lAI-y0-R8w"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="1Dd-en-YxH" secondAttribute="trailing" constant="30" id="sLw-KI-RtV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Tng-Sa-Zge" secondAttribute="trailing" constant="-20" id="vUm-eg-bcv"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="5VE-xM-xo7"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="StreamTable" destination="Tng-Sa-Zge" id="ald-K9-Uyj"/>
+                        <outlet property="StreamerLabel" destination="1Dd-en-YxH" id="pMR-Ue-l6U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z3D-ha-Idp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -374,14 +392,25 @@
                                     <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="yHh-l4-z87"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続済み" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2P-TF-xpb">
+                                <rect key="frame" x="216" y="58" width="68" height="17"/>
+                                <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="053-Fh-KpP" firstAttribute="top" secondItem="d0f-zL-1Hn" secondAttribute="bottom" constant="34" id="3qZ-Er-XNR"/>
                             <constraint firstItem="053-Fh-KpP" firstAttribute="leading" secondItem="sXy-cm-0jJ" secondAttribute="leadingMargin" constant="19" id="HjQ-MM-7hK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="M2P-TF-xpb" secondAttribute="trailing" constant="20" id="he9-h1-qhS"/>
+                            <constraint firstItem="M2P-TF-xpb" firstAttribute="top" secondItem="d0f-zL-1Hn" secondAttribute="bottom" constant="38" id="nTC-9O-uQo"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="ConnecedtLabel" destination="M2P-TF-xpb" id="9VU-cv-FkB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tpB-nd-zS9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
