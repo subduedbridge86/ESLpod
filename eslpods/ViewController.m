@@ -591,6 +591,7 @@
 
     [_mypod auClose];
     [_mypod2 auClose];
+     [NSNotificationCenter.defaultCenter removeObserver:self];
 //自分たち用
     
 }
