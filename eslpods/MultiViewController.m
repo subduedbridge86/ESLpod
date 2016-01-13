@@ -57,6 +57,10 @@
                                              selector:@selector(changeLabelNum)
                                                  name:@"conn"
                                                object:self.myMulti];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeLabelNum)
+                                                 name:@"disconn"
+                                               object:self.myMulti];
     
     // Do any additional setup after loading the view.
 }

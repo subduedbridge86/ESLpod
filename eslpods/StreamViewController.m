@@ -23,7 +23,14 @@
      self.myMulti=[[MultipeerHost alloc]init];
     self.myMulti.delegate=self;
     [self.myMulti startClient];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeLabeltoCon)
+                                                 name:@"conn"
+                                               object:self.myMulti];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeLabeltoDiscon)
+                                                 name:@"disconn"
+                                               object:self.myMulti];
     // Do any additional setup after loading the view.
 }
 
@@ -45,7 +52,24 @@
     [self.myMulti stopClient];
     [self.myMulti disconnect];
 }
-
+-(void)changeLabeltoDiscon{
+    dispatch_async(
+                   dispatch_get_main_queue(),
+                   ^{
+                       // ここに実行したいコード
+                      self.ConnecedtLabel.text=@"未接続";
+                   }
+                   );
+}
+-(void)changeLabeltoCon{
+    dispatch_async(
+                   dispatch_get_main_queue(),
+                   ^{
+                       // ここに実行したいコード
+                       self.ConnecedtLabel.text=@"接続済み";
+                   }
+                   );
+}
 /*
 #pragma mark - Navigation
 

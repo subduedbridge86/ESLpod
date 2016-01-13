@@ -76,7 +76,7 @@
     if (state==MCSessionStateNotConnected) {
         NSLog(@"抜けた,%@",peerID);
        
-        [self postNotificationc];
+        [self postNotificationDiscon];
         
         
     }
@@ -227,6 +227,17 @@
                       object:self
                     userInfo:nil];
 
+}
+-(void)postNotificationDiscon
+{
+    NSNotificationCenter *nc =
+    [NSNotificationCenter defaultCenter];
+    
+    // 通知する
+    [nc postNotificationName:@"disconn"
+                      object:self
+                    userInfo:nil];
+    
 }
 
 -(void)stopClient{
