@@ -16,6 +16,8 @@
 @interface MultipeerHost : NSObject<MCSessionDelegate,MCNearbyServiceAdvertiserDelegate,MCNearbyServiceBrowserDelegate>
 
 @property NSString *recvStr;
+@property MCPeerID *mPeerID;
+@property MCSession *mSession;
 
 @property id<MultipeerDataDelegate> delegate;
 -(void)startHost;

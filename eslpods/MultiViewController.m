@@ -19,6 +19,7 @@
 @property int nowPlayingIndex;
 @property AVAudioPlayer *player;
 @property NSMutableArray * URLarray;
+@property NSInteger numberOfPeer;
 @property (weak, nonatomic) IBOutlet UITableView *StreamTable;
 @property (weak, nonatomic) IBOutlet UILabel *StreamerLabel;
 
@@ -51,6 +52,11 @@
         [self.URLarray addObject:url];
         }
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeLabelNum)
+                                                 name:@"conn"
+                                               object:self.myMulti];
     
     // Do any additional setup after loading the view.
 }
@@ -211,7 +217,19 @@
     
 }
 
-
+-(void)changeLabelNum{
+    self.numberOfPeer=self.myMulti.mSession.connectedPeers.count;
+    NSString*str=@"接続人数 ";
+    NSString*numstr=[NSString stringWithFormat:@"%ld",(long)self.numberOfPeer];
+    dispatch_async(
+                   dispatch_get_main_queue(),
+                   ^{
+                       // ここに実行したいコード
+                       self.StreamerLabel.text=[str stringByAppendingString:numstr];
+                   }
+                   );
+    
+}
 
 
 @end

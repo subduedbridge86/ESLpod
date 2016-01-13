@@ -9,8 +9,7 @@
 
 #import "MultipeerHost.h"
 @interface MultipeerHost()
-@property MCPeerID *mPeerID;
-@property MCSession *mSession;
+
 @property MCNearbyServiceAdvertiser *nearbyAd;
 @property NSArray *invitationArr;
 @property MCNearbyServiceBrowser *browser;
