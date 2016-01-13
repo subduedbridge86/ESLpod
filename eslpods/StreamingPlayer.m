@@ -8,8 +8,6 @@
 
 #import "StreamingPlayer.h"
 @interface StreamingPlayer()
-@property NSMutableArray *dataArray;
-@property BOOL isFirst;
 @end
 @implementation StreamingPlayer
 -(void)start{
@@ -23,8 +21,7 @@
                                        &streamInfo.audioFileStream);
     checkError(err, "AudioFileStreamOpen");
     streamInfo.started=NO;
-    _dataArray=[[NSMutableArray alloc] init];
-    _isFirst = YES;
+    
     
    }
 void propertyListenerProc(
@@ -160,36 +157,10 @@ void outputCallback( void                 *inClientData,
     }
 }
 -(void)recvAudio:(NSData *)data{
-    if (_isFirst) {
-        
-    
-        if (_dataArray.count<=100) {
-        [_dataArray addObject:data];
-        }else if(_dataArray.count==101){
-            NSLog(@"101!!!!!!!!!!!!!!!!!!!!");
-            [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
-                for (int i=0; i<=50; i++) {
-                    NSMutableData *mdata=[[NSMutableData alloc]init];
-                    mdata=[_dataArray objectAtIndex:i];
-                    AudioFileStreamParseBytes(streamInfo.audioFileStream,
-                                              (int)mdata.length,
-                                              mdata.bytes,
-                                              0);            }];
-            
-                
-
-                
-            _isFirst=NO;
-            _dataArray=[_dataArray init];
-        }
-        
-    }else{
-        AudioFileStreamParseBytes(streamInfo.audioFileStream,
+           AudioFileStreamParseBytes(streamInfo.audioFileStream,
                                   (int)data.length,
                                   data.bytes,
                                   0);
-    }
-    
     
 }
 
