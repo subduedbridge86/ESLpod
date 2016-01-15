@@ -20,8 +20,21 @@
 @property AVAudioPlayer *player;
 @property NSMutableArray * URLarray;
 @property NSInteger numberOfPeer;
+
+
+@property NSTimer *timer;//数秒ごとにスライダーを更新させるため
+@property int currentsecond;
+@property int currentminute;
+@property int endsecond;
+@property int endminute;
+@property NSString *timestr;
+
+
 @property (weak, nonatomic) IBOutlet UITableView *StreamTable;
 @property (weak, nonatomic) IBOutlet UILabel *StreamerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentTimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
+@property (weak, nonatomic) IBOutlet UISlider *autoseek;
 
 @end
 
@@ -29,6 +42,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self startTimer];
     self.myMulti=[[MultipeerHost alloc]init];
     [self.myMulti startHost];
     self.converter=[[AudioConverter alloc]init];
@@ -236,5 +250,22 @@
     
 }
 
+-(void)startTimer{//数秒ごとにtimertextを呼び出す
+    _timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timertext) userInfo:nil repeats:YES];
+}
+-(void)timertext{
+    _currentsecond=fmodf(_player.currentTime,60);
+    _currentminute=_player.currentTime/60;
+    _timestr=[NSString stringWithFormat:@"%02d:%02d",_currentminute,_currentsecond];
+    _currentTimeLabel.text=_timestr;
+    
+//    _maxback=_playback-CMTimeGetSeconds(_player.currentTime);
+//    _maxsecond=_maxback%60;
+//    _maxminute=_maxback/60;
+//    _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
+//    _maxtimelabel.text=_maxtimelabelstr;
+    [_autoseek setValue:_player.currentTime animated:YES];
+    //autoseek.value=CMTimeGetSeconds(_avPlayer.currentTime);
+}
 
 @end
