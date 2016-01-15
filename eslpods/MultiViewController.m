@@ -23,11 +23,14 @@
 
 
 @property NSTimer *timer;//数秒ごとにスライダーを更新させるため
-@property int currentsecond;
-@property int currentminute;
-@property int endsecond;
-@property int endminute;
-@property NSString *timestr;
+@property int playback;//変換したendTimeを更新部に受け渡し
+@property int maxback;//受け渡し先の残り時間計算
+@property int currentsecond;//現在の秒
+@property int currentminute;//現在の分
+@property int endsecond;//残りの秒
+@property int endminute;//残りの分
+@property NSString *timestr;//現在の分:秒
+@property NSString *maxtimelabelstr;//残りの分:秒
 
 
 @property (weak, nonatomic) IBOutlet UITableView *StreamTable;
@@ -252,6 +255,11 @@
 
 -(void)startTimer{//数秒ごとにtimertextを呼び出す
     _timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timertext) userInfo:nil repeats:YES];
+    
+    NSString *playbackstr=[NSString stringWithFormat:@"%f", _player.duration];
+    _playback=playbackstr.intValue;
+    _autoseek.maximumValue=_playback;
+    
 }
 -(void)timertext{
     _currentsecond=fmodf(_player.currentTime,60);
@@ -259,11 +267,11 @@
     _timestr=[NSString stringWithFormat:@"%02d:%02d",_currentminute,_currentsecond];
     _currentTimeLabel.text=_timestr;
     
-//    _maxback=_playback-CMTimeGetSeconds(_player.currentTime);
-//    _maxsecond=_maxback%60;
-//    _maxminute=_maxback/60;
-//    _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
-//    _maxtimelabel.text=_maxtimelabelstr;
+    _maxback=_playback-_player.currentTime;
+    _endsecond=_maxback%60;
+    _endminute=_maxback/60;
+    _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_endminute,_endsecond];
+    _endTimeLabel.text=_maxtimelabelstr;
     [_autoseek setValue:_player.currentTime animated:YES];
     //autoseek.value=CMTimeGetSeconds(_avPlayer.currentTime);
 }
