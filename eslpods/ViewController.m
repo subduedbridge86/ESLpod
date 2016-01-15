@@ -13,7 +13,7 @@
 @property CMTime tm;
 @property int senderval;
 @property int maxback;
-@property int miccount;
+@property BOOL miccount;
 
 @property MPMusicPlayerController *player;
 
@@ -77,7 +77,7 @@
     _systemVol=0;
     _songCount=0;
     _repeatCount=0;
-    _miccount=1;
+    _miccount=YES;
     
     [super viewDidLoad];
     UIImage *imageForThumb = [UIImage imageNamed:@"slider.png"];
@@ -450,7 +450,7 @@
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
     _mypod.feedVol=sender.value;
     _mypod2.feedVol=sender.value;
-    if (_feedonoffstate.on) {
+    if (_miccount) {
 
         [_mypod mixUnitvol];
         [_mypod2 mixUnitvol];
@@ -600,8 +600,8 @@
 }
 
 - (IBAction)miconoff:(UIButton *)sender {
-    _miccount|=_miccount;
-    if (_miccount) {
+
+    if (!_miccount) {
         _mypod=[[ESLpod alloc]init];
         [_mypod audioSession];
         [_mypod feed];
@@ -613,12 +613,14 @@
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
         [_micimage setImage : [ UIImage imageNamed : @"new_micon.jpg" ] forState : UIControlStateNormal];
+        _miccount=YES;
     }else{
         [_mypod auClose];
         [_mypod2 auClose];
         _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
         _fbVolLabel.textColor=[UIColor lightGrayColor];
         [_micimage setImage : [ UIImage imageNamed : @"micoff.png" ] forState : UIControlStateNormal];
+        _miccount=NO;
     }
 }
 
