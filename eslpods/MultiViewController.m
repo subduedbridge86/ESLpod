@@ -112,12 +112,13 @@
   
     self.nowPlayingIndex=(int)indexPath.row;
     NSURL *url = [self.mediaItemCollection.items[self.nowPlayingIndex] valueForProperty:MPMediaItemPropertyAssetURL];
+    NSString *songTitle=[self.mediaItemCollection.items[self.nowPlayingIndex] valueForProperty:MPMediaItemPropertyTitle];
     self.player=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:nil];
     [self.player prepareToPlay];
     [self.player play];
     NSData*data=[[NSData alloc]initWithContentsOfURL:self.URLarray[self.nowPlayingIndex]];
-    NSData*msgData=[@"sta" dataUsingEncoding:NSUTF8StringEncoding];
-    [self.myMulti sendData:msgData];
+    [self.myMulti sendStr:@"sta"];
+    [self.myMulti sendStr:songTitle];
     [NSThread sleepForTimeInterval:1.0];
     [self.myMulti sendData:data];
    

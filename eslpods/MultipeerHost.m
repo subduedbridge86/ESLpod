@@ -134,7 +134,7 @@
                 
                 
             }else{
-                
+                [NSThread sleepForTimeInterval:0.01];
                 [data getBytes:buf range:NSMakeRange(ini,d)];
                 _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
 

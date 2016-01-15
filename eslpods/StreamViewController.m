@@ -12,6 +12,7 @@
 @property StreamingPlayer * StPlayer;
 @property MultipeerHost * myMulti;
 @property NSString * msgStr;
+@property BOOL songTitleFlag;
 @property (weak, nonatomic) IBOutlet UILabel *ConnecedtLabel;
 @end
 
@@ -31,6 +32,7 @@
                                              selector:@selector(changeLabeltoDiscon)
                                                  name:@"disconn"
                                                object:self.myMulti];
+    
     // Do any additional setup after loading the view.
 }
 
@@ -42,9 +44,13 @@
      _msgStr=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
     if ([_msgStr isEqual:@"sta"]) {
         [self.StPlayer start];
+        self.songTitleFlag=YES;
         NSLog(@"STREAMING START!!");
+    }else if(self.songTitleFlag){
+        NSLog(_msgStr);
+        self.songTitleFlag=NO;
     }else{
-    [self.StPlayer recvAudio:data];
+        [self.StPlayer recvAudio:data];
     }
     
 }
