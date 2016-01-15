@@ -13,6 +13,7 @@
 @property CMTime tm;
 @property int senderval;
 @property int maxback;
+@property BOOL miccount;
 
 @property MPMusicPlayerController *player;
 
@@ -38,6 +39,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *maxtimelabel;
 @property (weak, nonatomic) IBOutlet UISlider *autoseek;
 @property (weak, nonatomic) IBOutlet UIButton *playImage;
+@property (weak, nonatomic) IBOutlet UIButton *micimage;
 
 @property (weak, nonatomic) IBOutlet UILabel *ipodVolLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fbVolLabel;
@@ -75,6 +77,7 @@
     _systemVol=0;
     _songCount=0;
     _repeatCount=0;
+    _miccount=YES;
     
     [super viewDidLoad];
     UIImage *imageForThumb = [UIImage imageNamed:@"slider.png"];
@@ -447,7 +450,7 @@
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
     _mypod.feedVol=sender.value;
     _mypod2.feedVol=sender.value;
-    if (_feedonoffstate.on) {
+    if (_miccount) {
 
         [_mypod mixUnitvol];
         [_mypod2 mixUnitvol];
@@ -591,9 +594,34 @@
 
     [_mypod auClose];
     [_mypod2 auClose];
-     [NSNotificationCenter.defaultCenter removeObserver:self];
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 //自分たち用
     
+}
+
+- (IBAction)miconoff:(UIButton *)sender {
+
+    if (!_miccount) {
+        _mypod=[[ESLpod alloc]init];
+        [_mypod audioSession];
+        [_mypod feed];
+        [_mypod bufferSet];
+        _mypod2=[[ESLpod alloc]init];
+        [_mypod2 audioSession];
+        [_mypod2 feed];
+        [_mypod2 bufferSet];
+        _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        _fbVolLabel.textColor=[UIColor blackColor];
+        [_micimage setImage : [ UIImage imageNamed : @"new_micon.jpg" ] forState : UIControlStateNormal];
+        _miccount=YES;
+    }else{
+        [_mypod auClose];
+        [_mypod2 auClose];
+        _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+        _fbVolLabel.textColor=[UIColor lightGrayColor];
+        [_micimage setImage : [ UIImage imageNamed : @"micoff.png" ] forState : UIControlStateNormal];
+        _miccount=NO;
+    }
 }
 
 @end
