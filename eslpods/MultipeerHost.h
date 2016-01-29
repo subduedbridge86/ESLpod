@@ -26,7 +26,7 @@
 -(void)stopClient;
 -(void)sendStr:(NSString *)str;
 -(void)sendList:(NSArray *)arr;
--(void)sendData:(NSData *)data;
+-(void)sendData:(NSData *)data withSeconds:(NSInteger)seconds ;
 -(BOOL)fileCreate:(NSString *)path andData:(NSData*)data;
 -(void)disconnect;
 @end

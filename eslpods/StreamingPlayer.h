@@ -17,7 +17,8 @@ typedef struct StreamInfo{
     AudioFileStreamID audioFileStream;
     AudioQueueRef     audioQueueObject;
     BOOL              started;
-    
+    BOOL              isPlaying;
+    BOOL              isDone;
     AudioQueueBufferRef  audioQueueBuffer[kNumberOfBuffers];
     AudioStreamPacketDescription  packetDescs[kMaxPacketDescs];
     

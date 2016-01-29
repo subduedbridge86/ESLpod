@@ -21,7 +21,6 @@
 @property NSMutableArray * URLarray;
 @property NSInteger numberOfPeer;
 
-
 @property NSTimer *timer;//数秒ごとにスライダーを更新させるため
 @property int playback;//変換したendTimeを更新部に受け渡し
 @property int maxback;//受け渡し先の残り時間計算
@@ -45,7 +44,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self startTimer];
+   
+                       // ここに実行したいコード
+                       [self startTimer];
+                   
+    
     self.myMulti=[[MultipeerHost alloc]init];
     [self.myMulti startHost];
     self.converter=[[AudioConverter alloc]init];
@@ -137,10 +140,23 @@
     [self.myMulti sendStr:@"sta"];
     [self.myMulti sendStr:songTitle];
     [NSThread sleepForTimeInterval:1.0];
-    [self.myMulti sendData:data];
+    
+        [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
+            while (TRUE) {
+        if (self.endsecond!=0||self.endminute!=0) {
+            [self.myMulti sendData:data withSeconds:self.endminute*60+self.endsecond];
+            break;
+        }
+        
+        }
+        }];
+       
+        
+    }
+    
    
    
-}
+
 
 -(NSURL *)convertItemtoAAC:(MPMediaItem *)item{
    
@@ -256,20 +272,24 @@
 -(void)startTimer{//数秒ごとにtimertextを呼び出す
     _timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timertext) userInfo:nil repeats:YES];
     
-    NSString *playbackstr=[NSString stringWithFormat:@"%f", _player.duration];
-    _playback=playbackstr.intValue;
-    _autoseek.maximumValue=_playback;
+    
     
 }
 -(void)timertext{
+    NSString *playbackstr=[NSString stringWithFormat:@"%f", _player.duration];
+    _playback=playbackstr.intValue;//書く場所変更か
+    _autoseek.maximumValue=_playback;
     _currentsecond=fmodf(_player.currentTime,60);
     _currentminute=_player.currentTime/60;
     _timestr=[NSString stringWithFormat:@"%02d:%02d",_currentminute,_currentsecond];
     _currentTimeLabel.text=_timestr;
     
     _maxback=_playback-_player.currentTime;
+    NSLog(@"pp%d",_playback);
+   
     _endsecond=_maxback%60;
     _endminute=_maxback/60;
+   
     _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_endminute,_endsecond];
     _endTimeLabel.text=_maxtimelabelstr;
     [_autoseek setValue:_player.currentTime animated:YES];

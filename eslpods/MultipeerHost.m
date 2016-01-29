@@ -108,9 +108,10 @@
     NSData*keyData=[NSKeyedArchiver archivedDataWithRootObject:arr];
     [self.mSession sendData:keyData toPeers:self.mSession.connectedPeers withMode:MCSessionSendDataReliable error:nil];
 }
--(void)sendData:(NSData *)data{
+-(void)sendData:(NSData *)data withSeconds:(NSInteger)seconds{
     
-   
+    double interval=(double)seconds/(double)data.length*32768.0/1.3;//何秒に一パケット送るか
+    NSLog(@"いんた%f",interval);
     NSInteger d=0;
     int ini;
     u_int8_t buf[BUF];
@@ -134,7 +135,7 @@
                 
                 
             }else{
-                [NSThread sleepForTimeInterval:0.01];
+                [NSThread sleepForTimeInterval:interval];
                 [data getBytes:buf range:NSMakeRange(ini,d)];
                 _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
 
