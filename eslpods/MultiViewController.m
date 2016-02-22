@@ -285,7 +285,6 @@
     _currentTimeLabel.text=_timestr;
     
     _maxback=_playback-_player.currentTime;
-    NSLog(@"pp%d",_playback);
    
     _endsecond=_maxback%60;
     _endminute=_maxback/60;

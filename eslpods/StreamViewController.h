@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "StreamingPlayer.h"
 #import "MultipeerHost.h"
+#import "ESLpod.h" 
 @interface StreamViewController : UIViewController<MultipeerDataDelegate>
 
 @end
