@@ -294,5 +294,9 @@
     [_autoseek setValue:_player.currentTime animated:YES];
     //autoseek.value=CMTimeGetSeconds(_avPlayer.currentTime);
 }
+- (IBAction)returnBtnTaped:(id)sender {
+    [_myMulti stopHost];
+    [_myMulti disconnect];
+}
 
 @end

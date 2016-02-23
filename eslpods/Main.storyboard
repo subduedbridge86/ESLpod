@@ -325,6 +325,7 @@
                                 <rect key="frame" x="16" y="28" width="30" height="30"/>
                                 <state key="normal" title="戻る"/>
                                 <connections>
+                                    <action selector="returnBtnTaped:" destination="drm-Ul-07e" eventType="touchUpInside" id="rTi-jh-Vak"/>
                                     <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="wG2-42-OJQ"/>
                                 </connections>
                             </button>

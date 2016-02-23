@@ -34,14 +34,14 @@
                                                  name:@"disconn"
                                                object:self.myMulti];
     //feed back
-    _mypod=[[ESLpod alloc]init];
-    [_mypod audioSession];
-    [_mypod feed];
-    [_mypod bufferSet];
-    ESLpod *mypod=[[ESLpod alloc]init];
-    [mypod audioSession];
-    [mypod feed];
-    [mypod bufferSet];
+//    _mypod=[[ESLpod alloc]init];
+//    [_mypod audioSession];
+//    [_mypod feed];
+//    [_mypod bufferSet];
+//    ESLpod *mypod=[[ESLpod alloc]init];
+//    [mypod audioSession];
+//    [mypod feed];
+//    [mypod bufferSet];
     // Do any additional setup after loading the view.
 }
 
