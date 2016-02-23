@@ -57,7 +57,16 @@
         NSLog(@"STREAMING START!!");
     }else if(self.songTitleFlag){
         NSLog(_msgStr);
-        self.songTitleFlag=NO;
+        dispatch_async(
+                       dispatch_get_main_queue(),
+                       ^{
+                           // ここに実行したいコード
+                           self.titleLabel.text=_msgStr;
+                           self.songTitleFlag=NO;
+                          
+                       }
+                       );
+       
     }else{
         [self.StPlayer recvAudio:data];
     }

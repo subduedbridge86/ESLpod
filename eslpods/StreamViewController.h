@@ -11,5 +11,6 @@
 #import "MultipeerHost.h"
 #import "ESLpod.h" 
 @interface StreamViewController : UIViewController<MultipeerDataDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end
