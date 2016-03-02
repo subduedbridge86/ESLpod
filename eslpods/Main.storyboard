@@ -329,9 +329,9 @@
                                     <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="wG2-42-OJQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続人数 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Dd-en-YxH">
-                                <rect key="frame" x="189" y="37" width="85" height="17"/>
-                                <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="接続人数 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Dd-en-YxH">
+                                <rect key="frame" x="189" y="37" width="111" height="43"/>
+                                <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="22"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -427,28 +427,28 @@
                                     <segue destination="sOp-oo-Fhy" kind="unwind" unwindAction="unWindtoSecondScene:" id="yHh-l4-z87"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未接続" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2P-TF-xpb">
-                                <rect key="frame" x="233" y="58" width="51" height="17"/>
-                                <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="音声タイトルをここに表示" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1F-Yx-4Io">
+                                <rect key="frame" x="36" y="235" width="252" height="26"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="aaaaaaaaaaaaaaaaaaaaaaaaaa" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1F-Yx-4Io">
-                                <rect key="frame" x="54" y="235" width="234" height="75"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="未接続" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2P-TF-xpb">
+                                <rect key="frame" x="222" y="39" width="66" height="22"/>
+                                <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="22"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="r1F-Yx-4Io" firstAttribute="leading" secondItem="sXy-cm-0jJ" secondAttribute="leadingMargin" constant="15" id="07f-13-XeA"/>
                             <constraint firstItem="053-Fh-KpP" firstAttribute="top" secondItem="d0f-zL-1Hn" secondAttribute="bottom" constant="34" id="3qZ-Er-XNR"/>
-                            <constraint firstItem="eWI-5J-VUs" firstAttribute="top" secondItem="r1F-Yx-4Io" secondAttribute="bottom" constant="199" id="9ZE-Qx-6aE"/>
+                            <constraint firstItem="eWI-5J-VUs" firstAttribute="top" secondItem="r1F-Yx-4Io" secondAttribute="bottom" constant="258" id="9Vs-9R-ZQH"/>
                             <constraint firstItem="053-Fh-KpP" firstAttribute="leading" secondItem="sXy-cm-0jJ" secondAttribute="leadingMargin" constant="19" id="HjQ-MM-7hK"/>
-                            <constraint firstItem="r1F-Yx-4Io" firstAttribute="leading" secondItem="sXy-cm-0jJ" secondAttribute="leadingMargin" constant="34" id="hTO-Id-Vzg"/>
+                            <constraint firstItem="r1F-Yx-4Io" firstAttribute="top" secondItem="d0f-zL-1Hn" secondAttribute="bottom" constant="215" id="L4r-LK-G0Q"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="r1F-Yx-4Io" secondAttribute="trailing" constant="12" id="OHz-03-WIE"/>
                             <constraint firstAttribute="trailingMargin" secondItem="M2P-TF-xpb" secondAttribute="trailing" constant="20" id="he9-h1-qhS"/>
-                            <constraint firstItem="r1F-Yx-4Io" firstAttribute="top" secondItem="d0f-zL-1Hn" secondAttribute="bottom" constant="215" id="hfF-WB-wsN"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="r1F-Yx-4Io" secondAttribute="trailing" constant="12" id="jJC-Tg-rZb"/>
                             <constraint firstItem="M2P-TF-xpb" firstAttribute="top" secondItem="d0f-zL-1Hn" secondAttribute="bottom" constant="38" id="nTC-9O-uQo"/>
                         </constraints>
                     </view>
@@ -474,16 +474,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrg-nc-NNU">
-                                <rect key="frame" x="36" y="159" width="248" height="30"/>
-                                <state key="normal" title="曲を選択してストリーミングを開始"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lrg-nc-NNU">
+                                <rect key="frame" x="33" y="169" width="252" height="46"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="ストリーミング配信"/>
                                 <connections>
                                     <action selector="SelectMusicTap:" destination="MqE-m2-V1S" eventType="touchUpInside" id="AR3-yQ-aEi"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jhg-si-QJt">
-                                <rect key="frame" x="44" y="289" width="233" height="30"/>
-                                <state key="normal" title="近くのストリーミングを視聴開始"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jhg-si-QJt">
+                                <rect key="frame" x="34" y="371" width="252" height="46"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="ストリーミング受信"/>
                                 <connections>
                                     <segue destination="5rL-YQ-bPH" kind="presentation" id="aTi-Tc-g9c"/>
                                 </connections>
@@ -491,13 +493,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="lrg-nc-NNU" secondAttribute="trailing" constant="20" id="4Qp-6g-mpY"/>
-                            <constraint firstItem="Jhg-si-QJt" firstAttribute="leading" secondItem="1gn-iz-LcA" secondAttribute="leadingMargin" constant="28" id="AnZ-eH-r8m"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Jhg-si-QJt" secondAttribute="trailing" constant="27" id="Tda-gG-wpN"/>
-                            <constraint firstItem="lrg-nc-NNU" firstAttribute="leading" secondItem="1gn-iz-LcA" secondAttribute="leadingMargin" constant="20" id="U83-Qm-8ux"/>
-                            <constraint firstItem="lrg-nc-NNU" firstAttribute="top" secondItem="0t2-BU-flN" secondAttribute="bottom" constant="139" id="XbA-MC-cic"/>
+                            <constraint firstItem="lrg-nc-NNU" firstAttribute="leading" secondItem="1gn-iz-LcA" secondAttribute="leadingMargin" constant="-8" id="6zp-6Q-gUQ"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="Jhg-si-QJt" secondAttribute="leading" id="9ul-gJ-RDr"/>
+                            <constraint firstItem="Jhg-si-QJt" firstAttribute="top" secondItem="lrg-nc-NNU" secondAttribute="bottom" constant="148" id="JI9-Pw-22f"/>
                             <constraint firstItem="Jhg-si-QJt" firstAttribute="leading" secondItem="lrg-nc-NNU" secondAttribute="trailing" constant="-232" id="YzB-dj-QOf"/>
-                            <constraint firstItem="Jhg-si-QJt" firstAttribute="top" secondItem="lrg-nc-NNU" secondAttribute="bottom" constant="100" id="piG-Tp-3v9"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lrg-nc-NNU" secondAttribute="trailing" constant="-5" id="e6G-HO-qZA"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Jhg-si-QJt" secondAttribute="trailing" id="jn7-l3-fhr"/>
+                            <constraint firstItem="lrg-nc-NNU" firstAttribute="top" secondItem="0t2-BU-flN" secondAttribute="bottom" constant="139" id="oAY-2S-xDs"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">

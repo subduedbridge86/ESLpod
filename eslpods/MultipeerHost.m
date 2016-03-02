@@ -109,8 +109,9 @@
     [self.mSession sendData:keyData toPeers:self.mSession.connectedPeers withMode:MCSessionSendDataReliable error:nil];
 }
 -(void)sendData:(NSData *)data withSeconds:(NSInteger)seconds{
+    int priority=10;
     
-    double interval=(double)seconds/(double)data.length*32768.0/1.3;//何秒に一パケット送るか
+    double interval=0;
     NSLog(@"いんた%f",interval);
     NSInteger d=0;
     int ini;
@@ -135,6 +136,12 @@
                 
                 
             }else{
+                if (priority>0) {
+                    interval=0;
+                    priority--;
+                }else{
+                    interval=(double)seconds/(double)data.length*32768.0/1.3;//何秒に一パケット送るか
+                }
                 [NSThread sleepForTimeInterval:interval];
                 [data getBytes:buf range:NSMakeRange(ini,d)];
                 _mdata=[_mdata initWithBytes:buf length:sizeof(buf)];
