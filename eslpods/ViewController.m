@@ -40,6 +40,8 @@
 @property (weak, nonatomic) IBOutlet UISlider *autoseek;
 @property (weak, nonatomic) IBOutlet UIButton *playImage;
 @property (weak, nonatomic) IBOutlet UIButton *micimage;
+@property (weak, nonatomic) IBOutlet UIButton *repeatBtnView;
+
 
 @property (weak, nonatomic) IBOutlet UILabel *ipodVolLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fbVolLabel;
@@ -76,7 +78,6 @@
     _ipodVol=0.01;
     _systemVol=0;
     _songCount=0;
-    _repeatCount=0;
     _miccount=YES;
     
     [super viewDidLoad];
@@ -149,7 +150,20 @@
         _avPlayer.volume=_ipodVol;
         [self startTimer];
     
-    
+    _repeatCount=[ud floatForKey:@"repeatCount"];
+    if (_repeatCount==0) {
+        [_repeatBtnView setTitle:@"リピートなし" forState:UIControlStateNormal];
+        _repeatbtn.backgroundColor = [UIColor clearColor];
+        [_repeatbtn setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+    }else if (_repeatCount==1){
+        [_repeatBtnView setTitle:@"1曲リピート" forState:UIControlStateNormal];
+        _repeatbtn.backgroundColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        [_repeatbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    }else{
+        [_repeatBtnView setTitle:@"全曲リピート" forState:UIControlStateNormal];
+        _repeatbtn.backgroundColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        [_repeatbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    }
 }
 
 - (void)avPlayDidFinish:(NSNotification*)notification
@@ -488,6 +502,8 @@
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
     NSUserDefaults *ud5=[NSUserDefaults standardUserDefaults];
     [ud5 setFloat:_songCount forKey:@"songCount"];
+    NSUserDefaults *ud6=[NSUserDefaults standardUserDefaults];
+    [ud6 setFloat:_repeatCount forKey:@"repeatCount"];
     }
 }
 -(void)songtext{
@@ -577,6 +593,7 @@
         _repeatbtn.backgroundColor = [UIColor clearColor];
         [_repeatbtn setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
     }
+    [self saveCount];
 }
 
 -(void)AutoScroll{
