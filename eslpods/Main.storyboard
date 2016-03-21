@@ -130,6 +130,7 @@
                                 <rect key="frame" x="48" y="436" width="274" height="31"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
+                                    <action selector="feedDown:" destination="BYZ-38-t0r" eventType="touchDown" id="NaS-Lo-6mW"/>
                                     <action selector="feedUp:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="4Ir-xW-MqZ"/>
                                     <action selector="feedUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8BC-WF-BHk"/>
                                     <action selector="seekslider:" destination="BYZ-38-t0r" eventType="valueChanged" id="IYU-fd-TmP"/>
@@ -251,6 +252,7 @@
                             <constraint firstItem="DnD-02-eLF" firstAttribute="leading" secondItem="MDX-pb-b3U" secondAttribute="trailing" constant="4" id="TVc-35-QVr"/>
                             <constraint firstItem="ubH-Nf-V3v" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-7" id="Tom-YT-XOF"/>
                             <constraint firstItem="DnD-02-eLF" firstAttribute="top" secondItem="mDo-9k-N8d" secondAttribute="bottom" constant="13" id="TqF-Sc-oTE"/>
+                            <constraint firstItem="iMs-yN-2eC" firstAttribute="top" secondItem="Iby-vb-Uzr" secondAttribute="bottom" constant="9" id="UqN-e1-L9y"/>
                             <constraint firstAttribute="trailingMargin" secondItem="mDo-9k-N8d" secondAttribute="trailing" constant="45" id="VO4-W2-3U7"/>
                             <constraint firstItem="YR8-69-XMN" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="XL9-HP-lYT"/>
                             <constraint firstItem="mDo-9k-N8d" firstAttribute="leading" secondItem="B8W-7v-9oO" secondAttribute="trailing" constant="21" id="XSK-9Z-AUA"/>

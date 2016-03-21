@@ -14,6 +14,8 @@
 @property int senderval;
 @property int maxback;
 @property BOOL miccount;
+@property float newValue;
+@property float oldValue;
 
 @property MPMusicPlayerController *player;
 
@@ -112,7 +114,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(avPlayDidFinish:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
-                                               object:_playerItem];
+                                               object:_avPlayer];
     ///前回のスラいだー値反映
     NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
     
@@ -232,6 +234,13 @@
             NSLog(@"割り込みの開始！");
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [_avPlayer pause];
+            [_mypod auClose];
+            [_mypod2 auClose];
+            _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+            _fbVolLabel.textColor=[UIColor lightGrayColor];
+            [_micimage setImage : [ UIImage imageNamed : @"micoff.png" ] forState : UIControlStateNormal];
+            _miccount=NO;
+
             break;
         case AVAudioSessionInterruptionTypeEnded:
             NSLog(@"割り込みの終了！");
@@ -478,25 +487,26 @@
     [ud2 setFloat:_mypod2.feedVol forKey:@"feedvol"];
 }
 
-- (IBAction)feedonoff:(UISwitch *)sender {
-    if (sender.on) {
-        _mypod=[[ESLpod alloc]init];
-        [_mypod audioSession];
-        [_mypod feed];
-        [_mypod bufferSet];
-        _mypod2=[[ESLpod alloc]init];
-        [_mypod2 audioSession];
-        [_mypod2 feed];
-        [_mypod2 bufferSet];
-        _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
-        _fbVolLabel.textColor=[UIColor blackColor];
-    }else{
-        [_mypod auClose];
-        [_mypod2 auClose];
-        _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
-        _fbVolLabel.textColor=[UIColor lightGrayColor];
-    }
-}
+//スイッチでマイクオンオフしてたときの遺産
+//- (IBAction)feedonoff:(UISwitch *)sender {
+//    if (sender.on) {
+//        _mypod=[[ESLpod alloc]init];
+//        [_mypod audioSession];
+//        [_mypod feed];
+//        [_mypod bufferSet];
+//        _mypod2=[[ESLpod alloc]init];
+//        [_mypod2 audioSession];
+//        [_mypod2 feed];
+//        [_mypod2 bufferSet];
+//        _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+//        _fbVolLabel.textColor=[UIColor blackColor];
+//    }else{
+//        [_mypod auClose];
+//        [_mypod2 auClose];
+//        _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+//        _fbVolLabel.textColor=[UIColor lightGrayColor];
+//    }
+//}
 
 -(void)saveCount{
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
@@ -533,9 +543,16 @@
     [_autoseek setValue:CMTimeGetSeconds(_avPlayer.currentTime) animated:YES];
     //autoseek.value=CMTimeGetSeconds(_avPlayer.currentTime);
 }
+
+//float RoundValue(UISlider * slider) {
+//    return roundf(slider.value * 2.0) * 0.5;
+//}
+
 - (IBAction)seekslider:(UISlider *)sender {
+    _newValue=sender.value;
+    if (fabsf(_newValue-_oldValue)>1) {
     [_timer invalidate];
-    _tm= CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC);
+    _tm= CMTimeMakeWithSeconds((int)sender.value, NSEC_PER_SEC);
     //timelabel.text=CMTimeGetSeconds(tm);
     
     if ([_avPlayer rate]==0) {  //曲が停止中なら再生
@@ -558,6 +575,8 @@
     _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
     _maxtimelabel.text=_maxtimelabelstr;
    // autoseek.value=sender.value;
+        _oldValue=_newValue;
+    }
 }
 
 
@@ -569,11 +588,14 @@
 
         //[NSThread sleepForTimeInterval:1];
         [self startTimer];
-        NSLog(@"aaaaaaaaaa%f",CMTimeGetSeconds(_avPlayer.currentTime));
+        NSLog(@"離した%f",CMTimeGetSeconds(_avPlayer.currentTime));
     }
-    
-
 }
+
+- (IBAction)feedDown:(UISlider *)sender {
+    _oldValue=sender.value;
+}
+
 
 - (IBAction)repeatButton:(UIButton *)sender {
     NSLog(@"repeat押した");
@@ -606,27 +628,24 @@
     }
 }
 
-- (IBAction)BackToTheFirst:(id)sender {
-    [_avPlayer pause];
-
-    [_mypod auClose];
-    [_mypod2 auClose];
-    [NSNotificationCenter.defaultCenter removeObserver:self];
-//自分たち用
-    
-}
+//- (IBAction)BackToTheFirst:(id)sender {//戻るボタンの名残
+//    [_avPlayer pause];
+//
+//    [_mypod auClose];
+//    [_mypod2 auClose];
+//    [NSNotificationCenter.defaultCenter removeObserver:self];
+//}
 
 - (IBAction)miconoff:(UIButton *)sender {
-
     if (!_miccount) {
-        _mypod=[[ESLpod alloc]init];
         [_mypod audioSession];
         [_mypod feed];
         [_mypod bufferSet];
-        _mypod2=[[ESLpod alloc]init];
+        [_mypod mixUnitvol];
         [_mypod2 audioSession];
         [_mypod2 feed];
         [_mypod2 bufferSet];
+        [_mypod2 mixUnitvol];
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
         [_micimage setImage : [ UIImage imageNamed : @"new_micon.jpg" ] forState : UIControlStateNormal];
@@ -641,4 +660,11 @@
     }
 }
 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if ([event touchesForView:_autoseek]) {
+        //NULLじゃなかったら、`aView`がタッチされている
+        NSLog(@"aaa");
+    }
+}
 @end
