@@ -16,6 +16,7 @@
 @property BOOL miccount;
 @property float newValue;
 @property float oldValue;
+@property BOOL seekPlaying;
 
 @property MPMusicPlayerController *player;
 
@@ -438,9 +439,11 @@
         if ([_avPlayer rate]==0) {  //曲が停止中なら再生
             [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
             [_avPlayer play];
+            _seekPlaying=YES;
         }else{  //曲が再生中なら停止
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [_avPlayer pause];
+            _seekPlaying=NO;
         }
     }
 }
@@ -542,33 +545,38 @@
 
 - (IBAction)seekslider:(UISlider *)sender {
     _newValue=sender.value;
-    if (fabsf(_newValue-_oldValue)>1) {
     [_timer invalidate];
+    if (fabsf(_newValue-_oldValue)>1) {
+    
     _tm= CMTimeMakeWithSeconds((int)sender.value, NSEC_PER_SEC);
     //timelabel.text=CMTimeGetSeconds(tm);
     
-    if ([_avPlayer rate]==0) {  //曲が停止中なら再生
+    if (_seekPlaying==NO) {  //曲が停止中なら移動後も停止
         [_avPlayer seekToTime:_tm];
-    }else{  //曲が再生中なら停止
+    }else{  //曲が再生中なら移動後も再生
         [_avPlayer pause];
         [_avPlayer seekToTime:_tm];
-        [_avPlayer play];
+        if (_playback-sender.value>1) {
+            [_avPlayer play];
+            [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
+        }
     }
-    NSLog(@"%f",CMTimeGetSeconds(_avPlayer.currentTime));
+    NSLog(@"%f",_playback-sender.value);
     
-    _senderval=sender.value;
+
+    }
+        _senderval=sender.value;
     _second=_senderval%60;
     _minute=sender.value/60;
     _timestr=[NSString stringWithFormat:@"%02d:%02d",_minute,_second];
     _timelabel.text=_timestr;
-    _maxback=_playback-CMTimeGetSeconds(_avPlayer.currentTime);
+    _maxback=_playback-sender.value;
     _maxsecond=_maxback%60;
     _maxminute=_maxback/60;
     _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
     _maxtimelabel.text=_maxtimelabelstr;
    // autoseek.value=sender.value;
         _oldValue=_newValue;
-    }
 }
 
 
@@ -582,10 +590,22 @@
         [self startTimer];
         NSLog(@"離した%f",CMTimeGetSeconds(_avPlayer.currentTime));
     }
+    if (_seekPlaying==YES) {
+        [_avPlayer play];
+        
+    }
 }
 
 - (IBAction)feedDown:(UISlider *)sender {
     _oldValue=sender.value;
+    
+    if ([_avPlayer rate]==0) {
+        _seekPlaying=NO;
+        NSLog(@"NO");
+    }else{
+        _seekPlaying=YES;
+        NSLog(@"YES");
+    }
 }
 
 
@@ -649,4 +669,6 @@
         _miccount=NO;
     }
 }
+
+
 @end
