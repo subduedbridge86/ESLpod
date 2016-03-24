@@ -42,14 +42,12 @@
 @property (weak, nonatomic) IBOutlet UISlider *autoseek;
 @property (weak, nonatomic) IBOutlet UIButton *playImage;
 @property (weak, nonatomic) IBOutlet UIButton *micimage;
-@property (weak, nonatomic) IBOutlet UIButton *repeatBtnView;
+@property (weak, nonatomic) IBOutlet UIButton *repeatImage;
 
 
 @property (weak, nonatomic) IBOutlet UILabel *ipodVolLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fbVolLabel;
 
-@property (weak, nonatomic) IBOutlet UISwitch *feedonoffstate;
-@property (weak, nonatomic) IBOutlet UIButton *repeatbtn;
 
 @property (weak, nonatomic) IBOutlet UISlider *ipodvol;
 @property (weak, nonatomic) IBOutlet UISlider *feedvol;
@@ -153,18 +151,12 @@
         [self startTimer];
     
     _repeatCount=[ud floatForKey:@"repeatCount"];
-    if (_repeatCount==0) {
-        [_repeatBtnView setTitle:@"リピートなし" forState:UIControlStateNormal];
-        _repeatbtn.backgroundColor = [UIColor clearColor];
-        [_repeatbtn setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
-    }else if (_repeatCount==1){
-        [_repeatBtnView setTitle:@"1曲リピート" forState:UIControlStateNormal];
-        _repeatbtn.backgroundColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
-        [_repeatbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    }else{
-        [_repeatBtnView setTitle:@"全曲リピート" forState:UIControlStateNormal];
-        _repeatbtn.backgroundColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
-        [_repeatbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    if (_repeatCount==1) {//1
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeat11.png" ] forState : UIControlStateNormal];
+    }else if (_repeatCount==0){//all
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeat0.png" ] forState : UIControlStateNormal];
+    }else{//non
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeata.png" ] forState : UIControlStateNormal];
     }
 }
 
@@ -597,26 +589,24 @@
 }
 
 
-- (IBAction)repeatButton:(UIButton *)sender {
+
+
+- (IBAction)repeatBtn:(UIButton *)sender {//0=リピート無し,1=1曲リピート,2=Allリピート
     NSLog(@"repeat押した");
-    if (_repeatCount==0) {//1
+    if (_repeatCount==2) {//1
         _repeatCount=1;
-        [sender setTitle:@"1曲リピート" forState:UIControlStateNormal];
-        _repeatbtn.backgroundColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
-        [_repeatbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeat11.png" ] forState : UIControlStateNormal];
     }else if (_repeatCount==1){//all
-        [sender setTitle:@"全曲リピート" forState:UIControlStateNormal];
-        _repeatCount=2;
-        _repeatbtn.backgroundColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
-        [_repeatbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    }else{//non
         _repeatCount=0;
-        [sender setTitle:@"リピートなし" forState:UIControlStateNormal];
-        _repeatbtn.backgroundColor = [UIColor clearColor];
-        [_repeatbtn setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeat0.png" ] forState : UIControlStateNormal];
+    }else{//non
+        _repeatCount=2;
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeata.png" ] forState : UIControlStateNormal];
     }
     [self saveCount];
 }
+
+
 
 -(void)AutoScroll{
     if (_songCount<_nameData.count) {
@@ -657,14 +647,6 @@
         _fbVolLabel.textColor=[UIColor lightGrayColor];
         [_micimage setImage : [ UIImage imageNamed : @"micoff.png" ] forState : UIControlStateNormal];
         _miccount=NO;
-    }
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if ([event touchesForView:_autoseek]) {
-        //NULLじゃなかったら、`aView`がタッチされている
-        NSLog(@"aaa");
     }
 }
 @end
