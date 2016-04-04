@@ -12,22 +12,22 @@
 @implementation ESLpod
 
 -(void)audioSession{
-    AVAudioSession *session = [AVAudioSession sharedInstance];
+    _session = [AVAudioSession sharedInstance];
     
     NSError *setCategoryError = nil;
-    if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
+    if (![_session setCategory:AVAudioSessionCategoryPlayAndRecord
                   withOptions:AVAudioSessionCategoryOptionMixWithOthers
                         error:&setCategoryError]) {}
-    if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
+    if (![_session setCategory:AVAudioSessionCategoryPlayAndRecord
                   withOptions:AVAudioSessionCategoryOptionAllowBluetooth
                         error:&setCategoryError]) {}
 //    if (![session setCategory:AVAudioSessionCategoryPlayback
 //                        error:&setCategoryError]) {}
 
     
-    [session setMode:AVAudioSessionModeVoiceChat error:nil];
+    [_session setMode:AVAudioSessionModeVoiceChat error:nil];
     
-    [session setActive:YES error:nil];
+    [_session setActive:YES error:nil];
 }
 
 -(void)feed{

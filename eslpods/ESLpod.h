@@ -20,6 +20,7 @@
 @property AudioUnit remoteIOUnit,mixUnit;
 @property AUGraph auGraph;
 @property float feedVol;
+@property AVAudioSession* session;
 
 
 -(void)audioSession;

@@ -17,6 +17,8 @@
 @property float newValue;
 @property float oldValue;
 @property BOOL seekPlaying;
+@property BOOL headphoneConnect;
+@property NSString* ipodVoltext;
 
 @property MPMusicPlayerController *player;
 
@@ -41,6 +43,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *timelabel;
 @property (weak, nonatomic) IBOutlet UILabel *maxtimelabel;
 @property (weak, nonatomic) IBOutlet UISlider *autoseek;
+@property (weak, nonatomic) IBOutlet UILabel *musicIcon;
+
 @property (weak, nonatomic) IBOutlet UIButton *playImage;
 @property (weak, nonatomic) IBOutlet UIButton *micimage;
 @property (weak, nonatomic) IBOutlet UIButton *repeatImage;
@@ -65,14 +69,6 @@
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
-/* Usage
- if (SYSTEM_VERSION_LESS_THAN(@"4.0")) {
- ...
- }
- 
- if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"3.1.1")) {
- ...
- }*/
 
 - (void)viewDidLoad
 {
@@ -159,6 +155,18 @@
     }else{//non
         [_repeatImage setImage : [ UIImage imageNamed : @"repeata.png" ] forState : UIControlStateNormal];
     }
+    
+
+    NSArray *out = _mypod.session.currentRoute.outputs;
+    AVAudioSessionPortDescription *portDescription = [out lastObject];
+    if ([portDescription.portType isEqualToString:@"Headphones"])
+    {
+        NSLog(@"接続中");
+        [self ipodLabelDefault];
+    }else{
+        NSLog(@"未接続");
+        [self ipodLabelRed];
+    }
 }
 
 - (void)avPlayDidFinish:(NSNotification*)notification
@@ -208,10 +216,13 @@
     if (isJointHeadphone([[[AVAudioSession sharedInstance] currentRoute] outputs])) {
         if (!isJointHeadphone(prevDesc.outputs)) {
             NSLog(@"ヘッドフォンが刺さった");
+            [self ipodLabelDefault];
         }
     } else {
         if(isJointHeadphone(prevDesc.outputs)) {
             NSLog(@"ヘッドフォンが抜かれた");
+            [self ipodLabelRed];
+            
             [_avPlayer pause];
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
         }
@@ -254,8 +265,6 @@
     picker.allowsPickingMultipleItems = YES;        // 複数選択可
     
     [self presentViewController:picker animated:YES completion:nil];    //Libraryを開く
-    
-    
 }
 
 - (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker{
@@ -338,7 +347,6 @@
     }
     cell.textLabel.text = self.nameData[indexPath.row];
     
-    
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -372,21 +380,16 @@
         }
         else{[_avPlayer seekToTime:CMTimeMake(0, 600)];}
     }
-    
 }
 
 - (IBAction)nextSong:(id)sender {
-    
-    
     //NSLog(@"%lu",(unsigned long)_mediaItemCollection2.count);
     if(_mediaItemCollection2.count != 0){               //１曲以上選ばれているか
-        
         if (_songCount==_mediaItemCollection2.count-1) {//最後なら1曲目へ
             _songCount=0;
             [self saveCount];
         }
         else{           //次の曲へ
-            
             if (_repeatCount!=1) {
             _songCount++;
             }
@@ -398,8 +401,6 @@
         }else{  //曲が再生中なら停止
             [self nextandbackplay];
         }
-        
-        
     }
 }
 
@@ -458,8 +459,13 @@
     _ipodVol = sender.value;
     _avPlayer.volume=_ipodVol;
     
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
-    _ipodVolLabel.text=ipodVoltext;
+    if (_headphoneConnect) {
+        _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
+    }else{
+        _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+    }
+    
+    _ipodVolLabel.text=_ipodVoltext;
     
     NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
     [ud1 setFloat:_ipodVol forKey:@"ipodvol"];
@@ -529,14 +535,12 @@
     _timestr=[NSString stringWithFormat:@"%02d:%02d",_minute,_second];
     _timelabel.text=_timestr;
 
-    
     _maxback=_playback-CMTimeGetSeconds(_avPlayer.currentTime);
     _maxsecond=_maxback%60;
     _maxminute=_maxback/60;
     _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
     _maxtimelabel.text=_maxtimelabelstr;
-    [_autoseek setValue:CMTimeGetSeconds(_avPlayer.currentTime) animated:YES];
-    //autoseek.value=CMTimeGetSeconds(_avPlayer.currentTime);
+    [_autoseek setValue:CMTimeGetSeconds(_avPlayer.currentTime) animated:NO];
 }
 
 //float RoundValue(UISlider * slider) {
@@ -546,7 +550,7 @@
 - (IBAction)seekslider:(UISlider *)sender {
     _newValue=sender.value;
     [_timer invalidate];
-    if (fabsf(_newValue-_oldValue)>1) {
+    if (fabsf(_newValue-_oldValue)>(_playback/500)) {
     
     _tm= CMTimeMakeWithSeconds((int)sender.value, NSEC_PER_SEC);
     //timelabel.text=CMTimeGetSeconds(tm);
@@ -558,7 +562,6 @@
         [_avPlayer seekToTime:_tm];
         if (_playback-sender.value>1) {
             [_avPlayer play];
-            [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
         }
     }
     NSLog(@"%f",_playback-sender.value);
@@ -581,18 +584,16 @@
 
 
 - (IBAction)feedUp:(UISlider *)sender {
+    if (_seekPlaying==YES) {
+        [_avPlayer play];
+    }
     if (![_timer isValid]) {
 //        tm = CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC);
 //        [_avPlayer seekToTime:tm];
 //        autoseek.value=sender.value;
-
-        //[NSThread sleepForTimeInterval:1];
+//        [NSThread sleepForTimeInterval:1];
         [self startTimer];
         NSLog(@"離した%f",CMTimeGetSeconds(_avPlayer.currentTime));
-    }
-    if (_seekPlaying==YES) {
-        [_avPlayer play];
-        
     }
 }
 
@@ -670,5 +671,25 @@
     }
 }
 
+-(void)ipodLabelDefault{
+    _musicIcon.textColor=_ipodVolLabel.textColor=[UIColor blackColor];
+    _ipodvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    _ipodvol.maximumValue=0.1;
+    _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+    
+    _ipodvol.value=_ipodVol/10;
+    _ipodVolLabel.text=_ipodVoltext;
+    _avPlayer.volume=_ipodVol/10;
+    
+    _headphoneConnect=YES;
+}
+-(void)ipodLabelRed{
+    _musicIcon.textColor=_ipodVolLabel.textColor=[UIColor redColor];
+    _ipodvol.minimumTrackTintColor=[UIColor colorWithRed:1.0 green:0 blue:0 alpha:1.0];
+    _ipodvol.maximumValue=1;
+    _headphoneConnect=NO;
+    _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+    _ipodVolLabel.text=_ipodVoltext;
+}
 
 @end
