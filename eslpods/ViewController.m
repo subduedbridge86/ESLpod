@@ -81,11 +81,11 @@
     UIImage *imageForThumb = [UIImage imageNamed:@"slider.png"];
     [_autoseek setThumbImage:imageForThumb forState:UIControlStateNormal];
     [_autoseek setThumbImage:imageForThumb forState:UIControlStateHighlighted];
-    [self.view addSubview:_autoseek]; 
+    [self.view addSubview:_autoseek];
     
     _songList.delegate = self;
     _songList.dataSource = self;
-
+    
     _mypod=[[ESLpod alloc]init];
     [_mypod audioSession];
     [_mypod feed];
@@ -129,23 +129,23 @@
     _fbVolLabel.text=fbVoltext;
     _feedvol.value=_mypod.feedVol;
     
-
-        
+    
+    
     _nameData=[ud objectForKey:@"nameData"];
     
     _mediaitemData=[ud objectForKey:@"_mediaitemData"];
     _songCount=[ud floatForKey:@"songCount"];
     [self AutoScroll];
-
-        _mediaItemCollection2 = [NSKeyedUnarchiver unarchiveObjectWithData:_mediaitemData];
-        MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
-        [self songtext];
-        _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
-        _playerItem = [[AVPlayerItem alloc] initWithURL:_url];
-        _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
-        
-        _avPlayer.volume=_ipodVol;
-        [self startTimer];
+    
+    _mediaItemCollection2 = [NSKeyedUnarchiver unarchiveObjectWithData:_mediaitemData];
+    MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
+    [self songtext];
+    _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
+    _playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+    _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+    
+    _avPlayer.volume=_ipodVol;
+    [self startTimer];
     
     _repeatCount=[ud floatForKey:@"repeatCount"];
     if (_repeatCount==1) {//1
@@ -156,7 +156,7 @@
         [_repeatImage setImage : [ UIImage imageNamed : @"repeata.png" ] forState : UIControlStateNormal];
     }
     
-
+    
     NSArray *out = _mypod.session.currentRoute.outputs;
     AVAudioSessionPortDescription *portDescription = [out lastObject];
     if ([portDescription.portType isEqualToString:@"Headphones"])
@@ -188,7 +188,7 @@
             if (_repeatCount==1) {
                 
             }else{
-            _songCount++;
+                _songCount++;
             }
             [self saveCount];
             [self nextandbackplay];
@@ -244,7 +244,7 @@
             _fbVolLabel.textColor=[UIColor lightGrayColor];
             [_micimage setImage : [ UIImage imageNamed : @"micoff.png" ] forState : UIControlStateNormal];
             _miccount=NO;
-
+            
             break;
         case AVAudioSessionInterruptionTypeEnded:
             NSLog(@"割り込みの終了！");
@@ -280,30 +280,30 @@
     _mediaItemCollection2=mediaItemCollection;
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
-    _mediaitemData = [NSKeyedArchiver archivedDataWithRootObject:_mediaItemCollection2];
-    NSUserDefaults *ud4=[NSUserDefaults standardUserDefaults];
-    [ud4 setObject:_mediaitemData forKey:@"_mediaitemData"];
+        _mediaitemData = [NSKeyedArchiver archivedDataWithRootObject:_mediaItemCollection2];
+        NSUserDefaults *ud4=[NSUserDefaults standardUserDefaults];
+        [ud4 setObject:_mediaitemData forKey:@"_mediaitemData"];
     }
-
+    
     [self songtext];
-     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
+    MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
     _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
     _playerItem = [[AVPlayerItem alloc] initWithURL:_url];    //変換
     _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
     
     _avPlayer.volume=_ipodVol;
-   // [_avPlayer play];
-
-   // [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
+    // [_avPlayer play];
+    
+    // [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
     [mediaPicker dismissViewControllerAnimated:YES completion:nil];
-
+    
     _nameData=[[NSArray alloc]init];
     for (int i = 0;i < _mediaItemCollection2.count; i++) {
         MPMediaItem *nameitem1=[_mediaItemCollection2.items objectAtIndex:i];
         
         _name1=[nameitem1 valueForProperty:MPMediaItemPropertyTitle];
         _name2=[[nameitem1 valueForProperty:MPMediaItemPropertyAlbumTrackNumber]stringValue];
-
+        
         NSString* str1 = [NSString stringWithFormat: @"%4@", _name2];
         NSLog(@"%@",str1);
         
@@ -318,8 +318,8 @@
     [_songList reloadData];
     [self AutoScroll];
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
-    NSUserDefaults *ud3=[NSUserDefaults standardUserDefaults];
-    [ud3 setObject:_nameData forKey:@"nameData"];
+        NSUserDefaults *ud3=[NSUserDefaults standardUserDefaults];
+        [ud3 setObject:_nameData forKey:@"nameData"];
     }
     
     [self startTimer];
@@ -391,7 +391,7 @@
         }
         else{           //次の曲へ
             if (_repeatCount!=1) {
-            _songCount++;
+                _songCount++;
             }
             
             [self saveCount];
@@ -475,7 +475,7 @@
     _mypod.feedVol=sender.value;
     _mypod2.feedVol=sender.value;
     if (_miccount) {
-
+        
         [_mypod mixUnitvol];
         [_mypod2 mixUnitvol];
         
@@ -511,17 +511,17 @@
 
 -(void)saveCount{
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
-    NSUserDefaults *ud5=[NSUserDefaults standardUserDefaults];
-    [ud5 setFloat:_songCount forKey:@"songCount"];
-    NSUserDefaults *ud6=[NSUserDefaults standardUserDefaults];
-    [ud6 setFloat:_repeatCount forKey:@"repeatCount"];
+        NSUserDefaults *ud5=[NSUserDefaults standardUserDefaults];
+        [ud5 setFloat:_songCount forKey:@"songCount"];
+        NSUserDefaults *ud6=[NSUserDefaults standardUserDefaults];
+        [ud6 setFloat:_repeatCount forKey:@"repeatCount"];
     }
 }
 -(void)songtext{
     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
     _titlelabel.text =[item valueForProperty:MPMediaItemPropertyTitle];
     _albumlabel.text =[item valueForProperty:MPMediaItemPropertyAlbumTitle];
-
+    
     NSString *playbackstr=[item valueForProperty:MPMediaItemPropertyPlaybackDuration];
     _playback=playbackstr.intValue;
     _autoseek.maximumValue=_playback;
@@ -534,13 +534,13 @@
     _minute=CMTimeGetSeconds(_avPlayer.currentTime)/60;
     _timestr=[NSString stringWithFormat:@"%02d:%02d",_minute,_second];
     _timelabel.text=_timestr;
-
+    
     _maxback=_playback-CMTimeGetSeconds(_avPlayer.currentTime);
     _maxsecond=_maxback%60;
     _maxminute=_maxback/60;
     _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
     _maxtimelabel.text=_maxtimelabelstr;
-    [_autoseek setValue:CMTimeGetSeconds(_avPlayer.currentTime) animated:NO];
+    [_autoseek setValue:CMTimeGetSeconds(_avPlayer.currentTime) animated:YES];
 }
 
 //float RoundValue(UISlider * slider) {
@@ -551,50 +551,40 @@
     _newValue=sender.value;
     [_timer invalidate];
     if (fabsf(_newValue-_oldValue)>(_playback/500)) {
-    
-    _tm= CMTimeMakeWithSeconds((int)sender.value, NSEC_PER_SEC);
-    //timelabel.text=CMTimeGetSeconds(tm);
-    
-    if (_seekPlaying==NO) {  //曲が停止中なら移動後も停止
-        [_avPlayer seekToTime:_tm];
-    }else{  //曲が再生中なら移動後も再生
+        
+        _tm= CMTimeMakeWithSeconds((int)sender.value, NSEC_PER_SEC);
         [_avPlayer pause];
         [_avPlayer seekToTime:_tm];
-        if (_playback-sender.value>1) {
+        
+        if (_seekPlaying && _playback-sender.value>1) {
+            [NSThread sleepForTimeInterval:0.03];
             [_avPlayer play];
         }
-    }
-    NSLog(@"%f",_playback-sender.value);
-    
-
-    }
+        
+        NSLog(@"%f",_playback-sender.value);
+        
         _senderval=sender.value;
-    _second=_senderval%60;
-    _minute=sender.value/60;
-    _timestr=[NSString stringWithFormat:@"%02d:%02d",_minute,_second];
-    _timelabel.text=_timestr;
-    _maxback=_playback-sender.value;
-    _maxsecond=_maxback%60;
-    _maxminute=_maxback/60;
-    _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
-    _maxtimelabel.text=_maxtimelabelstr;
-   // autoseek.value=sender.value;
-        _oldValue=_newValue;
+        _second=_senderval%60;
+        _minute=sender.value/60;
+        _timestr=[NSString stringWithFormat:@"%02d:%02d",_minute,_second];
+        _timelabel.text=_timestr;
+        _maxback=_playback-sender.value;
+        _maxsecond=_maxback%60;
+        _maxminute=_maxback/60;
+        _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
+        _maxtimelabel.text=_maxtimelabelstr;
+        
+    }
+    _oldValue=_newValue;
 }
 
 
 - (IBAction)feedUp:(UISlider *)sender {
-    if (_seekPlaying==YES) {
-        [_avPlayer play];
-    }
-    if (![_timer isValid]) {
-//        tm = CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC);
-//        [_avPlayer seekToTime:tm];
-//        autoseek.value=sender.value;
-//        [NSThread sleepForTimeInterval:1];
-        [self startTimer];
-        NSLog(@"離した%f",CMTimeGetSeconds(_avPlayer.currentTime));
-    }
+    [_autoseek setValue:sender.value animated:YES];
+    [_avPlayer seekToTime:_tm];
+
+    [self startTimer];
+    NSLog(@"離した%f",CMTimeGetSeconds(_avPlayer.currentTime));
 }
 
 - (IBAction)feedDown:(UISlider *)sender {
@@ -631,10 +621,7 @@
 
 -(void)AutoScroll{
     if (_songCount<_nameData.count) {
-        
-        
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:_songCount inSection:0];
-        
         [_songList selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
     }
 }
