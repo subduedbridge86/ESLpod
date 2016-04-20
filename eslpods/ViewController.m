@@ -19,6 +19,8 @@
 @property BOOL seekPlaying;
 @property BOOL headphoneConnect;
 @property NSString* ipodVoltext;
+@property BOOL addFlag;
+
 
 @property MPMusicPlayerController *player;
 
@@ -27,7 +29,7 @@
 @property AVPlayerItem *playerItem;
 @property MPMediaItemCollection *mediaItemCollection2;
 //@property NSNotificationCenter *notification;
-@property NSArray *nameData;
+@property NSMutableArray *nameData;
 @property NSData *mediaitemData;
 @property NSTimer *timer;
 @property NSString *maxtimelabelstr;
@@ -70,12 +72,55 @@
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
+//ロック画面・コントロールセンターから操作未完成
+//- (BOOL)canBecomeFirstResponder { return YES; }
+//
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+//    [self becomeFirstResponder];
+//}
+//
+//- (void)viewDidDisappear:(BOOL)animated
+//{
+//    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+//    [self resignFirstResponder];
+//    [super viewDidDisappear:animated];
+//}
+//- (void)remoteControlRecievedWithEvent:(UIEvent *)receivedEvent {
+//    if(receivedEvent.type == UIEventTypeRemoteControl) {
+//        switch(receivedEvent.subtype) {
+//        case UIEventSubtypeRemoteControlPlay:
+//            //プレイボタン押下時の処理
+//            break;
+//        case UIEventSubtypeRemoteControlPause:
+//            //プレイボタン押下時の処理
+//            break;
+//        case UIEventSubtypeRemoteControlPreviousTrack:
+//            //戻るボタン押下時の処理
+//            break;
+//        case UIEventSubtypeRemoteControlNextTrack:
+//            //次へボタン押下時の処理
+//            break;
+//        default:
+//            break;
+//        }
+//    }
+//}
+
 - (void)viewDidLoad
 {
+    self.title = @"";
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addRow:)];
+    self.navigationItem.leftBarButtonItem = anotherButton;
+    
     _ipodVol=0.01;
     _systemVol=0;
     _songCount=0;
     _miccount=YES;
+    
     
     [super viewDidLoad];
     UIImage *imageForThumb = [UIImage imageNamed:@"slider.png"];
@@ -131,18 +176,41 @@
     
     
     
-    _nameData=[ud objectForKey:@"nameData"];
+    //    _nameData=[ud objectForKey:@"nameData"];
+    //    [_songList reloadData];
     
     _mediaitemData=[ud objectForKey:@"_mediaitemData"];
     _songCount=[ud floatForKey:@"songCount"];
-    [self AutoScroll];
+    
     
     _mediaItemCollection2 = [NSKeyedUnarchiver unarchiveObjectWithData:_mediaitemData];
-    MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
-    [self songtext];
-    _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
-    _playerItem = [[AVPlayerItem alloc] initWithURL:_url];
-    _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+    if (_mediaItemCollection2.count>=1) {
+        MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
+        [self songtext];
+        _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
+        _playerItem = [[AVPlayerItem alloc] initWithURL:_url];
+        _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+        
+        
+        _nameData=[[NSMutableArray alloc]init];
+        for (int i = 0;i < _mediaItemCollection2.count; i++) {
+            MPMediaItem *nameitem1=[_mediaItemCollection2.items objectAtIndex:i];
+            
+            _name1=[nameitem1 valueForProperty:MPMediaItemPropertyTitle];
+            _name2=[[nameitem1 valueForProperty:MPMediaItemPropertyAlbumTrackNumber]stringValue];
+            
+            //NSString* str1 = [NSString stringWithFormat: @"%4@", _name2];
+            //NSLog(@"%@",str1);
+            
+            [_nameData addObject:_name1];
+            
+            //NSLog(@"%@",[_nameData objectAtIndex:i]);
+            NSLog(@"%d曲目　%@",i,[_nameData objectAtIndex:i]);
+        }
+    }
+    
+    [_songList reloadData];
+    [self AutoScroll];
     
     _avPlayer.volume=_ipodVol;
     [self startTimer];
@@ -161,33 +229,154 @@
     AVAudioSessionPortDescription *portDescription = [out lastObject];
     if ([portDescription.portType isEqualToString:@"Headphones"])
     {
-        NSLog(@"接続中");
+        NSLog(@"起動時イヤホン接続中");
         [self ipodLabelDefault];
     }else{
-        NSLog(@"未接続");
+        NSLog(@"起動時イヤホン未接続");
         [self ipodLabelRed];
     }
+    
+    
 }
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    [super setEditing:editing animated:animated];
+    [_songList setEditing:editing animated:YES];
+        if (editing) { // 現在編集モードです。
+//            UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+//                                                                                       target:self action:@selector(addRow:)] ;
+//            [self.navigationItem setLeftBarButtonItem:addButton animated:YES]; // 追加ボタンを表示します。
+        } else { // 現在通常モードです。
+//            [self.navigationItem setLeftBarButtonItem:nil animated:YES]; // 追加ボタンを非表示にします。
+            NSIndexPath* indexPath2 = [NSIndexPath indexPathForRow:_songCount inSection:0];
+            [_songList selectRowAtIndexPath:indexPath2 animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
+}
+- (void)addRow:(id)sender {
+    _addFlag=YES;
+    
+    MPMediaPickerController *picker = [[MPMediaPickerController alloc]init];
+    picker.delegate = self;
+    picker.allowsPickingMultipleItems = YES;        // 複数選択可
+    [self presentViewController:picker animated:YES completion:nil];    //Libraryを開く
+    
+}
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [_nameData removeObjectAtIndex:indexPath.row]; // 削除ボタンが押された行のデータを配列から削除します。
+        NSArray* items = [_mediaItemCollection2 items];
+        NSMutableArray* array = [NSMutableArray arrayWithCapacity:[items count]];
+        [array addObjectsFromArray:items];
+        [array removeObjectAtIndex:indexPath.row];
+        _mediaItemCollection2 = [MPMediaItemCollection collectionWithItems:array];
+        [_songList deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        //if playing delete
+        if (_mediaItemCollection2.count<1) {//1曲の時
+            //選択初期化
+            _avPlayer=nil;
+            _timelabel.text=[NSString stringWithFormat:@"00:00"];
+            _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
+            _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
+            [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+            
+            
+        }else{//2曲以上の時
+            if (indexPath.row==_songCount) {//選択中の曲を削除
+                
+                if (_songCount==_mediaItemCollection2.count) {//最後なら1つ前の曲へ
+                    _songCount--;
+                    [self nextandback];
+                }else{//最後以外は次の曲へ=同じカウントでセットしなおし
+                    [self nextandback];
+                    [_songList selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+                }
+                [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+                
+            }else if(indexPath.row<_songCount){//選択中より上の曲を削除
+                _songCount--;
+                
+            }
+            NSIndexPath* indexPath2 = [NSIndexPath indexPathForRow:_songCount inSection:0];
+            [_songList selectRowAtIndexPath:indexPath2 animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
+        
+        [self savesongList];
+        [self saveCount];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // ここは空のままでOKです。
+    }
+}
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+//editで曲順入れ替え
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    if(fromIndexPath.section == toIndexPath.section) { // 移動元と移動先は同じセクションです。
+        if(_nameData && toIndexPath.row < [_nameData count]) {
+            id nameitem = [_nameData objectAtIndex:fromIndexPath.row]; // 移動対象を保持します。
+            [_nameData removeObjectAtIndex:fromIndexPath.row]; // 配列から一度消します。
+            [_nameData insertObject:nameitem atIndex:toIndexPath.row]; // 保持しておいた対象を挿入します。
+            
+            NSMutableArray *mutableitems = [[_mediaItemCollection2 items]mutableCopy];
+            id nameitem1 = [mutableitems objectAtIndex:fromIndexPath.row]; // 移動対象を保持します。
+            [mutableitems removeObjectAtIndex:fromIndexPath.row]; // 配列から一度消します。
+            [mutableitems insertObject:nameitem1 atIndex:toIndexPath.row]; // 保持しておいた対象を挿入します。
+            _mediaItemCollection2=[[MPMediaItemCollection alloc]initWithItems:mutableitems];
+            
+            NSLog(@"count:%ld from:%ld to:%ld",_songCount,(long)fromIndexPath.row,(long)toIndexPath.row);
+            if (_songCount==fromIndexPath.row) {
+                _songCount=toIndexPath.row;
+            }else if(_songCount>fromIndexPath.row){//再生中より上を触った時
+                if (_songCount>toIndexPath.row) {
+                    //上からとって上に入れる。+-0
+                    NSLog(@"上−>上");
+                }
+                if (_songCount<=toIndexPath.row) {
+                    //上からとって下に入れる。-1
+                    _songCount=_songCount-1;
+                    NSLog(@"上−>下");
+                }
+            }else if(_songCount<fromIndexPath.row){//再生中より下を触った時
+                if (_songCount>=toIndexPath.row) {
+                    //下からとって上に入れる。+1
+                    _songCount=_songCount+1;
+                    NSLog(@"下−>上");
+                }
+                if (_songCount<toIndexPath.row) {
+                    //下からとって下に入れる。+-0
+                    NSLog(@"下−>下");
+                }
+            }
+            [self savesongList];
+            [self saveCount];
+        }
+    }
+}
+
 
 - (void)avPlayDidFinish:(NSNotification*)notification
 {
     if(_mediaItemCollection2.count != 0){               //１曲以上選ばれているか
+        NSLog(@"次の曲通知");
         if (_songCount==_mediaItemCollection2.count-1) {//最後なら1曲目へ
-            NSLog(@"次の曲通知");
             _songCount=0;
+            _seekPlaying=NO;
             [self saveCount];
             
             [self nextandback];
-            if ((_repeatCount==2)||(_repeatCount==1)) {
+            if ((_repeatCount==2)||(_repeatCount==1)) {//リピートなら戻って再生続ける
                 [_avPlayer play];
-            }else{
+            }else{//リピートじゃないなら再生アイコンに
                 [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             }
         }
-        else{           //次の曲へ
-            if (_repeatCount==1) {
+        else{           //最後じゃないなら次の曲へ
+            if (_repeatCount==1) {//同じ曲リピートだからsongCountを+しない
                 
-            }else{
+            }else{//次の曲
                 _songCount++;
             }
             [self saveCount];
@@ -270,70 +459,78 @@
 - (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker{
     [mediaPicker dismissViewControllerAnimated:YES completion:nil];     //キャンセルで曲選択を終わる
 }
-
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 - (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection       //曲選択後
 {
-    [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
-    _songCount=0;
-    [self saveCount];
-    //曲名取得
-    _mediaItemCollection2=mediaItemCollection;
-    
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
-        _mediaitemData = [NSKeyedArchiver archivedDataWithRootObject:_mediaItemCollection2];
-        NSUserDefaults *ud4=[NSUserDefaults standardUserDefaults];
-        [ud4 setObject:_mediaitemData forKey:@"_mediaitemData"];
+    if (_addFlag) {
+        NSMutableArray *mutableitems = [[_mediaItemCollection2 items]mutableCopy];
+        [mutableitems addObjectsFromArray:[mediaItemCollection items]];
+        _mediaItemCollection2=[[MPMediaItemCollection alloc]initWithItems:mutableitems];
+        _nameData=[[NSMutableArray alloc]init];
+        for (int i = 0;i < _mediaItemCollection2.count; i++) {
+            MPMediaItem *nameitem1=[_mediaItemCollection2.items objectAtIndex:i];
+            _name1=[nameitem1 valueForProperty:MPMediaItemPropertyTitle];
+            [_nameData addObject:_name1];
+        }
+        
+        if (_avPlayer==nil) {
+            [self songtext];
+            MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
+            _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
+            _playerItem = [[AVPlayerItem alloc] initWithURL:_url];    //変換
+            _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+            
+            _avPlayer.volume=_ipodVol;
+        }
+        
+        
+    }else{
+        [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+        _songCount=0;
+        [self saveCount];
+        //曲名取得
+        _mediaItemCollection2=mediaItemCollection;
+        
+        [self songtext];
+        MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
+        _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
+        _playerItem = [[AVPlayerItem alloc] initWithURL:_url];    //変換
+        _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+        
+        _avPlayer.volume=_ipodVol;
+        
+        _nameData=[[NSMutableArray alloc]init];
+        for (int i = 0;i < _mediaItemCollection2.count; i++) {
+            MPMediaItem *nameitem1=[_mediaItemCollection2.items objectAtIndex:i];
+            
+            _name1=[nameitem1 valueForProperty:MPMediaItemPropertyTitle];
+            _name2=[[nameitem1 valueForProperty:MPMediaItemPropertyAlbumTrackNumber]stringValue];
+            
+            //NSString* str1 = [NSString stringWithFormat: @"%4@", _name2];
+            //NSLog(@"%@",str1);
+            
+            [_nameData addObject:_name1];
+            
+            //NSLog(@"%@",[_nameData objectAtIndex:i]);
+            NSLog(@"%d曲目　%@",i,[_nameData objectAtIndex:i]);
+        }
     }
-    
-    [self songtext];
-    MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
-    _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
-    _playerItem = [[AVPlayerItem alloc] initWithURL:_url];    //変換
-    _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
-    
-    _avPlayer.volume=_ipodVol;
-    // [_avPlayer play];
-    
-    // [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
+    [self savesongList];
     [mediaPicker dismissViewControllerAnimated:YES completion:nil];
-    
-    _nameData=[[NSArray alloc]init];
-    for (int i = 0;i < _mediaItemCollection2.count; i++) {
-        MPMediaItem *nameitem1=[_mediaItemCollection2.items objectAtIndex:i];
-        
-        _name1=[nameitem1 valueForProperty:MPMediaItemPropertyTitle];
-        _name2=[[nameitem1 valueForProperty:MPMediaItemPropertyAlbumTrackNumber]stringValue];
-        
-        NSString* str1 = [NSString stringWithFormat: @"%4@", _name2];
-        NSLog(@"%@",str1);
-        
-        _nameData=[_nameData arrayByAddingObject:_name1];
-        
-        
-        
-        //NSLog(@"%@",[_nameData objectAtIndex:i]);
-        NSLog(@"%@　%@",[[_mediaItemCollection2.items objectAtIndex:i]valueForProperty:MPMediaItemPropertyAlbumTrackNumber],[_nameData objectAtIndex:i]);
-        
-    }
     [_songList reloadData];
     [self AutoScroll];
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
-        NSUserDefaults *ud3=[NSUserDefaults standardUserDefaults];
-        [ud3 setObject:_nameData forKey:@"nameData"];
-    }
-    
     [self startTimer];
+    _addFlag=NO;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger dataCount;
-    
-    // テーブルに表示するデータ件数を返す
-    dataCount = self.nameData.count;
-    
-    return dataCount;
+    return _nameData.count;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -355,13 +552,14 @@
     _songCount=(int)indexPath.row;
     [self saveCount];
     [self nextandbackplay];
+    _seekPlaying=YES;
     //[ttableView reloadData];
 }
 
 
 - (IBAction)backSong:(id)sender {
     if(_mediaItemCollection2 != 0){                     //１曲以上選ばれているか
-        if (CMTimeGetSeconds(_avPlayer.currentTime)<2.9) {
+        if (CMTimeGetSeconds(_avPlayer.currentTime)<2.9) {//2.9秒以前なら前の曲
             
             if (_songCount==0) {                             //最初なら最後の曲へ
                 _songCount=_mediaItemCollection2.count-1;
@@ -374,11 +572,11 @@
             
             if ([_avPlayer rate]==0) {  //曲が停止中なら停止
                 [self nextandback];
-            }else{  //曲が再生中なら停止
+            }else{  //曲が再生中なら再生
                 [self nextandbackplay];
             }
         }
-        else{[_avPlayer seekToTime:CMTimeMake(0, 600)];}
+        else{[_avPlayer seekToTime:CMTimeMake(0, 600)];}//2.9秒以降なら0秒
     }
 }
 
@@ -436,7 +634,7 @@
 
 
 - (IBAction)pushPlay:(id)sender {
-    if (_avPlayer!=nil){
+    if (_mediaitemData!=nil){
         if ([_avPlayer rate]==0) {  //曲が停止中なら再生
             [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
             [_avPlayer play];
@@ -517,6 +715,14 @@
         [ud6 setFloat:_repeatCount forKey:@"repeatCount"];
     }
 }
+-(void)savesongList{
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
+        _mediaitemData = [NSKeyedArchiver archivedDataWithRootObject:_mediaItemCollection2];
+        NSUserDefaults *ud4=[NSUserDefaults standardUserDefaults];
+        [ud4 setObject:_mediaitemData forKey:@"_mediaitemData"];
+    }
+}
+
 -(void)songtext{
     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
     _titlelabel.text =[item valueForProperty:MPMediaItemPropertyTitle];
@@ -557,7 +763,7 @@
         [_avPlayer seekToTime:_tm];
         
         if (_seekPlaying && _playback-sender.value>1) {
-            [NSThread sleepForTimeInterval:0.03];
+            [NSThread sleepForTimeInterval:0.04];
             [_avPlayer play];
         }
         
@@ -580,9 +786,12 @@
 
 
 - (IBAction)feedUp:(UISlider *)sender {
+    if (_seekPlaying) {
+        [_avPlayer play];
+    }
     [_autoseek setValue:sender.value animated:YES];
     [_avPlayer seekToTime:_tm];
-
+    
     [self startTimer];
     NSLog(@"離した%f",CMTimeGetSeconds(_avPlayer.currentTime));
 }
@@ -658,7 +867,7 @@
     }
 }
 
--(void)ipodLabelDefault{
+-(void)ipodLabelDefault{//イヤホン挿さってる時
     _musicIcon.textColor=_ipodVolLabel.textColor=[UIColor blackColor];
     _ipodvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _ipodvol.maximumValue=0.1;
@@ -670,7 +879,7 @@
     
     _headphoneConnect=YES;
 }
--(void)ipodLabelRed{
+-(void)ipodLabelRed{//イヤホン刺さってない時
     _musicIcon.textColor=_ipodVolLabel.textColor=[UIColor redColor];
     _ipodvol.minimumTrackTintColor=[UIColor colorWithRed:1.0 green:0 blue:0 alpha:1.0];
     _ipodvol.maximumValue=1;
@@ -678,5 +887,4 @@
     _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
     _ipodVolLabel.text=_ipodVoltext;
 }
-
 @end
