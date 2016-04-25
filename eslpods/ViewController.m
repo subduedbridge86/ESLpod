@@ -121,6 +121,7 @@
     _systemVol=0;
     _songCount=0;
     _miccount=YES;
+    _addFlag=NO;
     
     
     [super viewDidLoad];
@@ -453,7 +454,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     picker.delegate = self;
     
     picker.allowsPickingMultipleItems = YES;        // 複数選択可
-    
+    // picker.prompt = @"Add songs to play";//上に文字出せる
     [self presentViewController:picker animated:YES completion:nil];    //Libraryを開く
 }
 
@@ -635,15 +636,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 - (IBAction)pushPlay:(id)sender {
-    if (_mediaitemData!=nil){
-        if ([_avPlayer rate]==0) {  //曲が停止中なら再生
-            [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
-            [_avPlayer play];
-            _seekPlaying=YES;
-        }else{  //曲が再生中なら停止
+    if (_mediaItemCollection2.count != 0){
+        if ([_avPlayer rate]!=0) {  //曲が再生中なら停止
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [_avPlayer pause];
             _seekPlaying=NO;
+        }else{  //曲が停止中なら再生
+            [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
+            [_avPlayer play];
+            _seekPlaying=YES;
         }
     }
 }
