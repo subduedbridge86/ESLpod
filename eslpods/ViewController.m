@@ -255,7 +255,10 @@
         }
 }
 - (void)addRow:(id)sender {
-    _addFlag=YES;
+    if (_mediaItemCollection2.count>=1) {
+        _addFlag=YES;
+    }
+    
     
     MPMediaPickerController *picker = [[MPMediaPickerController alloc]init];
     picker.delegate = self;
