@@ -2,7 +2,8 @@
 
 @interface ViewController()
 @property float ipodVol;
-@property float systemVol;
+//@property float speakerVol;
+//@property float systemVol;
 @property long songCount;
 @property int repeatCount;
 @property int second;
@@ -117,8 +118,8 @@
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addRow:)];
     self.navigationItem.leftBarButtonItem = anotherButton;
     
-    _ipodVol=0.01;
-    _systemVol=0;
+    _ipodVol=0.0;
+    //_systemVol=0;
     _songCount=0;
     _miccount=YES;
     _addFlag=NO;
@@ -160,11 +161,7 @@
     ///前回のスラいだー値反映
     NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
     
-    _ipodVol = [ud floatForKey:@"ipodvol"];
-    _avPlayer.volume=_ipodVol;
-    NSString *ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
-    _ipodVolLabel.text=ipodVoltext;
-    _ipodvol.value=_ipodVol;
+
     
     _mypod.feedVol=[ud floatForKey:@"feedvol"];
     _mypod2.feedVol=[ud floatForKey:@"feedvol"];
@@ -237,7 +234,11 @@
         NSLog(@"起動時イヤホン未接続");
         [self ipodLabelRed];
     }
-    
+
+    _avPlayer.volume=_ipodVol;
+
+    _ipodVolLabel.text=_ipodVoltext;
+    _ipodvol.value=_ipodVol;
     
 }
 
@@ -664,14 +665,19 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_headphoneConnect) {
         _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
+        
+        NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
+        [ud1 setFloat:_ipodVol forKey:@"ipodvol"];
     }else{
         _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+        
+        NSUserDefaults *ud6=[NSUserDefaults standardUserDefaults];
+        [ud6 setFloat:_ipodVol forKey:@"speakervol"];
     }
     
     _ipodVolLabel.text=_ipodVoltext;
     
-    NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
-    [ud1 setFloat:_ipodVol forKey:@"ipodvol"];
+
 }
 
 - (IBAction)feedSliderChanged:(UISlider*)sender {   //フィードバック音のボリューム変更スライダー
@@ -873,23 +879,33 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)ipodLabelDefault{//イヤホン挿さってる時
+    NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
+    _ipodVol = [ud floatForKey:@"ipodvol"];
+    
     _musicIcon.textColor=_ipodVolLabel.textColor=[UIColor blackColor];
     _ipodvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _ipodvol.maximumValue=0.1;
-    _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+    _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
     
-    _ipodvol.value=_ipodVol/10;
+    _ipodvol.value=_ipodVol;
     _ipodVolLabel.text=_ipodVoltext;
-    _avPlayer.volume=_ipodVol/10;
+    _avPlayer.volume=_ipodVol;
     
     _headphoneConnect=YES;
 }
 -(void)ipodLabelRed{//イヤホン刺さってない時
+    NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
+    _ipodVol = [ud floatForKey:@"speakervol"];
+    
     _musicIcon.textColor=_ipodVolLabel.textColor=[UIColor redColor];
     _ipodvol.minimumTrackTintColor=[UIColor colorWithRed:1.0 green:0 blue:0 alpha:1.0];
     _ipodvol.maximumValue=1;
-    _headphoneConnect=NO;
     _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+    
+    _ipodvol.value=_ipodVol;
     _ipodVolLabel.text=_ipodVoltext;
+    _avPlayer.volume=_ipodVol;
+    
+    _headphoneConnect=NO;
 }
 @end
