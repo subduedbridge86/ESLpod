@@ -200,11 +200,12 @@
             
             //NSString* str1 = [NSString stringWithFormat: @"%4@", _name2];
             //NSLog(@"%@",str1);
-            
-            [_nameData addObject:_name1];
+            if (_name1!=nil) {
+                [_nameData addObject:_name1];
+            }
             
             //NSLog(@"%@",[_nameData objectAtIndex:i]);
-            NSLog(@"%d曲目　%@",i,[_nameData objectAtIndex:i]);
+            //NSLog(@"%d曲目　%@",i,[_nameData objectAtIndex:i]);
         }
     }
     
@@ -564,11 +565,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 - (IBAction)backSong:(id)sender {
-    if(_mediaItemCollection2 != 0){                     //１曲以上選ばれているか
+    if(_nameData != 0){                     //１曲以上選ばれているか
         if (CMTimeGetSeconds(_avPlayer.currentTime)<2.9) {//2.9秒以前なら前の曲
             
             if (_songCount==0) {                             //最初なら最後の曲へ
-                _songCount=_mediaItemCollection2.count-1;
+                _songCount=_nameData.count-1;
                 [self saveCount];
             }
             else {
@@ -588,8 +589,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)nextSong:(id)sender {
     //NSLog(@"%lu",(unsigned long)_mediaItemCollection2.count);
-    if(_mediaItemCollection2.count != 0){               //１曲以上選ばれているか
-        if (_songCount==_mediaItemCollection2.count-1) {//最後なら1曲目へ
+    if(_nameData.count != 0){               //１曲以上選ばれているか
+        if (_songCount==_nameData.count-1) {//最後なら1曲目へ
             _songCount=0;
             [self saveCount];
         }
@@ -640,7 +641,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 - (IBAction)pushPlay:(id)sender {
-    if (_mediaItemCollection2.count != 0){
+    if (_nameData.count != 0){
         if ([_avPlayer rate]!=0) {  //曲が再生中なら停止
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [_avPlayer pause];
