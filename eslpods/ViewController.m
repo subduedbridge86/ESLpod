@@ -22,7 +22,6 @@
 @property NSString* ipodVoltext;
 @property BOOL addFlag;
 
-
 @property MPMusicPlayerController *player;
 
 @property AVQueuePlayer *avPlayer;
@@ -698,7 +697,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [ud2 setFloat:_mypod2.feedVol forKey:@"feedvol"];
 }
 
-//スイッチでマイクオンオフしてたときの遺産
+//スイッチでマイクオンオフしてたときの遺産ゴミ
 //- (IBAction)feedonoff:(UISwitch *)sender {
 //    if (sender.on) {
 //        _mypod=[[ESLpod alloc]init];

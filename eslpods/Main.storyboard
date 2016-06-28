@@ -134,7 +134,7 @@
                                     <action selector="seekslider:" destination="BYZ-38-t0r" eventType="valueChanged" id="IYU-fd-TmP"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="↓　曲を選択して下さい" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iMs-yN-2eC">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="曲が選択されていません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iMs-yN-2eC">
                                 <rect key="frame" x="-4" y="469" width="383" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="53" id="TPR-Bu-BLR"/>
