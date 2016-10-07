@@ -8,5 +8,8 @@
 
 
 @interface ViewController : UIViewController<MPMediaPickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+{
+@public AVQueuePlayer *avPlayer;
 
+}
 @end

@@ -14,13 +14,15 @@
 #import <AudioUnit/AudioUnit.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-@interface ESLpod : NSObject
+@interface ESLpod : NSObject{
+@public AVAudioSession *session;
+}
 
 @property AUNode remoteIONode,mixNode;
 @property AudioUnit remoteIOUnit,mixUnit;
 @property AUGraph auGraph;
 @property float feedVol;
-@property AVAudioSession* session;
+//@property AVAudioSession* session;
 
 
 -(void)audioSession;

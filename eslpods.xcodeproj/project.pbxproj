@@ -30,6 +30,8 @@
 		80040C9F1CA3DACD009D8A5B /* repeat0.png in Resources */ = {isa = PBXBuildFile; fileRef = 80040C971CA3DACD009D8A5B /* repeat0.png */; };
 		80040CA01CA3DACD009D8A5B /* repeat11.png in Resources */ = {isa = PBXBuildFile; fileRef = 80040C981CA3DACD009D8A5B /* repeat11.png */; };
 		80040CA11CA3DACD009D8A5B /* repeata.png in Resources */ = {isa = PBXBuildFile; fileRef = 80040C991CA3DACD009D8A5B /* repeata.png */; };
+		80DBCA6A1DA77482000552E2 /* micoffbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA681DA77482000552E2 /* micoffbutton.png */; };
+		80DBCA6B1DA77482000552E2 /* miconbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA691DA77482000552E2 /* miconbutton.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +85,8 @@
 		80040C971CA3DACD009D8A5B /* repeat0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repeat0.png; path = ../repeat0.png; sourceTree = "<group>"; };
 		80040C981CA3DACD009D8A5B /* repeat11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repeat11.png; path = ../repeat11.png; sourceTree = "<group>"; };
 		80040C991CA3DACD009D8A5B /* repeata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repeata.png; path = ../repeata.png; sourceTree = "<group>"; };
+		80DBCA681DA77482000552E2 /* micoffbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = micoffbutton.png; sourceTree = "<group>"; };
+		80DBCA691DA77482000552E2 /* miconbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = miconbutton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +150,8 @@
 				80040C971CA3DACD009D8A5B /* repeat0.png */,
 				80040C981CA3DACD009D8A5B /* repeat11.png */,
 				80040C991CA3DACD009D8A5B /* repeata.png */,
+				80DBCA681DA77482000552E2 /* micoffbutton.png */,
+				80DBCA691DA77482000552E2 /* miconbutton.png */,
 				43E5A0DC1BE1CBCC0004C60D /* Assets.xcassets */,
 				43E5A1031BE1CBE90004C60D /* AppDelegate.h */,
 				43E5A1041BE1CBE90004C60D /* AppDelegate.m */,
@@ -297,8 +303,10 @@
 			files = (
 				80040CA11CA3DACD009D8A5B /* repeata.png in Resources */,
 				80040CA01CA3DACD009D8A5B /* repeat11.png in Resources */,
+				80DBCA6B1DA77482000552E2 /* miconbutton.png in Resources */,
 				43E5A1171BE1CBF60004C60D /* slider.png in Resources */,
 				80040C9B1CA3DACD009D8A5B /* mic1.png in Resources */,
+				80DBCA6A1DA77482000552E2 /* micoffbutton.png in Resources */,
 				80040C9D1CA3DACD009D8A5B /* micon.png in Resources */,
 				80040C9F1CA3DACD009D8A5B /* repeat0.png in Resources */,
 				43E5A1131BE1CBF60004C60D /* backClear.png in Resources */,

@@ -24,7 +24,7 @@
 
 @property MPMusicPlayerController *player;
 
-@property AVQueuePlayer *avPlayer;
+//@property AVQueuePlayer *avPlayer;
 @property NSURL *url;
 @property AVPlayerItem *playerItem;
 @property MPMediaItemCollection *mediaItemCollection2;
@@ -73,45 +73,61 @@
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 //ロック画面・コントロールセンターから操作未完成
-//- (BOOL)canBecomeFirstResponder { return YES; }
-//
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-//    [self becomeFirstResponder];
-//}
-//
-//- (void)viewDidDisappear:(BOOL)animated
-//{
-//    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
-//    [self resignFirstResponder];
-//    [super viewDidDisappear:animated];
-//}
-//- (void)remoteControlRecievedWithEvent:(UIEvent *)receivedEvent {
-//    if(receivedEvent.type == UIEventTypeRemoteControl) {
-//        switch(receivedEvent.subtype) {
-//        case UIEventSubtypeRemoteControlPlay:
-//            //プレイボタン押下時の処理
-//            break;
-//        case UIEventSubtypeRemoteControlPause:
-//            //プレイボタン押下時の処理
-//            break;
-//        case UIEventSubtypeRemoteControlPreviousTrack:
-//            //戻るボタン押下時の処理
-//            break;
-//        case UIEventSubtypeRemoteControlNextTrack:
-//            //次へボタン押下時の処理
-//            break;
-//        default:
-//            break;
-//        }
-//    }
-//}
+
+-(void)addRemoteCommandCenter{
+    MPRemoteCommandCenter *rcc = [MPRemoteCommandCenter sharedCommandCenter];
+    [rcc.togglePlayPauseCommand addTarget:self action:@selector(avtoggle:)];
+    [rcc.playCommand addTarget:self action:@selector(avplay:)];
+    [rcc.pauseCommand addTarget:self action:@selector(avpause:)];
+    [rcc.nextTrackCommand addTarget:self action:@selector(avnextTrack:)];
+    [rcc.previousTrackCommand addTarget:self action:@selector(avprevTrack:)];
+}
+
+- (void)avtoggle:(MPRemoteCommandEvent*)event{
+    [self pushPlay];
+    
+}
+- (void)avplay:(MPRemoteCommandEvent*)event{
+    [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
+    [avPlayer play];
+    _seekPlaying=YES;
+    
+    [_mypod feed];
+    [_mypod bufferSet];
+    [_mypod mixUnitvol];
+    //[_mypod2 audioSession];
+    [_mypod2 feed];
+    [_mypod2 bufferSet];
+    [_mypod2 mixUnitvol];
+    _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    _fbVolLabel.textColor=[UIColor blackColor];
+    [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
+    _miccount=YES;
+}
+- (void)avpause:(MPRemoteCommandEvent*)event{
+    [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+    [avPlayer pause];
+    _seekPlaying=NO;
+    
+    [_mypod auClose];
+    [_mypod2 auClose];
+    _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+    _fbVolLabel.textColor=[UIColor lightGrayColor];
+    [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
+    _miccount=NO;
+}
+- (void)avnextTrack:(MPRemoteCommandEvent*)event{
+    [self nextsong];
+}
+- (void)avprevTrack:(MPRemoteCommandEvent*)event{
+    [self backsong];
+}
+
 
 
 - (void)viewDidLoad
 {
+    [self addRemoteCommandCenter];
     self.title = @"";
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addRow:)];
@@ -156,7 +172,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(avPlayDidFinish:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
-                                               object:_avPlayer];
+                                               object:avPlayer];
     ///前回のスラいだー値反映
     NSUserDefaults *ud=[NSUserDefaults standardUserDefaults];
     
@@ -187,7 +203,7 @@
         [self songtext];
         _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
         _playerItem = [[AVPlayerItem alloc] initWithURL:_url];
-        _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+        avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
         
         
         _nameData=[[NSMutableArray alloc]init];
@@ -211,7 +227,7 @@
     [_songList reloadData];
     [self AutoScroll];
     
-    _avPlayer.volume=_ipodVol;
+    avPlayer.volume=_ipodVol;
     [self startTimer];
     
     _repeatCount=[ud floatForKey:@"repeatCount"];
@@ -224,7 +240,7 @@
     }
     
     
-    NSArray *out = _mypod.session.currentRoute.outputs;
+    NSArray *out = _mypod->session.currentRoute.outputs;
     AVAudioSessionPortDescription *portDescription = [out lastObject];
     if ([portDescription.portType isEqualToString:@"Headphones"])
     {
@@ -235,11 +251,12 @@
         [self ipodLabelRed];
     }
 
-    _avPlayer.volume=_ipodVol;
+    avPlayer.volume=_ipodVol;
 
     _ipodVolLabel.text=_ipodVoltext;
     _ipodvol.value=_ipodVol;
-    
+    [self miconoff];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
@@ -281,7 +298,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         //if playing delete
         if (_mediaItemCollection2.count<1) {//1曲の時
             //選択初期化
-            _avPlayer=nil;
+            avPlayer=nil;
             _timelabel.text=[NSString stringWithFormat:@"00:00"];
             _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
             _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
@@ -374,7 +391,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [self nextandback];
             if ((_repeatCount==2)||(_repeatCount==1)) {//リピートなら戻って再生続ける
-                [_avPlayer play];
+                [avPlayer play];
             }else{//リピートじゃないなら再生アイコンに
                 [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             }
@@ -418,7 +435,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             NSLog(@"ヘッドフォンが抜かれた");
             [self ipodLabelRed];
             
-            [_avPlayer pause];
+            [avPlayer pause];
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
         }
     }
@@ -432,19 +449,19 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         case AVAudioSessionInterruptionTypeBegan:
             NSLog(@"割り込みの開始！");
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
-            [_avPlayer pause];
+            [avPlayer pause];
             [_mypod auClose];
             [_mypod2 auClose];
             _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
             _fbVolLabel.textColor=[UIColor lightGrayColor];
-            [_micimage setImage : [ UIImage imageNamed : @"micoff.png" ] forState : UIControlStateNormal];
+            [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
             _miccount=NO;
             
             break;
         case AVAudioSessionInterruptionTypeEnded:
             NSLog(@"割り込みの終了！");
             [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
-            [_avPlayer play];
+            [avPlayer play];
             break;
             
         default:
@@ -482,14 +499,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [_nameData addObject:_name1];
         }
         
-        if (_avPlayer==nil) {
+        if (avPlayer==nil) {
             [self songtext];
             MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
             _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
             _playerItem = [[AVPlayerItem alloc] initWithURL:_url];    //変換
-            _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+            avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
             
-            _avPlayer.volume=_ipodVol;
+            avPlayer.volume=_ipodVol;
         }
         
         
@@ -504,9 +521,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:0];
         _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
         _playerItem = [[AVPlayerItem alloc] initWithURL:_url];    //変換
-        _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+        avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
         
-        _avPlayer.volume=_ipodVol;
+        avPlayer.volume=_ipodVol;
         
         _nameData=[[NSMutableArray alloc]init];
         for (int i = 0;i < _mediaItemCollection2.count; i++) {
@@ -564,8 +581,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 - (IBAction)backSong:(id)sender {
+    [self backsong];
+}
+
+-(void)backsong{
     if(_nameData != 0){                     //１曲以上選ばれているか
-        if (CMTimeGetSeconds(_avPlayer.currentTime)<2.9) {//2.9秒以前なら前の曲
+        if (CMTimeGetSeconds(avPlayer.currentTime)<2.9) {//2.9秒以前なら前の曲
             
             if (_songCount==0) {                             //最初なら最後の曲へ
                 _songCount=_nameData.count-1;
@@ -576,17 +597,21 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                 [self saveCount];
             }
             
-            if ([_avPlayer rate]==0) {  //曲が停止中なら停止
+            if ([avPlayer rate]==0) {  //曲が停止中なら停止
                 [self nextandback];
             }else{  //曲が再生中なら再生
                 [self nextandbackplay];
             }
         }
-        else{[_avPlayer seekToTime:CMTimeMake(0, 600)];}//2.9秒以降なら0秒
+        else{[avPlayer seekToTime:CMTimeMake(0, 600)];}//2.9秒以降なら0秒
     }
 }
 
 - (IBAction)nextSong:(id)sender {
+    [self nextsong];
+}
+
+-(void)nextsong{
     //NSLog(@"%lu",(unsigned long)_mediaItemCollection2.count);
     if(_nameData.count != 0){               //１曲以上選ばれているか
         if (_songCount==_nameData.count-1) {//最後なら1曲目へ
@@ -600,7 +625,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [self saveCount];
         }
-        if ([_avPlayer rate]==0) {  //曲が停止中なら停止
+        if ([avPlayer rate]==0) {  //曲が停止中なら停止
             [self nextandback];
         }else{  //曲が再生中なら停止
             [self nextandbackplay];
@@ -615,9 +640,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
     
     _playerItem = [[AVPlayerItem alloc] initWithURL:_url];
-    _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+    avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
     
-    _avPlayer.volume=_ipodVol;
+    avPlayer.volume=_ipodVol;
     
 }
 
@@ -628,11 +653,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     _url = [item valueForProperty:MPMediaItemPropertyAssetURL];
     
     _playerItem = [[AVPlayerItem alloc] initWithURL:_url];
-    _avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
+    avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
     
-    _avPlayer.volume=_ipodVol;
+    avPlayer.volume=_ipodVol;
     
-    [_avPlayer play];
+    [avPlayer play];
     [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
     
     
@@ -640,14 +665,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 
 - (IBAction)pushPlay:(id)sender {
+    [self pushPlay];
+}
+-(void)pushPlay{
     if (_nameData.count != 0){
-        if ([_avPlayer rate]!=0) {  //曲が再生中なら停止
+        if ([avPlayer rate]!=0) {  //曲が再生中なら停止
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
-            [_avPlayer pause];
+            [avPlayer pause];
             _seekPlaying=NO;
         }else{  //曲が停止中なら再生
             [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
-            [_avPlayer play];
+            [avPlayer play];
             _seekPlaying=YES;
         }
     }
@@ -661,7 +689,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)ipodSliderChanged:(UISlider*)sender {   //曲のボリューム変更スライダー
     _ipodVol = sender.value;
-    _avPlayer.volume=_ipodVol;
+    avPlayer.volume=_ipodVol;
     
     if (_headphoneConnect) {
         _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
@@ -747,17 +775,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     _timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timertext) userInfo:nil repeats:YES];
 }
 -(void)timertext{
-    _second=fmodf(CMTimeGetSeconds(_avPlayer.currentTime),60);
-    _minute=CMTimeGetSeconds(_avPlayer.currentTime)/60;
+    _second=fmodf(CMTimeGetSeconds(avPlayer.currentTime),60);
+    _minute=CMTimeGetSeconds(avPlayer.currentTime)/60;
     _timestr=[NSString stringWithFormat:@"%02d:%02d",_minute,_second];
     _timelabel.text=_timestr;
     
-    _maxback=_playback-CMTimeGetSeconds(_avPlayer.currentTime);
+    _maxback=_playback-CMTimeGetSeconds(avPlayer.currentTime);
     _maxsecond=_maxback%60;
     _maxminute=_maxback/60;
     _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
     _maxtimelabel.text=_maxtimelabelstr;
-    [_autoseek setValue:CMTimeGetSeconds(_avPlayer.currentTime) animated:YES];
+    [_autoseek setValue:CMTimeGetSeconds(avPlayer.currentTime) animated:YES];
 }
 
 //float RoundValue(UISlider * slider) {
@@ -770,12 +798,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (fabsf(_newValue-_oldValue)>(_playback/500)) {
         
         _tm= CMTimeMakeWithSeconds((int)sender.value, NSEC_PER_SEC);
-        [_avPlayer pause];
-        [_avPlayer seekToTime:_tm];
+        [avPlayer pause];
+        [avPlayer seekToTime:_tm];
         
         if (_seekPlaying && _playback-sender.value>1) {
             [NSThread sleepForTimeInterval:0.04];
-            [_avPlayer play];
+            [avPlayer play];
         }
         
         NSLog(@"%f",_playback-sender.value);
@@ -798,19 +826,19 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)feedUp:(UISlider *)sender {
     if (_seekPlaying) {
-        [_avPlayer play];
+        [avPlayer play];
     }
     [_autoseek setValue:sender.value animated:YES];
-    [_avPlayer seekToTime:_tm];
+    [avPlayer seekToTime:_tm];
     
     [self startTimer];
-    NSLog(@"離した%f",CMTimeGetSeconds(_avPlayer.currentTime));
+    NSLog(@"離した%f",CMTimeGetSeconds(avPlayer.currentTime));
 }
 
 - (IBAction)feedDown:(UISlider *)sender {
     _oldValue=sender.value;
     
-    if ([_avPlayer rate]==0) {
+    if ([avPlayer rate]==0) {
         _seekPlaying=NO;
         NSLog(@"NO");
     }else{
@@ -855,25 +883,29 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 //}
 
 - (IBAction)miconoff:(UIButton *)sender {
+    [self miconoff];
+}
+
+-(void)miconoff{
     if (!_miccount) {
-        [_mypod audioSession];
+        //[_mypod audioSession];
         [_mypod feed];
         [_mypod bufferSet];
         [_mypod mixUnitvol];
-        [_mypod2 audioSession];
+        //[_mypod2 audioSession];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
-        [_micimage setImage : [ UIImage imageNamed : @"new_micon.jpg" ] forState : UIControlStateNormal];
+        [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
         _miccount=YES;
     }else{
         [_mypod auClose];
         [_mypod2 auClose];
         _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
         _fbVolLabel.textColor=[UIColor lightGrayColor];
-        [_micimage setImage : [ UIImage imageNamed : @"micoff.png" ] forState : UIControlStateNormal];
+        [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
         _miccount=NO;
     }
 }
@@ -889,7 +921,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     _ipodvol.value=_ipodVol;
     _ipodVolLabel.text=_ipodVoltext;
-    _avPlayer.volume=_ipodVol;
+    avPlayer.volume=_ipodVol;
     
     _headphoneConnect=YES;
 }
@@ -904,7 +936,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     _ipodvol.value=_ipodVol;
     _ipodVolLabel.text=_ipodVoltext;
-    _avPlayer.volume=_ipodVol;
+    avPlayer.volume=_ipodVol;
     
     _headphoneConnect=NO;
 }
