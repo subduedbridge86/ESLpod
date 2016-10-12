@@ -6,6 +6,7 @@
 //@property float systemVol;
 @property long songCount;
 @property int repeatCount;
+@property float getSecond;
 @property int second;
 @property int minute;
 @property int maxsecond;
@@ -23,7 +24,7 @@
 @property BOOL addFlag;
 
 @property MPMusicPlayerController *player;
-
+@property NSDictionary *songinfo;
 //@property AVQueuePlayer *avPlayer;
 @property NSURL *url;
 @property AVPlayerItem *playerItem;
@@ -770,13 +771,20 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *playbackstr=[item valueForProperty:MPMediaItemPropertyPlaybackDuration];
     _playback=playbackstr.intValue;
     _autoseek.maximumValue=_playback;
+    
+    
+    _songinfo=@{MPMediaItemPropertyTitle:[item valueForProperty:MPMediaItemPropertyTitle]};
+    //_songinfo=@{MPMediaItemPropertyPlaybackDuration:[item valueForProperty:MPMediaItemPropertyPlaybackDuration]};
+    [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:_songinfo];
+
 }
 -(void)startTimer{
     _timer=[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timertext) userInfo:nil repeats:YES];
 }
 -(void)timertext{
-    _second=fmodf(CMTimeGetSeconds(avPlayer.currentTime),60);
-    _minute=CMTimeGetSeconds(avPlayer.currentTime)/60;
+    _getSecond=CMTimeGetSeconds(avPlayer.currentTime);
+    _second=fmodf(_getSecond,60);
+    _minute=_getSecond/60;
     _timestr=[NSString stringWithFormat:@"%02d:%02d",_minute,_second];
     _timelabel.text=_timestr;
     
