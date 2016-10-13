@@ -18,10 +18,11 @@
 @public AVAudioSession *session;
 }
 
-@property AUNode remoteIONode,mixNode;
-@property AudioUnit remoteIOUnit,mixUnit;
+@property AUNode remoteIONode,mixNode,delayNode;
+@property AudioUnit remoteIOUnit,mixUnit,delayUnit;
 @property AUGraph auGraph;
 @property float feedVol;
+@property float delayTime;
 //@property AVAudioSession* session;
 
 
