@@ -31,6 +31,6 @@
 -(void)bufferSet;
 -(void)mixUnitvol;
 -(void)auClose;
-
+-(void)delayUnittime;
 
 @end

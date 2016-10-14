@@ -64,7 +64,7 @@
                           kDelayParam_WetDryMix,
                           kAudioUnitScope_Global,
                           0,
-                          0,//直接音：フィードバック音の比率
+                          100,//直接音：フィードバック音の比率
                           0);
     AudioUnitSetParameter(self->_delayUnit,
                           kDelayParam_Feedback,

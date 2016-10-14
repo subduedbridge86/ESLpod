@@ -55,10 +55,13 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *ipodVolLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fbVolLabel;
+@property (weak, nonatomic) IBOutlet UILabel *delaytimeLabel;
 
 
 @property (weak, nonatomic) IBOutlet UISlider *ipodvol;
 @property (weak, nonatomic) IBOutlet UISlider *feedvol;
+@property (weak, nonatomic) IBOutlet UISlider *delaytime;
+
 
 @end
 
@@ -96,12 +99,16 @@
     [_mypod feed];
     [_mypod bufferSet];
     [_mypod mixUnitvol];
+    [_mypod delayUnittime];
     //[_mypod2 audioSession];
     [_mypod2 feed];
     [_mypod2 bufferSet];
     [_mypod2 mixUnitvol];
+    [_mypod2 delayUnittime];
     _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _fbVolLabel.textColor=[UIColor blackColor];
+    _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    _delaytimeLabel.textColor=[UIColor blackColor];
     [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
     _miccount=YES;
 }
@@ -114,6 +121,8 @@
     [_mypod2 auClose];
     _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
     _fbVolLabel.textColor=[UIColor lightGrayColor];
+    _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
+    _delaytimeLabel.textColor=[UIColor lightGrayColor];
     [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
     _miccount=NO;
 }
@@ -188,6 +197,16 @@
     NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
     _fbVolLabel.text=fbVoltext;
     _feedvol.value=_mypod.feedVol;
+    
+    _mypod.delayTime=[ud floatForKey:@"delayTime"];
+    _mypod2.delayTime=[ud floatForKey:@"delayTime"];
+    
+    [_mypod delayUnittime];
+    [_mypod2 delayUnittime];
+    
+    NSString *delaytimetext = [NSString stringWithFormat:@"%.01f", _mypod.delayTime*2];
+    _delaytimeLabel.text=delaytimetext;
+    _delaytime.value=_mypod.delayTime;
     
     
     
@@ -726,6 +745,30 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [ud2 setFloat:_mypod2.feedVol forKey:@"feedvol"];
 }
 
+- (IBAction)delaySliderChanged:(UISlider*)sender {//フィードバック音のボリューム変更スライダー
+    NSLog(@"delay");
+    _mypod.delayTime=sender.value;
+    _mypod2.delayTime=sender.value;
+    if (_miccount) {
+        
+        [_mypod delayUnittime];
+        [_mypod2 delayUnittime];
+        
+    }
+    NSString *delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod.delayTime*2];
+    _delaytimeLabel.text=delaytimetext;
+    
+    NSUserDefaults *ud7=[NSUserDefaults standardUserDefaults];
+    [ud7 setFloat:_mypod.delayTime forKey:@"delayTime"];
+    [ud7 setFloat:_mypod2.delayTime forKey:@"delayTime"];
+    
+
+}
+
+
+
+
+
 //スイッチでマイクオンオフしてたときの遺産ゴミ
 //- (IBAction)feedonoff:(UISwitch *)sender {
 //    if (sender.on) {
@@ -900,12 +943,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [_mypod feed];
         [_mypod bufferSet];
         [_mypod mixUnitvol];
+        [_mypod delayUnittime];
         //[_mypod2 audioSession];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
+        [_mypod2 delayUnittime];
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
+        _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        _delaytimeLabel.textColor=[UIColor blackColor];
+
         [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
         _miccount=YES;
     }else{
@@ -913,6 +961,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [_mypod2 auClose];
         _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
         _fbVolLabel.textColor=[UIColor lightGrayColor];
+        _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
+        _delaytimeLabel.textColor=[UIColor lightGrayColor];
+
         [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
         _miccount=NO;
     }

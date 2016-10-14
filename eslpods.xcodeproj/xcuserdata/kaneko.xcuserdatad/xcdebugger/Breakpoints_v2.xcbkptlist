@@ -10,13 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "eslpods/ViewController.m"
-            timestampString = "497860066.228363"
+            timestampString = "498116915.345261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "768"
-            endingLineNumber = "768"
-            landmarkName = "-songtext"
-            landmarkType = "7">
+            startingLineNumber = "790"
+            endingLineNumber = "790"
+            landmarkName = "@implementation ViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
