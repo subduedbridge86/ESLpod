@@ -522,8 +522,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             break;
         case AVAudioSessionInterruptionTypeEnded:
             NSLog(@"割り込みの終了！");
-            [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
-            [avPlayer play];
             break;
             
         default:

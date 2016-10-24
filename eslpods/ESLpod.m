@@ -18,9 +18,9 @@
     if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
                   withOptions:AVAudioSessionCategoryOptionMixWithOthers
                         error:&setCategoryError]) {}
-    if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
-                  withOptions:AVAudioSessionCategoryOptionAllowBluetooth
-                        error:&setCategoryError]) {}
+//    if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
+//                  withOptions:AVAudioSessionCategoryOptionAllowBluetooth
+//                        error:&setCategoryError]) {}
 //    if (![session setCategory:AVAudioSessionCategoryPlayback
 //                        error:&setCategoryError]) {}
 
