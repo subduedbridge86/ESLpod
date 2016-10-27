@@ -751,7 +751,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)ipodSliderChanged:(UISlider*)sender {   //曲のボリューム変更スライダー
     _ipodVol = sender.value;
     avPlayer.volume=_ipodVol;
-    
+    NSLog(@"%f",sender.value);
     if (_headphoneConnect) {
         _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
         

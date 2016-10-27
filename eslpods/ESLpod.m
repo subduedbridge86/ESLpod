@@ -16,7 +16,7 @@
     
     NSError *setCategoryError = nil;
     if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
-                  withOptions:AVAudioSessionCategoryOptionMixWithOthers
+                  withOptions:AVAudioSessionCategoryOptionDuckOthers
                         error:&setCategoryError]) {}
 //    if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
 //                  withOptions:AVAudioSessionCategoryOptionAllowBluetooth
