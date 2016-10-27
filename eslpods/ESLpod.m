@@ -56,10 +56,10 @@
     delayDescription.componentManufacturer = kAudioUnitManufacturer_Apple;
     delayDescription.componentType = kAudioUnitType_Effect;
     delayDescription.componentSubType = kAudioUnitSubType_Delay;
-    
+
     AUGraphAddNode(_auGraph, &delayDescription, &_delayNode);
     AUGraphNodeInfo(_auGraph, _delayNode, NULL, &_delayUnit);
-    
+
     AudioUnitSetParameter(self->_delayUnit,
                           kDelayParam_WetDryMix,
                           kAudioUnitScope_Global,
@@ -73,8 +73,8 @@
                           0,//0でエコー無し
                           0);
     //下にDelaytimeのパラメータメソッド書いてる
-    
-    
+
+
     UInt32 flag = 1;                    //マイク入力をオンにする
     AudioUnitSetProperty(_remoteIOUnit,
                          kAudioOutputUnitProperty_EnableIO,
@@ -83,7 +83,7 @@
                          &flag,
                          sizeof(UInt32)
                          );
-    
+
     AudioStreamBasicDescription asbd;
     asbd.mSampleRate = 44100;
     asbd.mFormatID = kAudioFormatLinearPCM;
@@ -132,13 +132,13 @@
 //    AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareIOBufferDuration, &size1, &currentDuration);
 //    NSLog(@"元の遅延時間=%f\n",currentDuration);
 //    NSLog(@"元のフレーム=%f",44100*currentDuration);
-    
+
     Float32 byte=64;
     Float32 duration=byte/44100;
     
     NSLog(@"遅延をこれに=%f\n",duration);
     size1=sizeof(Float32);
-    AVAudioSession *session=[AVAudioSession sharedInstance];
+    //AVAudioSession *session1=[AVAudioSession sharedInstance];
     [session setPreferredIOBufferDuration:duration error:nil];
     
 //    Float32 new;
