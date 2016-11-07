@@ -63,7 +63,7 @@
                                     <constraint firstAttribute="width" constant="64" id="5G1-bn-bNw"/>
                                     <constraint firstAttribute="height" constant="29" id="7Ln-cC-2Ga"/>
                                 </constraints>
-                                <state key="normal" title="曲選択">
+                                <state key="normal" title="×100%">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -73,7 +73,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="pick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ysm-4T-Hju"/>
+                                    <action selector="playerrateButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5iy-WE-qWO"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="M2k-ls-zFo">
@@ -304,6 +304,7 @@
                         <outlet property="micimage" destination="B6A-Id-mB5" id="Udy-6n-G2b"/>
                         <outlet property="musicIcon" destination="MDX-pb-b3U" id="8Oa-Xk-aiV"/>
                         <outlet property="playImage" destination="B8W-7v-9oO" id="G8h-ak-XSa"/>
+                        <outlet property="rateButton" destination="1KA-wW-f2I" id="icH-nJ-kDy"/>
                         <outlet property="repeatImage" destination="Mmx-lp-FAY" id="nHR-PK-NFT"/>
                         <outlet property="songList" destination="M2k-ls-zFo" id="o4K-ou-qyN"/>
                         <outlet property="timelabel" destination="SoP-ei-M51" id="7Fl-UD-iew"/>
