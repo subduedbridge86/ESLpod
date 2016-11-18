@@ -365,8 +365,6 @@
         [self doButtonPushed];
     }]];
     [self presentViewController:alertController animated:YES completion:nil];
-    
-    
 }
 
 
@@ -522,6 +520,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)didChangeAudioSessionRoute:(NSNotification *)notification
 {
+    
+    
+    
+    
     // ヘッドホンが刺さっていたか取得
     BOOL (^isJointHeadphone)(NSArray *) = ^(NSArray *outputs){
         for (_desc in outputs) {

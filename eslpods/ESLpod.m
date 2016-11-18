@@ -85,14 +85,14 @@
                          );
 
     AudioStreamBasicDescription asbd;
-    asbd.mSampleRate = 44100;
+    asbd.mSampleRate = 44100.0f;
     asbd.mFormatID = kAudioFormatLinearPCM;
     asbd.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsNonInterleaved | (kAudioUnitSampleFractionBits << kLinearPCMFormatFlagsSampleFractionShift);
     asbd.mBitsPerChannel = 32;  //8*4
     asbd.mBytesPerFrame = 4;    //4=sizeof(SInt32)
     asbd.mBytesPerPacket = 4;
     asbd.mFramesPerPacket = 1;
-    asbd.mChannelsPerFrame = 1;
+    asbd.mChannelsPerFrame = 2;
     
     AudioUnitSetProperty(_remoteIOUnit,
                          kAudioUnitProperty_StreamFormat,
@@ -137,7 +137,7 @@
     Float32 duration=byte/44100;
     
     NSLog(@"遅延をこれに=%f\n",duration);
-    size1=sizeof(Float32);
+    //size1=sizeof(Float32);
     //AVAudioSession *session1=[AVAudioSession sharedInstance];
     [session setPreferredIOBufferDuration:duration error:nil];
     
