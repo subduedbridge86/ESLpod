@@ -107,11 +107,13 @@
     [_mypod bufferSet];
     [_mypod mixUnitvol];
     [_mypod delayUnittime];
+    [_mypod delayUnittime2];
     //[_mypod2 audioSession];
     [_mypod2 feed];
     [_mypod2 bufferSet];
     [_mypod2 mixUnitvol];
     [_mypod2 delayUnittime];
+    [_mypod2 delayUnittime2];
     _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _fbVolLabel.textColor=[UIColor blackColor];
     _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
@@ -256,7 +258,7 @@
     
     
     [self addRemoteCommandCenter];
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    //[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
     
     [_songList reloadData];
@@ -285,14 +287,12 @@
         [_mypod bufferSet];
         [_mypod mixUnitvol];
         [_mypod delayUnittime];
+        [_mypod delayUnittime2];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
         [_mypod2 delayUnittime];
-        [_mypod mixUnitvol];
-        [_mypod2 mixUnitvol];
-        [_mypod delayUnittime];
-        [_mypod2 delayUnittime];
+        [_mypod2 delayUnittime2];
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
         _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
@@ -319,7 +319,6 @@
     _ipodVolLabel.text=_ipodVoltext;
     _ipodvol.value=_ipodVol;
     
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
@@ -849,6 +848,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_miccount) {
         [_mypod delayUnittime];
         [_mypod2 delayUnittime];
+        [_mypod delayUnittime2];
+        [_mypod2 delayUnittime2];
+
     }
     NSString *delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod.delayTime*2];
     _delaytimeLabel.text=delaytimetext;
@@ -996,11 +998,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [_mypod bufferSet];
         [_mypod mixUnitvol];
         [_mypod delayUnittime];
+        [_mypod delayUnittime2];
         //[_mypod2 audioSession];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
         [_mypod2 delayUnittime];
+        [_mypod2 delayUnittime2];
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
         _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
@@ -1056,27 +1060,37 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)playerrateButton:(UIButton *)sender {
     if (_rateCount==0) {
         _rateValue=1.25;
-        avPlayer.rate=_rateValue;
+        if (_seekPlaying) {
+            avPlayer.rate=_rateValue;
+        }
         _rateCount++;
         [_rateButton setTitle:@"×125%" forState:UIControlStateNormal];
     }else if (_rateCount==1){
         _rateValue=1.5;
-        avPlayer.rate=_rateValue;
+        if (_seekPlaying) {
+            avPlayer.rate=_rateValue;
+        }
         _rateCount++;
         [_rateButton setTitle:@"×150%" forState:UIControlStateNormal];
     }else if (_rateCount==2){
         _rateValue=0.5;
-        avPlayer.rate=_rateValue;
+        if (_seekPlaying) {
+            avPlayer.rate=_rateValue;
+        }
         _rateCount++;
         [_rateButton setTitle:@"×50%" forState:UIControlStateNormal];
     }else if (_rateCount==3){
         _rateValue=0.75;
-        avPlayer.rate=_rateValue;
+        if (_seekPlaying) {
+            avPlayer.rate=_rateValue;
+        }
         _rateCount++;
         [_rateButton setTitle:@"×75%" forState:UIControlStateNormal];
     }else if (_rateCount==4){
         _rateValue=1;
-        avPlayer.rate=_rateValue;
+        if (_seekPlaying) {
+            avPlayer.rate=_rateValue;
+        }
         _rateCount=0;
         [_rateButton setTitle:@"×100%" forState:UIControlStateNormal];
     }
@@ -1085,6 +1099,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)playwithRate{
     [avPlayer play];
     avPlayer.rate=_rateValue;
+
 }
 
 @end

@@ -59,6 +59,8 @@
 
     AUGraphAddNode(_auGraph, &delayDescription, &_delayNode);
     AUGraphNodeInfo(_auGraph, _delayNode, NULL, &_delayUnit);
+    AUGraphAddNode(_auGraph, &delayDescription, &_delayNode2);
+    AUGraphNodeInfo(_auGraph, _delayNode2, NULL, &_delayUnit2);
 
     AudioUnitSetParameter(self->_delayUnit,
                           kDelayParam_WetDryMix,
@@ -73,6 +75,18 @@
                           0,//0でエコー無し
                           0);
     //下にDelaytimeのパラメータメソッド書いてる
+    AudioUnitSetParameter(self->_delayUnit2,
+                          kDelayParam_WetDryMix,
+                          kAudioUnitScope_Global,
+                          0,
+                          100,//直接音：フィードバック音の比率
+                          0);
+    AudioUnitSetParameter(self->_delayUnit2,
+                          kDelayParam_Feedback,
+                          kAudioUnitScope_Global,
+                          0,
+                          0,//0でエコー無し
+                          0);
 
 
     UInt32 flag = 1;                    //マイク入力をオンにする
@@ -114,6 +128,11 @@
     
     AUGraphConnectNodeInput(_auGraph,
                             _delayNode,0, //mixerと
+                            _delayNode2, 0  //Remote Outputを接続
+                            );
+    
+    AUGraphConnectNodeInput(_auGraph,
+                            _delayNode2,0, //mixerと
                             _remoteIONode, 0  //Remote Outputを接続
                             );
     
@@ -128,7 +147,7 @@
 
 -(void)bufferSet{   //フィードバックの早さ変更
 //    Float32 currentDuration;
-    UInt32 size1=sizeof(Float32);
+//    UInt32 size1=sizeof(Float32);
 //    AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareIOBufferDuration, &size1, &currentDuration);
 //    NSLog(@"元の遅延時間=%f\n",currentDuration);
 //    NSLog(@"元のフレーム=%f",44100*currentDuration);
@@ -159,6 +178,15 @@
 
 -(void)delayUnittime{
     AudioUnitSetParameter(self->_delayUnit,
+                          kDelayParam_DelayTime,
+                          kAudioUnitScope_Global,
+                          0,
+                          _delayTime,//0で遅延無し
+                          0);
+}
+
+-(void)delayUnittime2{
+    AudioUnitSetParameter(self->_delayUnit2,
                           kDelayParam_DelayTime,
                           kAudioUnitScope_Global,
                           0,

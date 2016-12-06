@@ -210,7 +210,7 @@
                                     <action selector="miconoff:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wbm-Ny-xVu"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hAe-EA-SyC">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="hAe-EA-SyC">
                                 <rect key="frame" x="45" y="621" width="290" height="31"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -302,14 +302,14 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="tOB-Ub-OIT"/>
-                                <exclude reference="zMh-x1-sfB"/>
-                                <exclude reference="1Jb-6e-r7f"/>
-                                <exclude reference="17n-tr-Lu7"/>
                                 <exclude reference="K5y-V8-ecA"/>
                                 <exclude reference="P8B-mp-RJo"/>
                                 <exclude reference="ZaY-XJ-CCM"/>
                                 <exclude reference="rBQ-hE-dhT"/>
+                                <exclude reference="1Jb-6e-r7f"/>
+                                <exclude reference="tOB-Ub-OIT"/>
+                                <exclude reference="zMh-x1-sfB"/>
+                                <exclude reference="17n-tr-Lu7"/>
                             </mask>
                         </variation>
                     </view>

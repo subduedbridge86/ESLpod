@@ -12,14 +12,13 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AudioUnit/AudioUnit.h>
-#import <AudioToolbox/AudioToolbox.h>
 
 @interface ESLpod : NSObject{
 @public AVAudioSession *session;
 }
 
-@property AUNode remoteIONode,mixNode,delayNode;
-@property AudioUnit remoteIOUnit,mixUnit,delayUnit;
+@property AUNode remoteIONode,mixNode,delayNode,delayNode2;
+@property AudioUnit remoteIOUnit,mixUnit,delayUnit,delayUnit2;
 @property AUGraph auGraph;
 @property float feedVol;
 @property float delayTime;
@@ -32,5 +31,6 @@
 -(void)mixUnitvol;
 -(void)auClose;
 -(void)delayUnittime;
+-(void)delayUnittime2;
 
 @end
