@@ -13,12 +13,43 @@
 @end
 
 @implementation AppDelegate
-
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    // 起動2回目以降
+//    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
+//        
+//        // ここに2回目以降の処理を書く
+//        // 今回は特に記述しなくていい
+//        // Storyboard を呼ぶ
+//        UIStoryboard *TutorialSB = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+//        
+//        // Storyboard の中のどの ViewContorller を呼ぶか
+//        // @""の中は Storyboard IDを記述する。ココ間違えばブラック画面かな。
+//        UISplitViewController* vc = [TutorialSB instantiateViewControllerWithIdentifier: @"main"];
+//        // その画面を表示させる
+//        [self.window setRootViewController:vc];
+//        
+//    } else { // 初回起動時はこっち
+//        // UserDefault に一度起動したことを記録
+//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+//        [[NSUserDefaults standardUserDefaults] synchronize]; //すぐに更新
+//        
+//        // チュートリアル画面を表示
+//        // Storyboard を呼ぶ
+//        UIStoryboard *TutorialSB = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+//        
+//        // Storyboard の中のどの ViewContorller を呼ぶか
+//        // @""の中は Storyboard IDを記述する。ココ間違えばブラック画面かな。
+//        UISplitViewController* vc = [TutorialSB instantiateViewControllerWithIdentifier: @"TutorialViewController"];
+//        // その画面を表示させる
+//        [self.window setRootViewController:vc];
+//        
+//    }
+    
     return YES;
 }
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

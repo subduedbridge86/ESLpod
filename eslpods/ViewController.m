@@ -43,7 +43,7 @@
 @property NSString *timestr;
 @property NSString *name1,*name2;
 
-@property ESLpod *mypod,*mypod2;
+@property ESLpod *mypod1,*mypod2,*mypod3;
 //@property NSArray *mypodArray;
 
 @property (weak, nonatomic) IBOutlet UITableView *songList;
@@ -103,17 +103,22 @@
     [self playwithRate];
     _seekPlaying=YES;
     
-    [_mypod feed];
-    [_mypod bufferSet];
-    [_mypod mixUnitvol];
-    [_mypod delayUnittime];
-    [_mypod delayUnittime2];
-    //[_mypod2 audioSession];
+    [_mypod1 feed];
+    [_mypod1 bufferSet];
+    [_mypod1 mixUnitvol];
+    [_mypod1 delayUnittime];
+    [_mypod1 delayUnittime2];
     [_mypod2 feed];
     [_mypod2 bufferSet];
     [_mypod2 mixUnitvol];
     [_mypod2 delayUnittime];
     [_mypod2 delayUnittime2];
+    [_mypod3 feed];
+    [_mypod3 bufferSet];
+    [_mypod3 mixUnitvol];
+    [_mypod3 delayUnittime];
+    [_mypod3 delayUnittime2];
+    
     _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _fbVolLabel.textColor=[UIColor blackColor];
     _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
@@ -127,8 +132,10 @@
     [avPlayer pause];
     _seekPlaying=NO;
     
-    [_mypod auClose];
+    [_mypod1 auClose];
     [_mypod2 auClose];
+    [_mypod3 auClose];
+
     _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
     _fbVolLabel.textColor=[UIColor lightGrayColor];
     _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
@@ -169,12 +176,12 @@
     _songList.delegate = self;
     _songList.dataSource = self;
     
-    _mypod=[[ESLpod alloc]init];
-    [_mypod audioSession];
-    
-    
+    _mypod1=[[ESLpod alloc]init];
+    [_mypod1 audioSession];
     _mypod2=[[ESLpod alloc]init];
     [_mypod2 audioSession];
+    _mypod3=[[ESLpod alloc]init];
+    [_mypod3 audioSession];
     
     
     _player = [MPMusicPlayerController applicationMusicPlayer];
@@ -196,23 +203,24 @@
     
     
     
-    _mypod.feedVol=[ud floatForKey:@"feedvol"];
+    _mypod1.feedVol=[ud floatForKey:@"feedvol"];
     _mypod2.feedVol=[ud floatForKey:@"feedvol"];
+    _mypod3.feedVol=[ud floatForKey:@"feedvol"];
     
     
-    
-    NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod.feedVol*100];
+    NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", _mypod1.feedVol*100];
     _fbVolLabel.text=fbVoltext;
-    _feedvol.value=_mypod.feedVol;
+    _feedvol.value=_mypod1.feedVol;
     
-    _mypod.delayTime=[ud floatForKey:@"delayTime"];
+    _mypod1.delayTime=[ud floatForKey:@"delayTime"];
     _mypod2.delayTime=[ud floatForKey:@"delayTime"];
+    _mypod3.delayTime=[ud floatForKey:@"delayTime"];
+
     
     
-    
-    NSString *delaytimetext = [NSString stringWithFormat:@"%.01f", _mypod.delayTime*2];
+    NSString *delaytimetext = [NSString stringWithFormat:@"%.01f", _mypod1.delayTime*2];
     _delaytimeLabel.text=delaytimetext;
-    _delaytime.value=_mypod.delayTime;
+    _delaytime.value=_mypod1.delayTime;
     
     _mediaitemData=[ud objectForKey:@"_mediaitemData"];
     _songCount=[ud floatForKey:@"songCount"];
@@ -276,23 +284,29 @@
         [_repeatImage setImage : [ UIImage imageNamed : @"repeata.png" ] forState : UIControlStateNormal];
     }
 
-    NSArray *out = _mypod->session.currentRoute.outputs;
+    NSArray *out = _mypod1->session.currentRoute.outputs;
     _desc = [out lastObject];
     //NSLog(@"%@",_desc);
     if ([_desc.portType isEqual:AVAudioSessionPortHeadphones])
     {
         NSLog(@"起動時イヤホン接続中");
         [self ipodLabelDefault];
-        [_mypod feed];
-        [_mypod bufferSet];
-        [_mypod mixUnitvol];
-        [_mypod delayUnittime];
-        [_mypod delayUnittime2];
+        [_mypod1 feed];
+        [_mypod1 bufferSet];
+        [_mypod1 mixUnitvol];
+        [_mypod1 delayUnittime];
+        [_mypod1 delayUnittime2];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
         [_mypod2 delayUnittime];
         [_mypod2 delayUnittime2];
+        [_mypod3 feed];
+        [_mypod3 bufferSet];
+        [_mypod3 mixUnitvol];
+        [_mypod3 delayUnittime];
+        [_mypod3 delayUnittime2];
+        
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
         _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
@@ -303,8 +317,9 @@
     }else{
         NSLog(@"起動時イヤホン未接続");
         [self ipodLabelRed];
-        [_mypod auClose];
+        [_mypod1 auClose];
         [_mypod2 auClose];
+        [_mypod3 auClose];
         _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
         _fbVolLabel.textColor=[UIColor lightGrayColor];
         _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
@@ -549,8 +564,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [avPlayer pause];
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             
-            [_mypod auClose];
+            [_mypod1 auClose];
             [_mypod2 auClose];
+            [_mypod3 auClose];
+            
             _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
             _fbVolLabel.textColor=[UIColor lightGrayColor];
             _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
@@ -571,8 +588,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             NSLog(@"割り込みの開始！");
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [avPlayer pause];
-            [_mypod auClose];
+            [_mypod1 auClose];
             [_mypod2 auClose];
+            [_mypod3 auClose];
             _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
             _fbVolLabel.textColor=[UIColor lightGrayColor];
             _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
@@ -827,37 +845,48 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     float log=-10*log2(rv);
     float db =pow(10, log/20);
     NSLog(@"%f",db);
-    _mypod.feedVol=db;
+    _mypod1.feedVol=db;
     _mypod2.feedVol=db;
+    _mypod3.feedVol=db;
+    
     if (_miccount) {
-        [_mypod mixUnitvol];
+        [_mypod1 mixUnitvol];
         [_mypod2 mixUnitvol];
+        [_mypod3 mixUnitvol];
+
     }
     NSString *fbVoltext = [NSString stringWithFormat:@"%.0f", sender.value*100];
     _fbVolLabel.text=fbVoltext;
     
     NSUserDefaults *ud2=[NSUserDefaults standardUserDefaults];
-    [ud2 setFloat:_mypod.feedVol forKey:@"feedvol"];
+    [ud2 setFloat:_mypod1.feedVol forKey:@"feedvol"];
     [ud2 setFloat:_mypod2.feedVol forKey:@"feedvol"];
+    [ud2 setFloat:_mypod3.feedVol forKey:@"feedvol"];
+
 }
 
 - (IBAction)delaySliderChanged:(UISlider*)sender {//フィードバック音の遅延変更スライダー
     NSLog(@"delay");
-    _mypod.delayTime=sender.value;
+    _mypod1.delayTime=sender.value;
     _mypod2.delayTime=sender.value;
+    _mypod3.delayTime=sender.value;
     if (_miccount) {
-        [_mypod delayUnittime];
+        [_mypod1 delayUnittime];
         [_mypod2 delayUnittime];
-        [_mypod delayUnittime2];
+        [_mypod3 delayUnittime];
+
+        [_mypod1 delayUnittime2];
         [_mypod2 delayUnittime2];
+        [_mypod3 delayUnittime2];
 
     }
-    NSString *delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod.delayTime*2];
+    NSString *delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod1.delayTime*2];
     _delaytimeLabel.text=delaytimetext;
     
     NSUserDefaults *ud7=[NSUserDefaults standardUserDefaults];
-    [ud7 setFloat:_mypod.delayTime forKey:@"delayTime"];
+    [ud7 setFloat:_mypod1.delayTime forKey:@"delayTime"];
     [ud7 setFloat:_mypod2.delayTime forKey:@"delayTime"];
+    [ud7 setFloat:_mypod3.delayTime forKey:@"delayTime"];
 }
 
 -(void)saveCount{
@@ -993,18 +1022,22 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)miconoff{
     if (!_miccount) {
-        //[_mypod audioSession];
-        [_mypod feed];
-        [_mypod bufferSet];
-        [_mypod mixUnitvol];
-        [_mypod delayUnittime];
-        [_mypod delayUnittime2];
-        //[_mypod2 audioSession];
+        [_mypod1 feed];
+        [_mypod1 bufferSet];
+        [_mypod1 mixUnitvol];
+        [_mypod1 delayUnittime];
+        [_mypod1 delayUnittime2];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
         [_mypod2 delayUnittime];
         [_mypod2 delayUnittime2];
+        [_mypod3 feed];
+        [_mypod3 bufferSet];
+        [_mypod3 mixUnitvol];
+        [_mypod3 delayUnittime];
+        [_mypod3 delayUnittime2];
+        
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
         _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
@@ -1013,8 +1046,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
         _miccount=YES;
     }else{
-        [_mypod auClose];
+        [_mypod1 auClose];
         [_mypod2 auClose];
+        [_mypod3 auClose];
+
         _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
         _fbVolLabel.textColor=[UIColor lightGrayColor];
         _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];

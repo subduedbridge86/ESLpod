@@ -30,6 +30,8 @@
 		80040C9F1CA3DACD009D8A5B /* repeat0.png in Resources */ = {isa = PBXBuildFile; fileRef = 80040C971CA3DACD009D8A5B /* repeat0.png */; };
 		80040CA01CA3DACD009D8A5B /* repeat11.png in Resources */ = {isa = PBXBuildFile; fileRef = 80040C981CA3DACD009D8A5B /* repeat11.png */; };
 		80040CA11CA3DACD009D8A5B /* repeata.png in Resources */ = {isa = PBXBuildFile; fileRef = 80040C991CA3DACD009D8A5B /* repeata.png */; };
+		801C135D1DF671C10037725B /* WSCoachMarksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 801C135C1DF671C10037725B /* WSCoachMarksView.m */; };
+		801C135F1DF67E910037725B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 801C135E1DF67E910037725B /* Settings.bundle */; };
 		80DBCA6A1DA77482000552E2 /* micoffbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA681DA77482000552E2 /* micoffbutton.png */; };
 		80DBCA6B1DA77482000552E2 /* miconbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA691DA77482000552E2 /* miconbutton.png */; };
 /* End PBXBuildFile section */
@@ -85,6 +87,9 @@
 		80040C971CA3DACD009D8A5B /* repeat0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repeat0.png; path = ../repeat0.png; sourceTree = "<group>"; };
 		80040C981CA3DACD009D8A5B /* repeat11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repeat11.png; path = ../repeat11.png; sourceTree = "<group>"; };
 		80040C991CA3DACD009D8A5B /* repeata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repeata.png; path = ../repeata.png; sourceTree = "<group>"; };
+		801C135B1DF671C10037725B /* WSCoachMarksView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSCoachMarksView.h; sourceTree = "<group>"; };
+		801C135C1DF671C10037725B /* WSCoachMarksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSCoachMarksView.m; sourceTree = "<group>"; };
+		801C135E1DF67E910037725B /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		80DBCA681DA77482000552E2 /* micoffbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = micoffbutton.png; sourceTree = "<group>"; };
 		80DBCA691DA77482000552E2 /* miconbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = miconbutton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -159,11 +164,14 @@
 				43E5A1061BE1CBE90004C60D /* ViewController.m */,
 				43E5A1071BE1CBE90004C60D /* ESLpod.h */,
 				43E5A1081BE1CBE90004C60D /* ESLpod.m */,
+				801C135B1DF671C10037725B /* WSCoachMarksView.h */,
+				801C135C1DF671C10037725B /* WSCoachMarksView.m */,
 				43E5A1091BE1CBE90004C60D /* Main.storyboard */,
 				43C806AD1C080BBA0007B1C3 /* FirstViewController.h */,
 				43C806AE1C080BBA0007B1C3 /* FirstViewController.m */,
 				43E5A0DE1BE1CBCC0004C60D /* LaunchScreen.storyboard */,
 				43E5A0E11BE1CBCC0004C60D /* Info.plist */,
+				801C135E1DF67E910037725B /* Settings.bundle */,
 				43E5A0D01BE1CBCC0004C60D /* Supporting Files */,
 			);
 			path = eslpods;
@@ -303,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80040CA11CA3DACD009D8A5B /* repeata.png in Resources */,
+				801C135F1DF67E910037725B /* Settings.bundle in Resources */,
 				80040CA01CA3DACD009D8A5B /* repeat11.png in Resources */,
 				80DBCA6B1DA77482000552E2 /* miconbutton.png in Resources */,
 				43E5A1171BE1CBF60004C60D /* slider.png in Resources */,
@@ -346,6 +355,7 @@
 			files = (
 				43E5A10B1BE1CBE90004C60D /* ViewController.m in Sources */,
 				43E5A10A1BE1CBE90004C60D /* AppDelegate.m in Sources */,
+				801C135D1DF671C10037725B /* WSCoachMarksView.m in Sources */,
 				43E5A10C1BE1CBE90004C60D /* ESLpod.m in Sources */,
 				43C806AF1C080BBA0007B1C3 /* FirstViewController.m in Sources */,
 				43E5A0D21BE1CBCC0004C60D /* main.m in Sources */,
