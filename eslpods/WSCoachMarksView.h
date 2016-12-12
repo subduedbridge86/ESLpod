@@ -40,7 +40,7 @@
 
 @protocol WSCoachMarksViewDelegate;
 
-@interface WSCoachMarksView : UIView
+@interface WSCoachMarksView : UIView <CAAnimationDelegate>
 
 @property (nonatomic, WS_WEAK) id<WSCoachMarksViewDelegate> delegate;
 @property (nonatomic, retain) NSArray *coachMarks;

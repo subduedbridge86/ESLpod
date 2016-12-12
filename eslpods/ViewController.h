@@ -3,7 +3,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <AudioUnit/AudioUnit.h>
 #import "ESLpod.h"
-
+#import "WSCoachMarksView.h"
 
 @interface ViewController : UIViewController<MPMediaPickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>
 {

@@ -16,7 +16,7 @@
     
     NSError *setCategoryError = nil;
     if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
-                  withOptions:AVAudioSessionCategoryOptionDuckOthers
+                  //withOptions:AVAudioSessionCategoryOptionDuckOthers
                         error:&setCategoryError]) {}
 //    if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
 //                  withOptions:AVAudioSessionCategoryOptionAllowBluetooth
@@ -87,6 +87,30 @@
                           0,
                           0,//0でエコー無し
                           0);
+    AudioUnitSetParameter(self->_delayUnit3,
+                          kDelayParam_WetDryMix,
+                          kAudioUnitScope_Global,
+                          0,
+                          100,//直接音：フィードバック音の比率
+                          0);
+    AudioUnitSetParameter(self->_delayUnit3,
+                          kDelayParam_Feedback,
+                          kAudioUnitScope_Global,
+                          0,
+                          0,//0でエコー無し
+                          0);
+    AudioUnitSetParameter(self->_delayUnit4,
+                          kDelayParam_WetDryMix,
+                          kAudioUnitScope_Global,
+                          0,
+                          100,//直接音：フィードバック音の比率
+                          0);
+    AudioUnitSetParameter(self->_delayUnit4,
+                          kDelayParam_Feedback,
+                          kAudioUnitScope_Global,
+                          0,
+                          0,//0でエコー無し
+                          0);
 
 
     UInt32 flag = 1;                    //マイク入力をオンにする
@@ -130,7 +154,14 @@
                             _delayNode,0, //mixerと
                             _delayNode2, 0  //Remote Outputを接続
                             );
-    
+//    AUGraphConnectNodeInput(_auGraph,
+//                            _delayNode2,0, //mixerと
+//                            _delayNode3, 0  //Remote Outputを接続
+//                            );
+//    AUGraphConnectNodeInput(_auGraph,
+//                            _delayNode3,0, //mixerと
+//                            _delayNode4, 0  //Remote Outputを接続
+//                            );
     AUGraphConnectNodeInput(_auGraph,
                             _delayNode2,0, //mixerと
                             _remoteIONode, 0  //Remote Outputを接続
@@ -193,6 +224,21 @@
                           _delayTime,//0で遅延無し
                           0);
 }
-
+-(void)delayUnittime3{
+    AudioUnitSetParameter(self->_delayUnit,
+                          kDelayParam_DelayTime,
+                          kAudioUnitScope_Global,
+                          0,
+                          _delayTime,//0で遅延無し
+                          0);
+}
+-(void)delayUnittime4{
+    AudioUnitSetParameter(self->_delayUnit,
+                          kDelayParam_DelayTime,
+                          kAudioUnitScope_Global,
+                          0,
+                          _delayTime,//0で遅延無し
+                          0);
+}
 
 @end

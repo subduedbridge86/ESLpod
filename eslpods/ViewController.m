@@ -24,8 +24,11 @@
 @property BOOL headphoneConnect;
 @property NSString* ipodVoltext;
 @property BOOL addFlag;
+@property BOOL nextikuFlag;
+@property BOOL mictuketetaFlag;
 
 @property MPMusicPlayerController *player;
+
 
 @property NSDictionary *songinfo;
 
@@ -69,6 +72,8 @@
 @property (weak, nonatomic) IBOutlet UISlider *feedvol;
 @property (weak, nonatomic) IBOutlet UISlider *delaytime;
 
+@property UIBarButtonItem *editButton,*anotherButton;
+
 
 @end
 
@@ -93,9 +98,8 @@
 }
 
 - (void)avtoggle:(MPRemoteCommandEvent*)event{
+    NSLog(@"avtoggle");
     [self pushPlay];
-    [self miconoff];
-    
 }
 
 - (void)avplay:(MPRemoteCommandEvent*)event{
@@ -108,16 +112,22 @@
     [_mypod1 mixUnitvol];
     [_mypod1 delayUnittime];
     [_mypod1 delayUnittime2];
+    [_mypod1 delayUnittime3];
+    [_mypod1 delayUnittime4];
     [_mypod2 feed];
     [_mypod2 bufferSet];
     [_mypod2 mixUnitvol];
     [_mypod2 delayUnittime];
     [_mypod2 delayUnittime2];
+    [_mypod2 delayUnittime3];
+    [_mypod2 delayUnittime4];
     [_mypod3 feed];
     [_mypod3 bufferSet];
     [_mypod3 mixUnitvol];
     [_mypod3 delayUnittime];
     [_mypod3 delayUnittime2];
+    [_mypod3 delayUnittime3];
+    [_mypod3 delayUnittime4];
     
     _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _fbVolLabel.textColor=[UIColor blackColor];
@@ -155,9 +165,10 @@
 - (void)viewDidLoad
 {
     self.title = @"";
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addRow:)];
-    self.navigationItem.leftBarButtonItem = anotherButton;
+    _editButton=self.editButtonItem;
+    self.navigationItem.rightBarButtonItem =_editButton;
+    _anotherButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addRow:)];
+    self.navigationItem.leftBarButtonItem = _anotherButton;
     
     _ipodVol=0.0;
     //_systemVol=0;書いたらスライダーの色が変わらなくなる
@@ -296,16 +307,22 @@
         [_mypod1 mixUnitvol];
         [_mypod1 delayUnittime];
         [_mypod1 delayUnittime2];
+        [_mypod1 delayUnittime3];
+        [_mypod1 delayUnittime4];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
         [_mypod2 delayUnittime];
         [_mypod2 delayUnittime2];
+        [_mypod2 delayUnittime3];
+        [_mypod2 delayUnittime4];
         [_mypod3 feed];
         [_mypod3 bufferSet];
         [_mypod3 mixUnitvol];
         [_mypod3 delayUnittime];
         [_mypod3 delayUnittime2];
+        [_mypod3 delayUnittime3];
+        [_mypod3 delayUnittime4];
         
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
@@ -314,6 +331,7 @@
         
         [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
         _miccount=YES;
+        _mictuketetaFlag=YES;
     }else{
         NSLog(@"起動時イヤホン未接続");
         [self ipodLabelRed];
@@ -334,6 +352,71 @@
     _ipodVolLabel.text=_ipodVoltext;
     _ipodvol.value=_ipodVol;
     
+    
+    
+    BOOL coachMarksShown = [[NSUserDefaults standardUserDefaults] boolForKey:@"WSCoachMarksShown"];
+    if (coachMarksShown == NO) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"WSCoachMarksShown"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        //画面取得
+        UIScreen *sc = [UIScreen mainScreen];
+        //ステータスバー込みのサイズ
+        CGRect rect = sc.bounds;
+        NSLog(@"%.1f, %.1f", rect.size.width, rect.size.height);
+        //ステータスバーを除いたサイズ
+        CGRect rect1 = sc.applicationFrame;
+        NSLog(@"%.1f, %.1f", rect1.size.width, rect1.size.height);
+        
+        float labely21 = _timelabel.frame.origin.y-10;
+        float labely22 = _ipodvol.frame.origin.y-10;
+
+        float labely31 = _musicIcon.frame.origin.y;
+
+        float labely41 = _micimage.frame.origin.y;
+        
+        float labely51 = _delaytime.frame.origin.y;
+        
+        NSArray *coachMarks = @[
+                                @{
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{rect.size.width/2,rect.size.height/3},{0,0}}],
+                                    @"caption": @"⚠\nこのアプリはイヤホンを\n接続して使用します"
+                                    },
+                                @{
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{rect.size.width/2,rect.size.height/3},{0,0}}],
+                                    @"caption": @"⚠\n本体音量が小さいと\n音が聞こえないことがあります"
+                                    },
+                                @{//1//全体縦ー下側+余裕5＝プレイリスト
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,0},{rect.size.width,rect.size.height-(736-462)+5}}],
+                                    @"caption": @"左上の＋ボタンで曲を\nプレイリストに追加します"
+                                    },
+                                @{//2//
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-462)+10},{rect.size.width,labely22-labely21}}],
+                                    @"caption": @"曲のシークや再生速度、\nリピートを設定できます"
+                                    },
+                                @{//3
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-610)-10},{rect.size.width,_musicIcon.frame.size.height+15}}],
+                                    @"caption": @"曲の音量を変更できます"
+                                    },
+                                @{//4
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-647)-8},{rect.size.width,_micimage.frame.size.height+15}}],
+                                    @"caption": @"マイクのオンオフや\n音量を変更できます"
+                                    },
+                                @{//5
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-695)-12},{rect.size.width,_delaytime.frame.size.height+15}}],
+                                    @"caption": @"声が返ってくるまでの\n遅延時間を変更できます"
+                                    },
+                                @{//6
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{rect.size.width/2,rect.size.height/3},{0,0}}],
+                                    @"caption": @"これで説明は終わりです\nどうぞお楽しみ下さい"
+                                    },
+
+                                ];
+        WSCoachMarksView *coachMarksView = [[WSCoachMarksView alloc] initWithFrame:self.view.bounds coachMarks:coachMarks];
+        
+        [coachMarksView setMaskColor: [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.75]];
+        [self.view addSubview:coachMarksView];
+        [coachMarksView start];
+    }
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
@@ -505,18 +588,24 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)avPlayDidFinish:(NSNotification*)notification
 {
-    if(_mediaItemCollection2.count != 0){               //１曲以上選ばれているか
+    [self avPlayDidFinish];
+}
+
+-(void)avPlayDidFinish{
+    if(_mediaItemCollection2.count != 0 && _nextikuFlag){               //１曲以上選ばれている　かつ　シーク触ってない
         NSLog(@"次の曲通知");
         if (_songCount==_mediaItemCollection2.count-1) {//最後なら1曲目へ
             _songCount=0;
-            _seekPlaying=NO;
+            
             [self saveCount];
             
             [self nextandback];
             if ((_repeatCount==2)||(_repeatCount==1)) {//リピートなら戻って再生続ける
+                _seekPlaying=YES;
                 [self playwithRate];
             }else{//リピートじゃないなら再生アイコンに
                 [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+                _seekPlaying=NO;
             }
         }
         else{           //最後じゃないなら次の曲へ
@@ -528,7 +617,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [self saveCount];
             [self nextandbackplay];
         }
-        
+    }else{
+        [self nextandback];
     }
 }
 
@@ -809,10 +899,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         if ([avPlayer rate]!=0) {  //曲が再生中なら停止
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [avPlayer pause];
+            NSLog(@"ポーズ");
             _seekPlaying=NO;
         }else{  //曲が停止中なら再生
             [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
             [self playwithRate];
+            NSLog(@"プレイ");
             _seekPlaying=YES;
         }
     }
@@ -879,6 +971,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [_mypod2 delayUnittime2];
         [_mypod3 delayUnittime2];
 
+        [_mypod1 delayUnittime3];
+        [_mypod2 delayUnittime3];
+        [_mypod3 delayUnittime3];
+        
+        [_mypod1 delayUnittime4];
+        [_mypod2 delayUnittime4];
+        [_mypod3 delayUnittime4];
     }
     NSString *delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod1.delayTime*2];
     _delaytimeLabel.text=delaytimetext;
@@ -943,18 +1042,26 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)seekslider:(UISlider *)sender {
     _newValue=sender.value;
     [_timer invalidate];
-    if (fabsf(_newValue-_oldValue)>(_playback/500)) {
+    if (fabsf(_newValue-_oldValue)>(_playback/1000)) {
         
+        
+        [_autoseek setValue:sender.value animated:YES];
         _tm= CMTimeMakeWithSeconds((int)sender.value, NSEC_PER_SEC);
-        [avPlayer pause];
-        [avPlayer seekToTime:_tm];
         
-        if (_seekPlaying && _playback-sender.value>1) {
-            [NSThread sleepForTimeInterval:0.04];
+        if (_seekPlaying && _playback-sender.value>0.1) {
+            
+            [avPlayer pause];
+            [avPlayer seekToTime:_tm];
+            
+            [NSThread sleepForTimeInterval:0.05];
             [self playwithRate];
+            NSLog(@"うああああああ%f",_playback-sender.value);
+
         }
         
-        NSLog(@"%f",_playback-sender.value);
+        if (_playback-sender.value<0.2) {
+            [avPlayer pause];
+        }
         
         _senderval=sender.value;
         _second=_senderval%60;
@@ -967,16 +1074,30 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
         _maxtimelabel.text=_maxtimelabelstr;
         
+    }else{
+        
     }
+    
     _oldValue=_newValue;
 }
 
 - (IBAction)feedUp:(UISlider *)sender {
+    _nextikuFlag=YES;
     if (_seekPlaying) {
         [self playwithRate];
+    }else{
+        [avPlayer seekToTime:_tm];
     }
-    [_autoseek setValue:sender.value animated:YES];
-    [avPlayer seekToTime:_tm];
+    
+    
+    if (_playback-sender.value<0.2) {
+        NSLog(@"離したaaaaaaaa");
+        if (_seekPlaying) {
+            [self avPlayDidFinish];
+        }
+    }
+    //[_autoseek setValue:sender.value animated:YES];
+  
     
     [self startTimer];
     NSLog(@"離した%f",CMTimeGetSeconds(avPlayer.currentTime));
@@ -984,6 +1105,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)feedDown:(UISlider *)sender {//シークバー操作中
     _oldValue=sender.value;
+    _nextikuFlag=NO;
     
     if ([avPlayer rate]==0) {
         _seekPlaying=NO;
@@ -1022,42 +1144,56 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)miconoff{
     if (!_miccount) {
-        [_mypod1 feed];
-        [_mypod1 bufferSet];
-        [_mypod1 mixUnitvol];
-        [_mypod1 delayUnittime];
-        [_mypod1 delayUnittime2];
-        [_mypod2 feed];
-        [_mypod2 bufferSet];
-        [_mypod2 mixUnitvol];
-        [_mypod2 delayUnittime];
-        [_mypod2 delayUnittime2];
-        [_mypod3 feed];
-        [_mypod3 bufferSet];
-        [_mypod3 mixUnitvol];
-        [_mypod3 delayUnittime];
-        [_mypod3 delayUnittime2];
-        
-        _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
-        _fbVolLabel.textColor=[UIColor blackColor];
-        _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
-        _delaytimeLabel.textColor=[UIColor blackColor];
-        
-        [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
-        _miccount=YES;
+        [self micon];
     }else{
-        [_mypod1 auClose];
-        [_mypod2 auClose];
-        [_mypod3 auClose];
-
-        _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
-        _fbVolLabel.textColor=[UIColor lightGrayColor];
-        _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
-        _delaytimeLabel.textColor=[UIColor lightGrayColor];
-        
-        [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
-        _miccount=NO;
+        [self micoff];
     }
+    _mictuketetaFlag=_miccount;
+}
+
+-(void)micon{
+    [_mypod1 feed];
+    [_mypod1 bufferSet];
+    [_mypod1 mixUnitvol];
+    [_mypod1 delayUnittime];
+    [_mypod1 delayUnittime2];
+    [_mypod1 delayUnittime3];
+    [_mypod1 delayUnittime4];
+    [_mypod2 feed];
+    [_mypod2 bufferSet];
+    [_mypod2 mixUnitvol];
+    [_mypod2 delayUnittime];
+    [_mypod2 delayUnittime2];
+    [_mypod2 delayUnittime3];
+    [_mypod2 delayUnittime4];
+    [_mypod3 feed];
+    [_mypod3 bufferSet];
+    [_mypod3 mixUnitvol];
+    [_mypod3 delayUnittime];
+    [_mypod3 delayUnittime2];
+    [_mypod3 delayUnittime3];
+    [_mypod3 delayUnittime4];
+    
+    _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    _fbVolLabel.textColor=[UIColor blackColor];
+    _delaytime.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    _delaytimeLabel.textColor=[UIColor blackColor];
+    
+    [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
+    _miccount=YES;
+}
+-(void)micoff{
+    [_mypod1 auClose];
+    [_mypod2 auClose];
+    [_mypod3 auClose];
+    
+    _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+    _fbVolLabel.textColor=[UIColor lightGrayColor];
+    _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
+    _delaytimeLabel.textColor=[UIColor lightGrayColor];
+    
+    [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
+    _miccount=NO;
 }
 
 -(void)ipodLabelDefault{//イヤホン挿さってる時

@@ -17,8 +17,8 @@
 @public AVAudioSession *session;
 }
 
-@property AUNode remoteIONode,mixNode,delayNode,delayNode2;
-@property AudioUnit remoteIOUnit,mixUnit,delayUnit,delayUnit2;
+@property AUNode remoteIONode,mixNode,delayNode,delayNode2,delayNode3,delayNode4;
+@property AudioUnit remoteIOUnit,mixUnit,delayUnit,delayUnit2,delayUnit3,delayUnit4;
 @property AUGraph auGraph;
 @property float feedVol;
 @property float delayTime;
@@ -32,5 +32,6 @@
 -(void)auClose;
 -(void)delayUnittime;
 -(void)delayUnittime2;
-
+-(void)delayUnittime3;
+-(void)delayUnittime4;
 @end

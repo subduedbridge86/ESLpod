@@ -9,12 +9,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "WSCoachMarksView.h"
 
-static const CGFloat kAnimationDuration = 0.3f;
+static const CGFloat kAnimationDuration = 0.5f;
 static const CGFloat kCutoutRadius = 2.0f;
-static const CGFloat kMaxLblWidth = 230.0f;
+static const CGFloat kMaxLblWidth = 300.0f;
 static const CGFloat kLblSpacing = 35.0f;
-static const BOOL kEnableContinueLabel = YES;
-static const BOOL kEnableSkipButton = YES;
+static const BOOL kEnableContinueLabel = NO;
+static const BOOL kEnableSkipButton = NO;
 
 @implementation WSCoachMarksView {
     CAShapeLayer *mask;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TV0-xY-sHl">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -19,18 +19,18 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.01" minValue="0.0" maxValue="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="DnD-02-eLF">
-                                <rect key="frame" x="41" y="537" width="294" height="31"/>
+                                <rect key="frame" x="45" y="606" width="325" height="31"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="ipodSliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="eeh-TZ-xDc"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="♫" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MDX-pb-b3U">
-                                <rect key="frame" x="7" y="541" width="28" height="30"/>
+                                <rect key="frame" x="11" y="610" width="28" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="28" id="aoz-E9-HcN"/>
                                     <constraint firstAttribute="height" constant="30" id="jZ3-DJ-HrV"/>
@@ -40,7 +40,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YR8-69-XMN">
-                                <rect key="frame" x="341" y="541" width="29" height="21"/>
+                                <rect key="frame" x="376" y="610" width="29" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="Iyp-qd-DjF"/>
                                     <constraint firstAttribute="width" constant="29" id="yJV-cp-1g2"/>
@@ -50,13 +50,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.20000000000000001" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sMb-gi-W26">
-                                <rect key="frame" x="41" y="580" width="294" height="31"/>
+                                <rect key="frame" x="41" y="649" width="329" height="31"/>
                                 <connections>
                                     <action selector="feedSliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Pc1-6G-97R"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VLw-jI-0Zl">
-                                <rect key="frame" x="341" y="585" width="29" height="21"/>
+                                <rect key="frame" x="376" y="654" width="29" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="29" id="AVh-5Q-ez7"/>
                                     <constraint firstAttribute="height" constant="21" id="hYC-dD-T78"/>
@@ -66,7 +66,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1KA-wW-f2I">
-                                <rect key="frame" x="16" y="486" width="64" height="29"/>
+                                <rect key="frame" x="20" y="555" width="64" height="29"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="64" id="5G1-bn-bNw"/>
@@ -86,11 +86,11 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="M2k-ls-zFo">
-                                <rect key="frame" x="-8" y="63" width="391" height="330"/>
+                                <rect key="frame" x="-4" y="63" width="422" height="399"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iby-vb-Uzr">
-                                <rect key="frame" x="324" y="416" width="47" height="15"/>
+                                <rect key="frame" x="359" y="485" width="47" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="47" id="2EI-r8-w2X"/>
                                     <constraint firstAttribute="height" constant="15" id="LSm-A5-iLl"/>
@@ -108,7 +108,7 @@
                                 </variation>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Jyd-xe-UMw">
-                                <rect key="frame" x="50" y="408" width="268" height="31"/>
+                                <rect key="frame" x="54" y="477" width="299" height="31"/>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="feedDown:" destination="BYZ-38-t0r" eventType="touchDown" id="NaS-Lo-6mW"/>
@@ -118,7 +118,7 @@
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="曲が選択されていません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iMs-yN-2eC">
-                                <rect key="frame" x="-4" y="433" width="383" height="53"/>
+                                <rect key="frame" x="0.0" y="502" width="414" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="53" id="TPR-Bu-BLR"/>
                                 </constraints>
@@ -127,7 +127,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iwN-IH-naK">
-                                <rect key="frame" x="112.5" y="487" width="37" height="31"/>
+                                <rect key="frame" x="132" y="556" width="37" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="37" id="iQd-cU-Nan"/>
                                     <constraint firstAttribute="height" constant="31" id="ksq-Nk-neL"/>
@@ -140,7 +140,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mDo-9k-N8d">
-                                <rect key="frame" x="226.5" y="487" width="37" height="31"/>
+                                <rect key="frame" x="246" y="556" width="37" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="SPj-fX-y1o"/>
                                     <constraint firstAttribute="width" constant="37" id="guG-Hs-71d"/>
@@ -153,7 +153,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B8W-7v-9oO">
-                                <rect key="frame" x="172.5" y="486" width="30" height="33"/>
+                                <rect key="frame" x="192" y="555" width="30" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="33" id="PHa-j0-xif"/>
                                     <constraint firstAttribute="width" constant="30" id="XG1-5k-ntG"/>
@@ -172,7 +172,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mmx-lp-FAY">
-                                <rect key="frame" x="303" y="489" width="40" height="28"/>
+                                <rect key="frame" x="338" y="558" width="40" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="K1P-wz-hYV"/>
                                     <constraint firstAttribute="height" constant="28" id="KeW-cD-fBq"/>
@@ -183,7 +183,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SoP-ei-M51">
-                                <rect key="frame" x="4" y="416" width="40" height="15"/>
+                                <rect key="frame" x="8" y="485" width="40" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="5ME-IN-8RH"/>
                                     <constraint firstAttribute="height" constant="15" id="Wk8-bf-IVI"/>
@@ -199,7 +199,7 @@
                                 </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B6A-Id-mB5">
-                                <rect key="frame" x="4" y="578" width="35" height="35"/>
+                                <rect key="frame" x="4" y="647" width="35" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="35" id="h4k-SG-LWE"/>
                                     <constraint firstAttribute="height" constant="35" id="yci-4L-yIb"/>
@@ -211,20 +211,20 @@
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="hAe-EA-SyC">
-                                <rect key="frame" x="45" y="621" width="290" height="31"/>
-                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="45" y="690" width="329" height="31"/>
+                                <color key="tintColor" red="0.0" green="0.56947511434555054" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="delaySliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="KBQ-CI-Sqm"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🕑" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2p-J8-YYa">
-                                <rect key="frame" x="10" y="626" width="26" height="21"/>
+                                <rect key="frame" x="10" y="695" width="26" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nXq-im-CSu">
-                                <rect key="frame" x="341" y="625" width="29" height="21"/>
+                                <rect key="frame" x="380" y="694" width="29" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="euA-5v-Yn4"/>
                                     <constraint firstAttribute="width" constant="29" id="u3l-Vi-Tq8"/>
