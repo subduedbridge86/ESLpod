@@ -114,6 +114,7 @@
     [_mypod1 delayUnittime2];
     [_mypod1 delayUnittime3];
     [_mypod1 delayUnittime4];
+    [_mypod1 delayUnittime5];
     [_mypod2 feed];
     [_mypod2 bufferSet];
     [_mypod2 mixUnitvol];
@@ -121,6 +122,7 @@
     [_mypod2 delayUnittime2];
     [_mypod2 delayUnittime3];
     [_mypod2 delayUnittime4];
+    [_mypod2 delayUnittime5];
     [_mypod3 feed];
     [_mypod3 bufferSet];
     [_mypod3 mixUnitvol];
@@ -128,6 +130,7 @@
     [_mypod3 delayUnittime2];
     [_mypod3 delayUnittime3];
     [_mypod3 delayUnittime4];
+    [_mypod3 delayUnittime5];
     
     _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _fbVolLabel.textColor=[UIColor blackColor];
@@ -228,9 +231,13 @@
     _mypod3.delayTime=[ud floatForKey:@"delayTime"];
 
     
-    
-    NSString *delaytimetext = [NSString stringWithFormat:@"%.01f", _mypod1.delayTime*2];
-    _delaytimeLabel.text=delaytimetext;
+    NSString *delaytimetext;
+    if (_mypod1.delayTime*5 < 9.95) {
+        delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod1.delayTime*5];
+        _delaytimeLabel.text=delaytimetext;
+    }else{
+        _delaytimeLabel.text=@"10.";
+    }
     _delaytime.value=_mypod1.delayTime;
     
     _mediaitemData=[ud objectForKey:@"_mediaitemData"];
@@ -309,6 +316,7 @@
         [_mypod1 delayUnittime2];
         [_mypod1 delayUnittime3];
         [_mypod1 delayUnittime4];
+        [_mypod1 delayUnittime5];
         [_mypod2 feed];
         [_mypod2 bufferSet];
         [_mypod2 mixUnitvol];
@@ -316,6 +324,7 @@
         [_mypod2 delayUnittime2];
         [_mypod2 delayUnittime3];
         [_mypod2 delayUnittime4];
+        [_mypod2 delayUnittime5];
         [_mypod3 feed];
         [_mypod3 bufferSet];
         [_mypod3 mixUnitvol];
@@ -323,6 +332,7 @@
         [_mypod3 delayUnittime2];
         [_mypod3 delayUnittime3];
         [_mypod3 delayUnittime4];
+        [_mypod3 delayUnittime5];
         
         _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
         _fbVolLabel.textColor=[UIColor blackColor];
@@ -978,9 +988,20 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [_mypod1 delayUnittime4];
         [_mypod2 delayUnittime4];
         [_mypod3 delayUnittime4];
+        
+        [_mypod1 delayUnittime5];
+        [_mypod2 delayUnittime5];
+        [_mypod3 delayUnittime5];
     }
-    NSString *delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod1.delayTime*2];
-    _delaytimeLabel.text=delaytimetext;
+    
+    NSString *delaytimetext;
+    if (_mypod1.delayTime*5 < 9.95) {
+        delaytimetext = [NSString stringWithFormat:@"%.1f", _mypod1.delayTime*5];
+        _delaytimeLabel.text=delaytimetext;
+    }else{
+        _delaytimeLabel.text=@"10.";
+    }
+    
     
     NSUserDefaults *ud7=[NSUserDefaults standardUserDefaults];
     [ud7 setFloat:_mypod1.delayTime forKey:@"delayTime"];
@@ -1159,6 +1180,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [_mypod1 delayUnittime2];
     [_mypod1 delayUnittime3];
     [_mypod1 delayUnittime4];
+    [_mypod1 delayUnittime5];
     [_mypod2 feed];
     [_mypod2 bufferSet];
     [_mypod2 mixUnitvol];
@@ -1166,6 +1188,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [_mypod2 delayUnittime2];
     [_mypod2 delayUnittime3];
     [_mypod2 delayUnittime4];
+    [_mypod2 delayUnittime5];
     [_mypod3 feed];
     [_mypod3 bufferSet];
     [_mypod3 mixUnitvol];
@@ -1173,6 +1196,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [_mypod3 delayUnittime2];
     [_mypod3 delayUnittime3];
     [_mypod3 delayUnittime4];
+    [_mypod3 delayUnittime5];
     
     _feedvol.minimumTrackTintColor=[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
     _fbVolLabel.textColor=[UIColor blackColor];
@@ -1272,5 +1296,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     avPlayer.rate=_rateValue;
 
 }
+
+
 
 @end

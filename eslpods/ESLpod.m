@@ -16,12 +16,9 @@
     
     NSError *setCategoryError = nil;
     if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
-                  //withOptions:AVAudioSessionCategoryOptionDuckOthers
+                  withOptions:AVAudioSessionCategoryOptionAllowBluetooth
                         error:&setCategoryError]) {}
-//    if (![session setCategory:AVAudioSessionCategoryPlayAndRecord
-//                  withOptions:AVAudioSessionCategoryOptionAllowBluetooth
-//                        error:&setCategoryError]) {}
-//    if (![session setCategory:AVAudioSessionCategoryPlayback
+//    if (![session setCategory:AVAudioSessionCategoryPlayback  AVAudioSessionCategoryOptionDuckOthers
 //                        error:&setCategoryError]) {}
 
     
@@ -61,6 +58,13 @@
     AUGraphNodeInfo(_auGraph, _delayNode, NULL, &_delayUnit);
     AUGraphAddNode(_auGraph, &delayDescription, &_delayNode2);
     AUGraphNodeInfo(_auGraph, _delayNode2, NULL, &_delayUnit2);
+    AUGraphAddNode(_auGraph, &delayDescription, &_delayNode3);
+    AUGraphNodeInfo(_auGraph, _delayNode3, NULL, &_delayUnit3);
+    AUGraphAddNode(_auGraph, &delayDescription, &_delayNode4);
+    AUGraphNodeInfo(_auGraph, _delayNode4, NULL, &_delayUnit4);
+    AUGraphAddNode(_auGraph, &delayDescription, &_delayNode5);
+    AUGraphNodeInfo(_auGraph, _delayNode5, NULL, &_delayUnit5);
+
 
     AudioUnitSetParameter(self->_delayUnit,
                           kDelayParam_WetDryMix,
@@ -111,6 +115,18 @@
                           0,
                           0,//0でエコー無し
                           0);
+    AudioUnitSetParameter(self->_delayUnit5,
+                          kDelayParam_WetDryMix,
+                          kAudioUnitScope_Global,
+                          0,
+                          100,//直接音：フィードバック音の比率
+                          0);
+    AudioUnitSetParameter(self->_delayUnit5,
+                          kDelayParam_Feedback,
+                          kAudioUnitScope_Global,
+                          0,
+                          0,//0でエコー無し
+                          0);
 
 
     UInt32 flag = 1;                    //マイク入力をオンにする
@@ -154,16 +170,20 @@
                             _delayNode,0, //mixerと
                             _delayNode2, 0  //Remote Outputを接続
                             );
-//    AUGraphConnectNodeInput(_auGraph,
-//                            _delayNode2,0, //mixerと
-//                            _delayNode3, 0  //Remote Outputを接続
-//                            );
-//    AUGraphConnectNodeInput(_auGraph,
-//                            _delayNode3,0, //mixerと
-//                            _delayNode4, 0  //Remote Outputを接続
-//                            );
     AUGraphConnectNodeInput(_auGraph,
                             _delayNode2,0, //mixerと
+                            _delayNode3, 0  //Remote Outputを接続
+                            );
+    AUGraphConnectNodeInput(_auGraph,
+                            _delayNode3,0, //mixerと
+                            _delayNode4, 0  //Remote Outputを接続
+                            );
+    AUGraphConnectNodeInput(_auGraph,
+                            _delayNode4,0, //mixerと
+                            _delayNode5, 0  //Remote Outputを接続
+                            );
+    AUGraphConnectNodeInput(_auGraph,
+                            _delayNode5,0, //mixerと
                             _remoteIONode, 0  //Remote Outputを接続
                             );
     
@@ -225,7 +245,7 @@
                           0);
 }
 -(void)delayUnittime3{
-    AudioUnitSetParameter(self->_delayUnit,
+    AudioUnitSetParameter(self->_delayUnit3,
                           kDelayParam_DelayTime,
                           kAudioUnitScope_Global,
                           0,
@@ -233,12 +253,19 @@
                           0);
 }
 -(void)delayUnittime4{
-    AudioUnitSetParameter(self->_delayUnit,
+    AudioUnitSetParameter(self->_delayUnit4,
                           kDelayParam_DelayTime,
                           kAudioUnitScope_Global,
                           0,
                           _delayTime,//0で遅延無し
                           0);
 }
-
+-(void)delayUnittime5{
+    AudioUnitSetParameter(self->_delayUnit5,
+                          kDelayParam_DelayTime,
+                          kAudioUnitScope_Global,
+                          0,
+                          _delayTime,//0で遅延無し
+                          0);
+}
 @end
