@@ -196,6 +196,8 @@
     _laststopfloat=0;
     [self lastplaydisable];
     [self resetlastplayslider];
+    _nextikuFlag=YES;
+    _lastplaying=NO;
 
     
     [super viewDidLoad];
@@ -685,6 +687,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [self ipodLabelRed];
             
             [avPlayer pause];
+            _seekPlaying=NO;
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             
             [_mypod1 auClose];
@@ -711,6 +714,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             NSLog(@"割り込みの開始！");
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [avPlayer pause];
+            _seekPlaying=NO;
             [_mypod1 auClose];
             [_mypod2 auClose];
             [_mypod3 auClose];
@@ -847,32 +851,43 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)backsong{
+
+    [self resetlastplayslider];
     if(_nameData != 0){                     //１曲以上選ばれているか
         if (CMTimeGetSeconds(avPlayer.currentTime)<2.9) {//2.9秒以前なら前の曲
-            if (_songCount==0) {                             //最初なら最後の曲へ
+            if (_songCount==0) {    //最初なら最後の曲へ
                 _songCount=_nameData.count-1;
                 [self saveCount];
-            }
-            else {
+            }else {
                 _songCount--;    //前の曲へ
                 [self saveCount];
             }
             
-            if ([avPlayer rate]==0) {  //曲が停止中なら停止
+            if ([avPlayer rate]==0 || _lastplaying) {  //曲が停止中なら停止
                 [self nextandback];
             }else{  //曲が再生中なら再生
                 [self nextandbackplay];
+                [self setlastplaytopslider];
             }
-        }
-        else{[avPlayer seekToTime:CMTimeMake(0, 600)];}//2.9秒以降なら0秒
-        if (_lastplaying) {
-            [avPlayer pause];
+        }else{//2.9秒以降なら0秒
+            [avPlayer seekToTime:CMTimeMake(0, 600)];
+
+            if (!([avPlayer rate]==0 || _lastplaying)) {
+                _lastplayfloat=0;
+                [self setlastplaytopslider];
+            }
             
         }
+        
+        if (_lastplaying) {
+            [avPlayer pause];
+            _seekPlaying=NO;
+
+        }
+        [self lastplayreset];
+        [self lastplaydisable];
     }
-    [self lastplayreset];
-    [self lastplaydisable];
-    [self resetlastplayslider];
+
 }
 
 - (IBAction)nextSong:(id)sender {
@@ -880,9 +895,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)nextsong{
-    [self lastplayreset];
-    [self lastplaydisable];
-    [self resetlastplayslider];
+
     //NSLog(@"%lu",(unsigned long)_mediaItemCollection2.count);
     if(_nameData.count != 0){               //１曲以上選ばれているか
         if (_songCount==_nameData.count-1) {//最後なら1曲目へ
@@ -896,12 +909,24 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             
             [self saveCount];
         }
-        if ([avPlayer rate]==0) {  //曲が停止中なら停止
+        if ([avPlayer rate]==0 || _lastplaying) {  //曲が停止中なら停止
             [self nextandback];
+            [self lastplayreset];
+            [self lastplaydisable];
+            [self resetlastplayslider];
+            
         }else{  //曲が再生中なら停止
             [self nextandbackplay];
+            [self lastplayreset];
+            [self lastplaydisable];
+            
+            [self resetlastplayslider];
+            _lastplayfloat=0;
+            [self setlastplaytopslider];
+            
         }
     }
+
 }
 
 -(void)nextandback{
@@ -917,13 +942,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     avPlayer = [[AVQueuePlayer alloc] initWithPlayerItem:_playerItem];
     
     avPlayer.volume=_ipodVol;
-    
+    _seekPlaying=NO;
 }
 
 -(void)nextandbackplay{
     [self lastplayreset];
     [self lastplaydisable];
     [self resetlastplayslider];
+    [self setlastplaytopslider];
     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
     [self songtext];
     [self AutoScroll];
@@ -967,6 +993,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             _laststoptime= CMTimeMakeWithSeconds(_laststopfloat, NSEC_PER_SEC);
             if (_laststopfloat-_lastplayfloat>0) {
                 [self lastplayenable];
+            }else{
+                [self resetlastplayslider];
             }
             
         }else{  //曲が停止中なら再生
@@ -1202,6 +1230,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [self startTimer];
     NSLog(@"離した%f",CMTimeGetSeconds(avPlayer.currentTime));
     
+    if (sender.value<=_lastplayfloat && _seekPlaying) {
+        [self resetlastplayslider];
+        _lastplayfloat=CMTimeGetSeconds(avPlayer.currentTime);
+        _lastplaytime= CMTimeMakeWithSeconds(_lastplayfloat, NSEC_PER_SEC);
+        [self lastplaydisable];
+        [self resetlastplaystopslider];
+        [self setlastplaytopslider];
+    }
 }
 
 - (IBAction)feedDown:(UISlider *)sender {//シークバー操作中
