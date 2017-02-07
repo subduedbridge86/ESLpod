@@ -32,6 +32,11 @@
 		80040CA11CA3DACD009D8A5B /* repeata.png in Resources */ = {isa = PBXBuildFile; fileRef = 80040C991CA3DACD009D8A5B /* repeata.png */; };
 		801C135D1DF671C10037725B /* WSCoachMarksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 801C135C1DF671C10037725B /* WSCoachMarksView.m */; };
 		801C135F1DF67E910037725B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 801C135E1DF67E910037725B /* Settings.bundle */; };
+		802EC4BC1E49955400F7C7A1 /* lastplayplay.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4BB1E49955400F7C7A1 /* lastplayplay.png */; };
+		802EC4BE1E49955800F7C7A1 /* lastplaytop.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4BD1E49955800F7C7A1 /* lastplaytop.png */; };
+		802EC4C01E4999D700F7C7A1 /* slider_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4BF1E4999D700F7C7A1 /* slider_white.png */; };
+		802EC4C21E499DC200F7C7A1 /* slider_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4C11E499DC200F7C7A1 /* slider_blue.png */; };
+		802EC4C41E499DC900F7C7A1 /* slider_blueのコピー.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4C31E499DC900F7C7A1 /* slider_blueのコピー.png */; };
 		80DBCA6A1DA77482000552E2 /* micoffbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA681DA77482000552E2 /* micoffbutton.png */; };
 		80DBCA6B1DA77482000552E2 /* miconbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA691DA77482000552E2 /* miconbutton.png */; };
 /* End PBXBuildFile section */
@@ -90,6 +95,11 @@
 		801C135B1DF671C10037725B /* WSCoachMarksView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSCoachMarksView.h; sourceTree = "<group>"; };
 		801C135C1DF671C10037725B /* WSCoachMarksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSCoachMarksView.m; sourceTree = "<group>"; };
 		801C135E1DF67E910037725B /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		802EC4BB1E49955400F7C7A1 /* lastplayplay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lastplayplay.png; sourceTree = "<group>"; };
+		802EC4BD1E49955800F7C7A1 /* lastplaytop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lastplaytop.png; sourceTree = "<group>"; };
+		802EC4BF1E4999D700F7C7A1 /* slider_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider_white.png; sourceTree = "<group>"; };
+		802EC4C11E499DC200F7C7A1 /* slider_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider_blue.png; sourceTree = "<group>"; };
+		802EC4C31E499DC900F7C7A1 /* slider_blueのコピー.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider_blueのコピー.png"; sourceTree = "<group>"; };
 		80DBCA681DA77482000552E2 /* micoffbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = micoffbutton.png; sourceTree = "<group>"; };
 		80DBCA691DA77482000552E2 /* miconbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = miconbutton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -142,11 +152,16 @@
 		43E5A0CF1BE1CBCC0004C60D /* eslpods */ = {
 			isa = PBXGroup;
 			children = (
+				802EC4BB1E49955400F7C7A1 /* lastplayplay.png */,
+				802EC4BD1E49955800F7C7A1 /* lastplaytop.png */,
 				43E5A10E1BE1CBF60004C60D /* backClear.png */,
 				43E5A10F1BE1CBF60004C60D /* nextClear.png */,
 				43E5A1101BE1CBF60004C60D /* pauseClear.png */,
 				43E5A1111BE1CBF60004C60D /* playClear.png */,
+				802EC4C11E499DC200F7C7A1 /* slider_blue.png */,
+				802EC4C31E499DC900F7C7A1 /* slider_blueのコピー.png */,
 				43E5A1121BE1CBF60004C60D /* slider.png */,
+				802EC4BF1E4999D700F7C7A1 /* slider_white.png */,
 				80040C921CA3DACD009D8A5B /* mic0.png */,
 				80040C931CA3DACD009D8A5B /* mic1.png */,
 				80040C941CA3DACD009D8A5B /* micoff.png */,
@@ -312,8 +327,10 @@
 			files = (
 				80040CA11CA3DACD009D8A5B /* repeata.png in Resources */,
 				801C135F1DF67E910037725B /* Settings.bundle in Resources */,
+				802EC4C41E499DC900F7C7A1 /* slider_blueのコピー.png in Resources */,
 				80040CA01CA3DACD009D8A5B /* repeat11.png in Resources */,
 				80DBCA6B1DA77482000552E2 /* miconbutton.png in Resources */,
+				802EC4BE1E49955800F7C7A1 /* lastplaytop.png in Resources */,
 				43E5A1171BE1CBF60004C60D /* slider.png in Resources */,
 				80040C9B1CA3DACD009D8A5B /* mic1.png in Resources */,
 				80DBCA6A1DA77482000552E2 /* micoffbutton.png in Resources */,
@@ -325,6 +342,9 @@
 				43E5A1161BE1CBF60004C60D /* playClear.png in Resources */,
 				80040C9C1CA3DACD009D8A5B /* micoff.png in Resources */,
 				80040C9E1CA3DACD009D8A5B /* new_micon.jpg in Resources */,
+				802EC4C21E499DC200F7C7A1 /* slider_blue.png in Resources */,
+				802EC4C01E4999D700F7C7A1 /* slider_white.png in Resources */,
+				802EC4BC1E49955400F7C7A1 /* lastplayplay.png in Resources */,
 				43E5A0E01BE1CBCC0004C60D /* LaunchScreen.storyboard in Resources */,
 				43E5A0DD1BE1CBCC0004C60D /* Assets.xcassets in Resources */,
 				43E5A1151BE1CBF60004C60D /* pauseClear.png in Resources */,

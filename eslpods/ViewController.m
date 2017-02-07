@@ -27,6 +27,10 @@
 @property BOOL nextikuFlag;
 @property BOOL mictuketetaFlag;
 
+@property float lastplayfloat,laststopfloat;
+@property CMTime lastplaytime,laststoptime;
+@property BOOL lastplaying;
+
 @property MPMusicPlayerController *player;
 
 
@@ -71,6 +75,10 @@
 @property (weak, nonatomic) IBOutlet UISlider *ipodvol;
 @property (weak, nonatomic) IBOutlet UISlider *feedvol;
 @property (weak, nonatomic) IBOutlet UISlider *delaytime;
+@property (weak, nonatomic) IBOutlet UIButton *lastplay;
+@property (weak, nonatomic) IBOutlet UISlider *lastplaytopslider;
+@property (weak, nonatomic) IBOutlet UISlider *lastplaystopslider;
+@property UIImage *imageForThumb;
 
 @property UIBarButtonItem *editButton,*anotherButton;
 
@@ -173,18 +181,26 @@
     _anotherButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addRow:)];
     self.navigationItem.leftBarButtonItem = _anotherButton;
     
+    _lastplaytopslider.userInteractionEnabled=NO;
+    _lastplaystopslider.userInteractionEnabled=NO;
+    _imageForThumb = [UIImage imageNamed:@"slider_white.png"];
+    [_lastplaytopslider setThumbImage:_imageForThumb forState:UIControlStateNormal];
+    [_lastplaystopslider setThumbImage:_imageForThumb forState:UIControlStateNormal];
+    
     _ipodVol=0.0;
     //_systemVol=0;書いたらスライダーの色が変わらなくなる
     _songCount=0;
     _miccount=YES;
     _addFlag=NO;
     _rateValue=1;
-    
+    _laststopfloat=0;
+    [self lastplaydisable];
+    [self resetlastplayslider];
+
     
     [super viewDidLoad];
-    UIImage *imageForThumb = [UIImage imageNamed:@"slider.png"];
-    [_autoseek setThumbImage:imageForThumb forState:UIControlStateNormal];
-    // [_autoseek setThumbImage:imageForThumb forState:UIControlStateHighlighted];
+    _imageForThumb = [UIImage imageNamed:@"slider.png"];
+    [_autoseek setThumbImage:_imageForThumb forState:UIControlStateNormal];
     [self.view addSubview:_autoseek];
     
     _songList.delegate = self;
@@ -280,6 +296,8 @@
         _timelabel.text=[NSString stringWithFormat:@"00:00"];
         _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
         _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
+        self.title = @"曲が選択されていません";
+
     }
     
     
@@ -472,6 +490,9 @@
         [self doButtonPushed];
     }]];
     [self presentViewController:alertController animated:YES completion:nil];
+    [self lastplaydisable];
+    [self resetlastplayslider];
+    [self lastplayreset];
 }
 
 
@@ -488,6 +509,7 @@
     _timelabel.text=[NSString stringWithFormat:@"00:00"];
     _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
     _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
+    self.title = @"曲が選択されていません";
     [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
     _songCount=0;
     [self saveCount];
@@ -518,6 +540,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             _timelabel.text=[NSString stringWithFormat:@"00:00"];
             _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
             _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
+            self.title = @"曲が選択されていません";
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             
             
@@ -826,7 +849,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)backsong{
     if(_nameData != 0){                     //１曲以上選ばれているか
         if (CMTimeGetSeconds(avPlayer.currentTime)<2.9) {//2.9秒以前なら前の曲
-            
             if (_songCount==0) {                             //最初なら最後の曲へ
                 _songCount=_nameData.count-1;
                 [self saveCount];
@@ -843,7 +865,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             }
         }
         else{[avPlayer seekToTime:CMTimeMake(0, 600)];}//2.9秒以降なら0秒
+        if (_lastplaying) {
+            [avPlayer pause];
+            
+        }
     }
+    [self lastplayreset];
+    [self lastplaydisable];
+    [self resetlastplayslider];
 }
 
 - (IBAction)nextSong:(id)sender {
@@ -851,6 +880,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)nextsong{
+    [self lastplayreset];
+    [self lastplaydisable];
+    [self resetlastplayslider];
     //NSLog(@"%lu",(unsigned long)_mediaItemCollection2.count);
     if(_nameData.count != 0){               //１曲以上選ばれているか
         if (_songCount==_nameData.count-1) {//最後なら1曲目へ
@@ -873,6 +905,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)nextandback{
+    [self lastplayreset];
+    [self lastplaydisable];
+    [self resetlastplayslider];
     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
     [self songtext];
     [self AutoScroll];
@@ -886,6 +921,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)nextandbackplay{
+    [self lastplayreset];
+    [self lastplaydisable];
+    [self resetlastplayslider];
     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
     [self songtext];
     [self AutoScroll];
@@ -906,16 +944,42 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 -(void)pushPlay{
     if (_nameData.count != 0){
+        if (_lastplaying) {
+            _lastplaying=NO;
+            [avPlayer seekToTime:_laststoptime];
+            [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
+            [self playwithRate];
+            NSLog(@"プレイ");
+            _seekPlaying=YES;
+            _lastplayfloat=_laststopfloat;
+            _lastplaytime= _laststoptime;
+
+            [self lastplaydisable];
+            [self.view sendSubviewToBack:_lastplaytopslider];
+            [self setlastplaytopslider];
+        }else{
         if ([avPlayer rate]!=0) {  //曲が再生中なら停止
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [avPlayer pause];
             NSLog(@"ポーズ");
             _seekPlaying=NO;
+            _laststopfloat=CMTimeGetSeconds(avPlayer.currentTime);
+            _laststoptime= CMTimeMakeWithSeconds(_laststopfloat, NSEC_PER_SEC);
+            if (_laststopfloat-_lastplayfloat>0) {
+                [self lastplayenable];
+            }
+            
         }else{  //曲が停止中なら再生
             [_playImage setImage : [ UIImage imageNamed : @"pauseClear.png" ] forState : UIControlStateNormal];
             [self playwithRate];
             NSLog(@"プレイ");
             _seekPlaying=YES;
+            _lastplayfloat=CMTimeGetSeconds(avPlayer.currentTime);
+            _lastplaytime= CMTimeMakeWithSeconds(_lastplayfloat, NSEC_PER_SEC);
+            [self lastplaydisable];
+            [self resetlastplaystopslider];
+            [self setlastplaytopslider];
+        }
         }
     }
 }
@@ -1029,11 +1093,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 -(void)songtext{
     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
     _titlelabel.text =[item valueForProperty:MPMediaItemPropertyTitle];
+    self.title = [item valueForProperty:MPMediaItemPropertyTitle];
     _albumlabel.text =[item valueForProperty:MPMediaItemPropertyAlbumTitle];
     
     NSString *playbackstr=[item valueForProperty:MPMediaItemPropertyPlaybackDuration];
     _playback=playbackstr.intValue;
     _autoseek.maximumValue=_playback;
+    _lastplaystopslider.maximumValue=_playback;
+    _lastplaytopslider.maximumValue=_playback;
     
     _songinfo=@{MPMediaItemPropertyTitle:[item valueForProperty:MPMediaItemPropertyTitle],
                 MPMediaItemPropertyPlaybackDuration:[item valueForProperty:MPMediaItemPropertyPlaybackDuration]
@@ -1057,7 +1124,19 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     _maxminute=_maxback/60;
     _maxtimelabelstr=[NSString stringWithFormat:@"-%02d:%02d",_maxminute,_maxsecond];
     _maxtimelabel.text=_maxtimelabelstr;
-    [_autoseek setValue:CMTimeGetSeconds(avPlayer.currentTime) animated:YES];
+    [_autoseek setValue:_getSecond animated:YES];
+    
+    if (_lastplaying) {
+        _getSecond=CMTimeGetSeconds(avPlayer.currentTime);
+        if (_laststopfloat<=_getSecond) {
+            NSLog(@"%f",_laststopfloat);
+            NSLog(@"%f",_getSecond);
+            [self lastplaystop];
+            [self.view sendSubviewToBack:_lastplaytopslider];
+            [_lastplay setImage : [ UIImage imageNamed : @"lastplayplay.png" ] forState : UIControlStateNormal];
+            _lastplay.alpha=1;
+        }
+    }
 }
 
 - (IBAction)seekslider:(UISlider *)sender {
@@ -1104,7 +1183,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)feedUp:(UISlider *)sender {
     _nextikuFlag=YES;
-    if (_seekPlaying) {
+    if (_seekPlaying&&_lastplaying==NO) {
         [self playwithRate];
     }else{
         [avPlayer seekToTime:_tm];
@@ -1122,6 +1201,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [self startTimer];
     NSLog(@"離した%f",CMTimeGetSeconds(avPlayer.currentTime));
+    
 }
 
 - (IBAction)feedDown:(UISlider *)sender {//シークバー操作中
@@ -1134,6 +1214,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     }else{
         _seekPlaying=YES;
         NSLog(@"YES");
+    }
+    
+    if (_lastplaying) {
+        [self.view sendSubviewToBack:_lastplaytopslider];
+        [self lastplaystop];
+        [self lastplayreset];
+        [self lastplaydisable];
+        [self resetlastplayslider];
+
     }
 }
 
@@ -1254,33 +1343,33 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)playerrateButton:(UIButton *)sender {
     if (_rateCount==0) {
-        _rateValue=1.25;
+        _rateValue=1.1;
         if (_seekPlaying) {
             avPlayer.rate=_rateValue;
         }
         _rateCount++;
-        [_rateButton setTitle:@"×125%" forState:UIControlStateNormal];
+        [_rateButton setTitle:@"×110%" forState:UIControlStateNormal];
     }else if (_rateCount==1){
-        _rateValue=1.5;
+        _rateValue=1.2;
         if (_seekPlaying) {
             avPlayer.rate=_rateValue;
         }
         _rateCount++;
-        [_rateButton setTitle:@"×150%" forState:UIControlStateNormal];
+        [_rateButton setTitle:@"×120%" forState:UIControlStateNormal];
     }else if (_rateCount==2){
-        _rateValue=0.5;
+        _rateValue=0.8;
         if (_seekPlaying) {
             avPlayer.rate=_rateValue;
         }
         _rateCount++;
-        [_rateButton setTitle:@"×50%" forState:UIControlStateNormal];
+        [_rateButton setTitle:@"×80%" forState:UIControlStateNormal];
     }else if (_rateCount==3){
-        _rateValue=0.75;
+        _rateValue=0.9;
         if (_seekPlaying) {
             avPlayer.rate=_rateValue;
         }
         _rateCount++;
-        [_rateButton setTitle:@"×75%" forState:UIControlStateNormal];
+        [_rateButton setTitle:@"×90%" forState:UIControlStateNormal];
     }else if (_rateCount==4){
         _rateValue=1;
         if (_seekPlaying) {
@@ -1297,6 +1386,79 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 
 }
 
+- (IBAction)lastplayButton:(UIButton *)sender {
+    [_timer invalidate];
+    [_lastplay setImage : [ UIImage imageNamed : @"lastplaytop.png" ] forState : UIControlStateNormal];
+    [avPlayer seekToTime:_lastplaytime];
+    [self.view bringSubviewToFront:_lastplaytopslider];
+    [self playwithRate];
+    _seekPlaying=YES;
+    _lastplaying=YES;
+    
+    //[self performSelector:@selector(lastplaystop) withObject:nil afterDelay:(_laststopfloat-_lastplayfloat)/_rateValue];
+    
+    [self startTimer];
+}
 
+-(void)lastplaystop{
+    if (_lastplaying) {
+        [avPlayer pause];
+        _seekPlaying=NO;
+        _lastplaying=NO;
+        [_lastplay setImage : [ UIImage imageNamed : @"lastplayplay.png" ] forState : UIControlStateNormal];
+        _lastplay.alpha=1;
+    }
+}
+
+-(void)lastplaydisable{
+    _lastplay.userInteractionEnabled=NO;
+    _lastplay.alpha=0.2;
+    [_lastplay setImage : [ UIImage imageNamed : @"lastplayplay.png" ] forState : UIControlStateNormal];
+    //[self resetlastplayslider];
+}
+-(void)lastplayenable{
+    _lastplay.userInteractionEnabled=YES;
+    _lastplay.alpha=1;
+    [_lastplay setImage : [ UIImage imageNamed : @"lastplayplay.png" ] forState : UIControlStateNormal];
+    [self setlastplayslider];
+}
+-(void)lastplayreset{
+    [_lastplay setImage : [ UIImage imageNamed : @"lastplayplay.png" ] forState : UIControlStateNormal];
+    _lastplaying=NO;
+    _laststopfloat=0;
+    _laststoptime= CMTimeMakeWithSeconds(0, NSEC_PER_SEC);
+    _lastplayfloat=0;
+    _lastplaytime= CMTimeMakeWithSeconds(0, NSEC_PER_SEC);
+}
+-(void)setlastplayslider{
+    [self setlastplaytopslider];
+    [self setlastplaystopslider];
+}
+-(void)setlastplaytopslider{
+    _imageForThumb = [UIImage imageNamed:@"slider_blue.png"];
+    [_lastplaytopslider setThumbImage:_imageForThumb forState:UIControlStateNormal];
+    _lastplaytopslider.value=_lastplayfloat;
+}
+-(void)setlastplaystopslider{
+    _imageForThumb = [UIImage imageNamed:@"slider_blue.png"];
+    [_lastplaystopslider setThumbImage:_imageForThumb forState:UIControlStateNormal];
+    _lastplaystopslider.value=_laststopfloat+0.05;
+}
+-(void)resetlastplayslider{
+    [self resetlastplaytopslider];
+    [self resetlastplaystopslider];
+}
+-(void)resetlastplaytopslider{
+    _imageForThumb = [UIImage imageNamed:@"slider_white.png"];
+    [_lastplaytopslider setThumbImage:_imageForThumb forState:UIControlStateNormal];
+    _lastplaytopslider.value=_lastplayfloat;
+    [self.view sendSubviewToBack:_lastplaytopslider];
+}
+-(void)resetlastplaystopslider{
+    _imageForThumb = [UIImage imageNamed:@"slider_white.png"];
+    [_lastplaystopslider setThumbImage:_imageForThumb forState:UIControlStateNormal];
+    _lastplaystopslider.value=_laststopfloat+0.05;
+    [self.view sendSubviewToBack:_lastplaystopslider];
+}
 
 @end
