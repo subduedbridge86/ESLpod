@@ -37,6 +37,8 @@
 		802EC4C01E4999D700F7C7A1 /* slider_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4BF1E4999D700F7C7A1 /* slider_white.png */; };
 		802EC4C21E499DC200F7C7A1 /* slider_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4C11E499DC200F7C7A1 /* slider_blue.png */; };
 		802EC4C41E499DC900F7C7A1 /* slider_blueのコピー.png in Resources */ = {isa = PBXBuildFile; fileRef = 802EC4C31E499DC900F7C7A1 /* slider_blueのコピー.png */; };
+		80A9CC371E53FBC40091C3A2 /* repeat3.png in Resources */ = {isa = PBXBuildFile; fileRef = 80A9CC361E53FBC40091C3A2 /* repeat3.png */; };
+		80A9CC3A1E559AB20091C3A2 /* CBAutoScrollLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 80A9CC391E559AB20091C3A2 /* CBAutoScrollLabel.m */; };
 		80DBCA6A1DA77482000552E2 /* micoffbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA681DA77482000552E2 /* micoffbutton.png */; };
 		80DBCA6B1DA77482000552E2 /* miconbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 80DBCA691DA77482000552E2 /* miconbutton.png */; };
 /* End PBXBuildFile section */
@@ -100,6 +102,9 @@
 		802EC4BF1E4999D700F7C7A1 /* slider_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider_white.png; sourceTree = "<group>"; };
 		802EC4C11E499DC200F7C7A1 /* slider_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider_blue.png; sourceTree = "<group>"; };
 		802EC4C31E499DC900F7C7A1 /* slider_blueのコピー.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider_blueのコピー.png"; sourceTree = "<group>"; };
+		80A9CC361E53FBC40091C3A2 /* repeat3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = repeat3.png; sourceTree = "<group>"; };
+		80A9CC381E559AB20091C3A2 /* CBAutoScrollLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBAutoScrollLabel.h; sourceTree = "<group>"; };
+		80A9CC391E559AB20091C3A2 /* CBAutoScrollLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAutoScrollLabel.m; sourceTree = "<group>"; };
 		80DBCA681DA77482000552E2 /* micoffbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = micoffbutton.png; sourceTree = "<group>"; };
 		80DBCA691DA77482000552E2 /* miconbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = miconbutton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,6 +175,7 @@
 				80040C971CA3DACD009D8A5B /* repeat0.png */,
 				80040C981CA3DACD009D8A5B /* repeat11.png */,
 				80040C991CA3DACD009D8A5B /* repeata.png */,
+				80A9CC361E53FBC40091C3A2 /* repeat3.png */,
 				80DBCA681DA77482000552E2 /* micoffbutton.png */,
 				80DBCA691DA77482000552E2 /* miconbutton.png */,
 				43E5A0DC1BE1CBCC0004C60D /* Assets.xcassets */,
@@ -181,6 +187,8 @@
 				43E5A1081BE1CBE90004C60D /* ESLpod.m */,
 				801C135B1DF671C10037725B /* WSCoachMarksView.h */,
 				801C135C1DF671C10037725B /* WSCoachMarksView.m */,
+				80A9CC381E559AB20091C3A2 /* CBAutoScrollLabel.h */,
+				80A9CC391E559AB20091C3A2 /* CBAutoScrollLabel.m */,
 				43E5A1091BE1CBE90004C60D /* Main.storyboard */,
 				43C806AD1C080BBA0007B1C3 /* FirstViewController.h */,
 				43C806AE1C080BBA0007B1C3 /* FirstViewController.m */,
@@ -340,6 +348,7 @@
 				80040C9A1CA3DACD009D8A5B /* mic0.png in Resources */,
 				43E5A10D1BE1CBE90004C60D /* Main.storyboard in Resources */,
 				43E5A1161BE1CBF60004C60D /* playClear.png in Resources */,
+				80A9CC371E53FBC40091C3A2 /* repeat3.png in Resources */,
 				80040C9C1CA3DACD009D8A5B /* micoff.png in Resources */,
 				80040C9E1CA3DACD009D8A5B /* new_micon.jpg in Resources */,
 				802EC4C21E499DC200F7C7A1 /* slider_blue.png in Resources */,
@@ -377,6 +386,7 @@
 				43E5A10A1BE1CBE90004C60D /* AppDelegate.m in Sources */,
 				801C135D1DF671C10037725B /* WSCoachMarksView.m in Sources */,
 				43E5A10C1BE1CBE90004C60D /* ESLpod.m in Sources */,
+				80A9CC3A1E559AB20091C3A2 /* CBAutoScrollLabel.m in Sources */,
 				43C806AF1C080BBA0007B1C3 /* FirstViewController.m in Sources */,
 				43E5A0D21BE1CBCC0004C60D /* main.m in Sources */,
 			);

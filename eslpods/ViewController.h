@@ -4,8 +4,9 @@
 #import <AudioUnit/AudioUnit.h>
 #import "ESLpod.h"
 #import "WSCoachMarksView.h"
+#import "CBAutoScrollLabel.h"
 
-@interface ViewController : UIViewController<MPMediaPickerControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface ViewController : UIViewController<MPMediaPickerControllerDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 {
 @public AVQueuePlayer *avPlayer;
 

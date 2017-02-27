@@ -22,6 +22,7 @@
 @property float oldValue;
 @property BOOL seekPlaying;
 @property BOOL headphoneConnect;
+@property BOOL bluetoothConnect;
 @property NSString* ipodVoltext;
 @property BOOL addFlag;
 @property BOOL nextikuFlag;
@@ -30,6 +31,10 @@
 @property float lastplayfloat,laststopfloat;
 @property CMTime lastplaytime,laststoptime;
 @property BOOL lastplaying;
+@property BOOL doubleTapped;
+@property float lastlastplayfloat,lastlaststopfloat;
+@property CMTime lastlastplaytime,lastlaststoptime;
+@property BOOL repeat3destop;
 
 @property MPMusicPlayerController *player;
 
@@ -115,6 +120,15 @@
     [self playwithRate];
     _seekPlaying=YES;
     
+    _lastlastplayfloat=_lastplayfloat;
+    _lastlastplaytime=_lastplaytime;
+    
+    _lastplayfloat=CMTimeGetSeconds(avPlayer.currentTime);
+    _lastplaytime= CMTimeMakeWithSeconds(_lastplayfloat, NSEC_PER_SEC);
+    [self lastplaydisable];
+    [self resetlastplaystopslider];
+    [self setlastplaytopslider];
+    
     [_mypod1 feed];
     [_mypod1 bufferSet];
     [_mypod1 mixUnitvol];
@@ -152,7 +166,16 @@
     [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
     [avPlayer pause];
     _seekPlaying=NO;
+    _lastlaststopfloat=_lastplayfloat;
+    _lastlaststoptime=_lastplaytime;
     
+    _laststopfloat=CMTimeGetSeconds(avPlayer.currentTime);
+    _laststoptime= CMTimeMakeWithSeconds(_laststopfloat, NSEC_PER_SEC);
+    if (_laststopfloat-_lastplayfloat>0) {
+        [self lastplayenable];
+    }else{
+        [self resetlastplayslider];
+    }
     [_mypod1 auClose];
     [_mypod2 auClose];
     [_mypod3 auClose];
@@ -198,7 +221,7 @@
     [self resetlastplayslider];
     _nextikuFlag=YES;
     _lastplaying=NO;
-
+    _doubleTapped=NO;
     
     [super viewDidLoad];
     _imageForThumb = [UIImage imageNamed:@"slider.png"];
@@ -299,6 +322,25 @@
         _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
         _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
         self.title = @"曲が選択されていません";
+        /**
+         ナビゲーションバー部分のAutoScrollLabel
+         */
+        // CBAutoScrollLabel生成
+        CBAutoScrollLabel *autoScrollNavigation = [[CBAutoScrollLabel alloc] initWithFrame:CGRectMake(0.0f,
+                                                                                                      0.0f,
+                                                                                                      self.navigationController.navigationBar.frame.size.width,
+                                                                                                      self.navigationController.navigationBar.frame.size.height)];
+        autoScrollNavigation.text               = @"曲が選択されていません";
+        autoScrollNavigation.textAlignment      = NSTextAlignmentCenter;
+        autoScrollNavigation.labelSpacing       = 35;
+        autoScrollNavigation.pauseInterval      = 1.7;
+        autoScrollNavigation.scrollSpeed        = 27.0;
+        autoScrollNavigation.fadeLength         = 12.0;
+        autoScrollNavigation.font               = [UIFont boldSystemFontOfSize:17.1];
+        autoScrollNavigation.textColor          = [UIColor blackColor];
+        [autoScrollNavigation observeApplicationNotifications];
+        // Navigation Barに設定
+        self.navigationItem.titleView           = autoScrollNavigation;
 
     }
     
@@ -318,8 +360,10 @@
         [_repeatImage setImage : [ UIImage imageNamed : @"repeat11.png" ] forState : UIControlStateNormal];
     }else if (_repeatCount==0){//all
         [_repeatImage setImage : [ UIImage imageNamed : @"repeat0.png" ] forState : UIControlStateNormal];
-    }else{//non
+    }else if (_repeatCount==2){//non
         [_repeatImage setImage : [ UIImage imageNamed : @"repeata.png" ] forState : UIControlStateNormal];
+    }else{
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeat3.png" ] forState : UIControlStateNormal];
     }
 
     NSArray *out = _mypod1->session.currentRoute.outputs;
@@ -362,6 +406,25 @@
         [_micimage setImage : [ UIImage imageNamed : @"miconbutton.png" ] forState : UIControlStateNormal];
         _miccount=YES;
         _mictuketetaFlag=YES;
+        _bluetoothConnect=NO;
+        
+        [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
+    }else if ([_desc.portType isEqual:AVAudioSessionPortBluetoothHFP]||[_desc.portType isEqual:AVAudioSessionPortBluetoothA2DP]){
+        NSLog(@"起動時Bluetooth接続");
+        [self ipodLabelDefault];
+        [_mypod1 auClose];
+        [_mypod2 auClose];
+        [_mypod3 auClose];
+        _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+        _fbVolLabel.textColor=[UIColor lightGrayColor];
+        _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
+        _delaytimeLabel.textColor=[UIColor lightGrayColor];
+        
+        [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
+        _miccount=NO;
+        _bluetoothConnect=YES;
+        [self bluetoothwindow];
+        //[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionAllowBluetooth error:nil];
     }else{
         NSLog(@"起動時イヤホン未接続");
         [self ipodLabelRed];
@@ -375,12 +438,12 @@
         
         [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
         _miccount=NO;
+        
+        [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+        _bluetoothConnect=NO;
     }
     
-    avPlayer.volume=_ipodVol;
     
-    _ipodVolLabel.text=_ipodVoltext;
-    _ipodvol.value=_ipodVol;
     
     
     
@@ -413,15 +476,23 @@
                                     },
                                 @{
                                     @"rect": [NSValue valueWithCGRect:(CGRect){{rect.size.width/2,rect.size.height/3},{0,0}}],
-                                    @"caption": @"⚠\n本体音量が小さいと\n音が聞こえないことがあります"
+                                    @"caption": @"⚠\nイヤホン接続後に\n本体音量を上げて下さい"
                                     },
                                 @{//1//全体縦ー下側+余裕5＝プレイリスト
-                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,0},{rect.size.width,rect.size.height-(736-462)+5}}],
-                                    @"caption": @"左上の＋ボタンで曲を\nプレイリストに追加します"
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,0},{rect.size.width,rect.size.height-(736-460)}}],
+                                    @"caption": @"左上の＋ボタンで曲を\nプレイリストに追加できます"
                                     },
                                 @{//2//
-                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-462)+10},{rect.size.width,labely22-labely21}}],
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-460)-5},{rect.size.width,labely22-labely21}}],
                                     @"caption": @"曲のシークや再生速度、\nリピートを設定できます"
+                                    },
+                                @{//2//
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{rect.size.width/2-28.5,rect.size.height-(736-489)},{55,55}}],
+                                    @"caption": @"タップで最後の再生区間を\nもう一度再生できます"
+                                    },
+                                @{//2//
+                                    @"rect": [NSValue valueWithCGRect:(CGRect){{rect.size.width/2-28.5,rect.size.height-(736-489)},{55,55}}],
+                                    @"caption": @"ダブルタップで2個前の再生区間を\nもう一度再生できます"
                                     },
                                 @{//3
                                     @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-610)-10},{rect.size.width,_musicIcon.frame.size.height+15}}],
@@ -429,7 +500,7 @@
                                     },
                                 @{//4
                                     @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-647)-8},{rect.size.width,_micimage.frame.size.height+15}}],
-                                    @"caption": @"マイクのオンオフや\n音量を変更できます"
+                                    @"caption": @"マイクのオンオフと\n音量の変更ができます"
                                     },
                                 @{//5
                                     @"rect": [NSValue valueWithCGRect:(CGRect){{0,rect.size.height-(736-695)-12},{rect.size.width,_delaytime.frame.size.height+15}}],
@@ -446,6 +517,8 @@
         [coachMarksView setMaskColor: [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.75]];
         [self.view addSubview:coachMarksView];
         [coachMarksView start];
+        
+
     }
 }
 
@@ -464,6 +537,7 @@
         [_songList selectRowAtIndexPath:indexPath2 animated:NO scrollPosition:UITableViewScrollPositionNone];
         UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addRow:)];
         self.navigationItem.leftBarButtonItem = anotherButton;
+        [_songList reloadData];
     }
 }
 
@@ -512,6 +586,25 @@
     _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
     _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
     self.title = @"曲が選択されていません";
+    /**
+     ナビゲーションバー部分のAutoScrollLabel
+     */
+    // CBAutoScrollLabel生成
+    CBAutoScrollLabel *autoScrollNavigation = [[CBAutoScrollLabel alloc] initWithFrame:CGRectMake(0.0f,
+                                                                                                  0.0f,
+                                                                                                  self.navigationController.navigationBar.frame.size.width,
+                                                                                                  self.navigationController.navigationBar.frame.size.height)];
+    autoScrollNavigation.text               = @"曲が選択されていません";
+    autoScrollNavigation.textAlignment      = NSTextAlignmentCenter;
+    autoScrollNavigation.labelSpacing       = 35;
+    autoScrollNavigation.pauseInterval      = 1.7;
+    autoScrollNavigation.scrollSpeed        = 27.0;
+    autoScrollNavigation.fadeLength         = 12.0;
+    autoScrollNavigation.font               = [UIFont boldSystemFontOfSize:17.1];
+    autoScrollNavigation.textColor          = [UIColor blackColor];
+    [autoScrollNavigation observeApplicationNotifications];
+    // Navigation Barに設定
+    self.navigationItem.titleView           = autoScrollNavigation;
     [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
     _songCount=0;
     [self saveCount];
@@ -543,6 +636,25 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             _maxtimelabel.text=[NSString stringWithFormat:@"-00:00"];
             _titlelabel.text=[NSString stringWithFormat:@"曲が選択されていません"];
             self.title = @"曲が選択されていません";
+            /**
+             ナビゲーションバー部分のAutoScrollLabel
+             */
+            // CBAutoScrollLabel生成
+            CBAutoScrollLabel *autoScrollNavigation = [[CBAutoScrollLabel alloc] initWithFrame:CGRectMake(0.0f,
+                                                                                                          0.0f,
+                                                                                                          self.navigationController.navigationBar.frame.size.width,
+                                                                                                          self.navigationController.navigationBar.frame.size.height)];
+            autoScrollNavigation.text               = @"曲が選択されていません";
+            autoScrollNavigation.textAlignment      = NSTextAlignmentCenter;
+            autoScrollNavigation.labelSpacing       = 35;
+            autoScrollNavigation.pauseInterval      = 1.7;
+            autoScrollNavigation.scrollSpeed        = 27.0;
+            autoScrollNavigation.fadeLength         = 12.0;
+            autoScrollNavigation.font               = [UIFont boldSystemFontOfSize:17.1];
+            autoScrollNavigation.textColor          = [UIColor blackColor];
+            [autoScrollNavigation observeApplicationNotifications];
+            // Navigation Barに設定
+            self.navigationItem.titleView           = autoScrollNavigation;
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             
             
@@ -571,6 +683,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         
     }
+    [_songList reloadData];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -656,34 +769,59 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [self nextandback];
     }
 }
-
+-(void)routeChangeNotification:(NSNotification*)note
+{
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs])
+    {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones])
+        {
+            // 有線接続されている
+        }
+        else if ([[desc portType] isEqualToString:AVAudioSessionPortBluetoothA2DP])
+        {
+            // A2DPでBluetooth接続されている
+        }
+    }
+}
 - (void)didChangeAudioSessionRoute:(NSNotification *)notification
 {
-    
-    
-    
-    
-    // ヘッドホンが刺さっていたか取得
-    BOOL (^isJointHeadphone)(NSArray *) = ^(NSArray *outputs){
-        for (_desc in outputs) {
-            if ([_desc.portType isEqual:AVAudioSessionPortHeadphones]) {
-                return YES;
-            }
-        }
-        return NO;
-    };
-    
-    // 直前の状態を取得
-    AVAudioSessionRouteDescription *prevDesc = notification.userInfo[AVAudioSessionRouteChangePreviousRouteKey];
-    
-    if (isJointHeadphone([[[AVAudioSession sharedInstance] currentRoute] outputs])) {
-        if (!isJointHeadphone(prevDesc.outputs)) {
-            NSLog(@"ヘッドフォンが刺さった");
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs])
+    {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones])
+        {
+            NSLog(@"Headphones");
             [self ipodLabelDefault];
+            _micimage.userInteractionEnabled=YES;
+            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
         }
-    } else {
-        if(isJointHeadphone(prevDesc.outputs)) {
-            NSLog(@"ヘッドフォンが抜かれた");
+        else if ([[desc portType] isEqualToString:AVAudioSessionPortBluetoothHFP]||[[desc portType] isEqualToString:AVAudioSessionPortBluetoothA2DP])
+        {
+            NSLog(@"bluetoothHFP or bluetoothA2DP");
+
+            [self ipodLabelDefault];
+            _bluetoothConnect=YES;
+            [avPlayer pause];
+            _seekPlaying=NO;
+            [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+            
+            [_mypod1 auClose];
+            [_mypod2 auClose];
+            [_mypod3 auClose];
+            
+            _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+            _fbVolLabel.textColor=[UIColor lightGrayColor];
+            _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
+            _delaytimeLabel.textColor=[UIColor lightGrayColor];
+            
+            [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
+            
+            _miccount=NO;
+            [self bluetoothwindow];
+            //[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionAllowBluetooth error:nil];
+        }else{
+            NSLog(@"なにもない");
             [self ipodLabelRed];
             
             [avPlayer pause];
@@ -700,9 +838,57 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             _delaytimeLabel.textColor=[UIColor lightGrayColor];
             
             [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
+
+            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+            
             _miccount=NO;
         }
     }
+//    // ヘッドホンが刺さっていたか取得
+//    BOOL (^isJointHeadphone)(NSArray *) = ^(NSArray *outputs){
+//        for (_desc in outputs) {
+//            if ([_desc.portType isEqual:AVAudioSessionPortHeadphones]||[_desc.portType isEqual:AVAudioSessionPortBluetoothHFP]||[_desc.portType isEqual:AVAudioSessionPortBluetoothA2DP]) {
+//                return YES;
+//            }
+//        }
+//        return NO;
+//    };
+//    
+//    // 直前の状態を取得
+//    AVAudioSessionRouteDescription *prevDesc = notification.userInfo[AVAudioSessionRouteChangePreviousRouteKey];
+//    
+//    if (isJointHeadphone([[[AVAudioSession sharedInstance] currentRoute] outputs])) {
+//        if (!isJointHeadphone(prevDesc.outputs)) {
+//            NSLog(@"ヘッドフォンが刺さった");
+//            [self ipodLabelDefault];
+//            _micimage.userInteractionEnabled=YES;
+//            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
+//        }
+//    } else {
+//        if(isJointHeadphone(prevDesc.outputs)) {
+//            NSLog(@"ヘッドフォンが抜かれた");
+//            [self ipodLabelRed];
+//            
+//            [avPlayer pause];
+//            _seekPlaying=NO;
+//            [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+//            
+//            [_mypod1 auClose];
+//            [_mypod2 auClose];
+//            [_mypod3 auClose];
+//            
+//            _feedvol.minimumTrackTintColor=[UIColor lightGrayColor];
+//            _fbVolLabel.textColor=[UIColor lightGrayColor];
+//            _delaytime.minimumTrackTintColor=[UIColor lightGrayColor];
+//            _delaytimeLabel.textColor=[UIColor lightGrayColor];
+//            
+//            [_micimage setImage : [ UIImage imageNamed : @"micoffbutton.png" ] forState : UIControlStateNormal];
+//            _micimage.userInteractionEnabled=NO;
+//            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+//            
+//            _miccount=NO;
+//        }
+//    }
 }
 
 -(void)telephoneObserver:(NSNotification *)notification{
@@ -832,7 +1018,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];
     }
-    cell.textLabel.text = self.nameData[indexPath.row];
+    NSString *str = [NSString stringWithFormat:@"%ld  %@",(long)indexPath.row+1,self.nameData[indexPath.row]];
+    NSString *strrow=[NSString stringWithFormat:@"%ld",(long)indexPath.row+1];
+    NSMutableAttributedString *attrStr;
+    attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+    [attrStr addAttribute:NSForegroundColorAttributeName
+                    value:[UIColor lightGrayColor]
+                    range:NSMakeRange(0, strrow.length)];
+    
+    [cell.textLabel setAttributedText:attrStr];
+    //cell.textLabel.text =[NSString stringWithFormat:@"%ld. %@",(long)indexPath.row+1,self.nameData[indexPath.row]];
+    //self.nameData[indexPath.row];
     
     return cell;
 }
@@ -977,18 +1173,27 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [self playwithRate];
             NSLog(@"プレイ");
             _seekPlaying=YES;
+            
             _lastplayfloat=_laststopfloat;
             _lastplaytime= _laststoptime;
 
             [self lastplaydisable];
             [self.view sendSubviewToBack:_lastplaytopslider];
             [self setlastplaytopslider];
+            
+            if (_repeat3destop) {
+                [self nextsong];
+            }
         }else{
         if ([avPlayer rate]!=0) {  //曲が再生中なら停止
             [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
             [avPlayer pause];
             NSLog(@"ポーズ");
             _seekPlaying=NO;
+            
+            _lastlaststopfloat=_lastplayfloat;
+            _lastlaststoptime=_lastplaytime;
+            
             _laststopfloat=CMTimeGetSeconds(avPlayer.currentTime);
             _laststoptime= CMTimeMakeWithSeconds(_laststopfloat, NSEC_PER_SEC);
             if (_laststopfloat-_lastplayfloat>0) {
@@ -1002,11 +1207,18 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [self playwithRate];
             NSLog(@"プレイ");
             _seekPlaying=YES;
+            
+            _lastlastplayfloat=_lastplayfloat;
+            _lastlastplaytime=_lastplaytime;
+            
             _lastplayfloat=CMTimeGetSeconds(avPlayer.currentTime);
             _lastplaytime= CMTimeMakeWithSeconds(_lastplayfloat, NSEC_PER_SEC);
             [self lastplaydisable];
             [self resetlastplaystopslider];
             [self setlastplaytopslider];
+            if (_repeat3destop) {
+                [self nextsong];
+            }
         }
         }
     }
@@ -1017,20 +1229,24 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (IBAction)ipodSliderChanged:(UISlider*)sender {   //曲のボリューム変更スライダー
-    _ipodVol = sender.value;
-    avPlayer.volume=_ipodVol;
+    
+    
     NSLog(@"%f",sender.value);
     if (_headphoneConnect) {
+        _ipodVol = sender.value;
         _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL];
         
         NSUserDefaults *ud1=[NSUserDefaults standardUserDefaults];
         [ud1 setFloat:_ipodVol forKey:@"ipodvol"];
     }else{
-        _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+        _ipodvol.maximumValue=1;
+        _ipodVol = sender.value*10;
+        _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/100];
         
         NSUserDefaults *ud6=[NSUserDefaults standardUserDefaults];
         [ud6 setFloat:_ipodVol forKey:@"speakervol"];
     }
+    avPlayer.volume=_ipodVol;
     _ipodVolLabel.text=_ipodVoltext;
 }
 
@@ -1122,6 +1338,25 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     MPMediaItem *item = [_mediaItemCollection2.items objectAtIndex:_songCount];
     _titlelabel.text =[item valueForProperty:MPMediaItemPropertyTitle];
     self.title = [item valueForProperty:MPMediaItemPropertyTitle];
+    /**
+     ナビゲーションバー部分のAutoScrollLabel
+     */
+    // CBAutoScrollLabel生成
+    CBAutoScrollLabel *autoScrollNavigation = [[CBAutoScrollLabel alloc] initWithFrame:CGRectMake(0.0f,
+                                                                                                  0.0f,
+                                                                                                  self.navigationController.navigationBar.frame.size.width,
+                                                                                                  self.navigationController.navigationBar.frame.size.height)];
+    autoScrollNavigation.text               = [item valueForProperty:MPMediaItemPropertyTitle];
+    autoScrollNavigation.textAlignment      = NSTextAlignmentCenter;
+    autoScrollNavigation.labelSpacing       = 35;
+    autoScrollNavigation.pauseInterval      = 4;
+    autoScrollNavigation.scrollSpeed        = 13.0;
+    autoScrollNavigation.fadeLength         = 12.0;
+    autoScrollNavigation.font               = [UIFont boldSystemFontOfSize:17.1];
+    autoScrollNavigation.textColor          = [UIColor blackColor];
+    [autoScrollNavigation observeApplicationNotifications];
+    // Navigation Barに設定
+    self.navigationItem.titleView           = autoScrollNavigation;
     _albumlabel.text =[item valueForProperty:MPMediaItemPropertyAlbumTitle];
     
     NSString *playbackstr=[item valueForProperty:MPMediaItemPropertyPlaybackDuration];
@@ -1134,6 +1369,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                 MPMediaItemPropertyPlaybackDuration:[item valueForProperty:MPMediaItemPropertyPlaybackDuration]
                 };
     //[[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:_songinfo];
+    _repeat3destop=NO;
 }
 
 -(void)startTimer{
@@ -1164,6 +1400,24 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             [_lastplay setImage : [ UIImage imageNamed : @"lastplayplay.png" ] forState : UIControlStateNormal];
             _lastplay.alpha=1;
         }
+    }
+    if (_repeatCount==3 && _getSecond>=_playback-0.1) {
+        [_playImage setImage : [ UIImage imageNamed : @"playClear.png" ] forState : UIControlStateNormal];
+        [avPlayer pause];
+        //NSLog(@"ポーズ");
+        _seekPlaying=NO;
+        
+        _lastlaststopfloat=_lastplayfloat;
+        _lastlaststoptime=_lastplaytime;
+        
+        _laststopfloat=CMTimeGetSeconds(avPlayer.currentTime);
+        _laststoptime= CMTimeMakeWithSeconds(_laststopfloat, NSEC_PER_SEC);
+        if (_laststopfloat-_lastplayfloat>0) {
+            [self lastplayenable];
+        }else{
+            [self resetlastplayslider];
+        }
+        _repeat3destop=YES;
     }
 }
 
@@ -1212,6 +1466,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)feedUp:(UISlider *)sender {
     _nextikuFlag=YES;
     if (_seekPlaying&&_lastplaying==NO) {
+        [_autoseek setValue:sender.value animated:YES];
+
         [self playwithRate];
     }else{
         [avPlayer seekToTime:_tm];
@@ -1220,12 +1476,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_playback-sender.value<0.2) {
         NSLog(@"離したaaaaaaaa");
-        if (_seekPlaying) {
+        if (_seekPlaying==YES && _repeatCount!=3) {
             [self avPlayDidFinish];
         }
     }
-    //[_autoseek setValue:sender.value animated:YES];
-  
+    //    
     
     [self startTimer];
     NSLog(@"離した%f",CMTimeGetSeconds(avPlayer.currentTime));
@@ -1238,6 +1493,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         [self resetlastplaystopslider];
         [self setlastplaytopslider];
     }
+    _repeat3destop=NO;
 }
 
 - (IBAction)feedDown:(UISlider *)sender {//シークバー操作中
@@ -1267,12 +1523,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_repeatCount==2) {//1
         _repeatCount=1;
         [_repeatImage setImage : [ UIImage imageNamed : @"repeat11.png" ] forState : UIControlStateNormal];
-    }else if (_repeatCount==1){//all
+    }else if (_repeatCount==3){//all
         _repeatCount=0;
         [_repeatImage setImage : [ UIImage imageNamed : @"repeat0.png" ] forState : UIControlStateNormal];
-    }else{//non
+    }else if (_repeatCount==0){//no
         _repeatCount=2;
         [_repeatImage setImage : [ UIImage imageNamed : @"repeata.png" ] forState : UIControlStateNormal];
+    }else{
+        _repeatCount=3;
+        [_repeatImage setImage : [ UIImage imageNamed : @"repeat3.png" ] forState : UIControlStateNormal];
     }
     [self saveCount];
 }
@@ -1289,12 +1548,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 -(void)miconoff{
-    if (!_miccount) {
-        [self micon];
-    }else{
-        [self micoff];
+    if (_headphoneConnect && !_bluetoothConnect) {
+        if (!_miccount) {
+            [self micon];
+        }else{
+            [self micoff];
+        }
+        _mictuketetaFlag=_miccount;
+    
     }
-    _mictuketetaFlag=_miccount;
 }
 
 -(void)micon{
@@ -1332,6 +1594,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     _miccount=YES;
 }
 -(void)micoff{
+    
     [_mypod1 auClose];
     [_mypod2 auClose];
     [_mypod3 auClose];
@@ -1359,6 +1622,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     avPlayer.volume=_ipodVol;
     
     _headphoneConnect=YES;
+    _bluetoothConnect=YES;
 }
 
 -(void)ipodLabelRed{//イヤホン刺さってない時
@@ -1368,13 +1632,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     _musicIcon.textColor=_ipodVolLabel.textColor=[UIColor redColor];
     _ipodvol.minimumTrackTintColor=[UIColor colorWithRed:1.0 green:0 blue:0 alpha:1.0];
     _ipodvol.maximumValue=1;
-    _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/10];
+    _ipodVoltext = [NSString stringWithFormat:@"%.0f", _ipodVol*IPOD_VOL/100];
     
-    _ipodvol.value=_ipodVol;
+    _ipodvol.value=_ipodVol/10;
     _ipodVolLabel.text=_ipodVoltext;
     avPlayer.volume=_ipodVol;
     
     _headphoneConnect=NO;
+    _bluetoothConnect=NO;
 }
 
 - (IBAction)playerrateButton:(UIButton *)sender {
@@ -1425,6 +1690,23 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)lastplayButton:(UIButton *)sender {
     [_timer invalidate];
     [_lastplay setImage : [ UIImage imageNamed : @"lastplaytop.png" ] forState : UIControlStateNormal];
+    
+    if (_doubleTapped==NO) {
+        _doubleTapped=YES;
+        [self performSelector:@selector(thisissingletap) withObject:nil afterDelay:0.25];
+        
+    }else{
+        _doubleTapped=NO;
+        NSLog(@"ダブル");
+        _lastplaytime=_lastlastplaytime;
+        _laststoptime=_lastlaststoptime;
+        _lastplayfloat=_lastlastplayfloat;
+        _laststopfloat=_lastlaststopfloat;
+        
+        [self setlastplayslider];
+    }
+    
+
     [avPlayer seekToTime:_lastplaytime];
     [self.view bringSubviewToFront:_lastplaytopslider];
     [self playwithRate];
@@ -1434,6 +1716,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     //[self performSelector:@selector(lastplaystop) withObject:nil afterDelay:(_laststopfloat-_lastplayfloat)/_rateValue];
     
     [self startTimer];
+}
+
+-(void)thisissingletap{
+    _doubleTapped=NO;
+    NSLog(@"タップ追加終了");
 }
 
 -(void)lastplaystop{
@@ -1495,6 +1782,52 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     [_lastplaystopslider setThumbImage:_imageForThumb forState:UIControlStateNormal];
     _lastplaystopslider.value=_laststopfloat+0.05;
     [self.view sendSubviewToBack:_lastplaystopslider];
+}
+
+-(void)alertwindow{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"⚠\nマイクを有効にするには\n有線イヤホンを接続して下さい" message:nil preferredStyle:UIAlertControllerStyleAlert];
+
+    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }]];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (IBAction)miconofftouched:(id)sender {
+    if (_headphoneConnect==NO ||_bluetoothConnect) {
+        [self alertwindow];
+    }
+}
+
+- (IBAction)feedvolslidertouched:(id)sender {
+    if (_headphoneConnect==NO  ||_bluetoothConnect) {
+        [self alertwindow];
+    }
+}
+
+- (IBAction)delayslidertouched:(id)sender {
+    if (_headphoneConnect==NO  ||_bluetoothConnect) {
+        [self alertwindow];
+    }
+}
+-(void)bluetoothwindow{
+    BOOL neverbluealert = [[NSUserDefaults standardUserDefaults] boolForKey:@"neverbluealert"];
+    if (neverbluealert !=YES) {
+        
+
+    
+    UIAlertController *bluealert = [UIAlertController alertControllerWithTitle:@"⚠\nBluetoothでは音質が低下します" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [bluealert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+    }]];
+    [bluealert addAction:[UIAlertAction actionWithTitle:@"今後 表示しない" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"neverbluealert"];
+    }]];
+    
+    [self presentViewController:bluealert animated:YES completion:nil];
+    
+    }
 }
 
 @end

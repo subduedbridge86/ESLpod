@@ -75,6 +75,7 @@
                                 <rect key="frame" x="41" y="579" width="298" height="31"/>
                                 <connections>
                                     <action selector="feedSliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Pc1-6G-97R"/>
+                                    <action selector="feedvolslidertouched:" destination="BYZ-38-t0r" eventType="touchDown" id="WrK-Th-xVL"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VLw-jI-0Zl">
@@ -179,6 +180,7 @@
                                 <state key="normal" image="miconbutton.png"/>
                                 <connections>
                                     <action selector="miconoff:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wbm-Ny-xVu"/>
+                                    <action selector="miconofftouched:" destination="BYZ-38-t0r" eventType="touchDown" id="uXM-XK-9KL"/>
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="hAe-EA-SyC">
@@ -186,6 +188,7 @@
                                 <color key="tintColor" red="0.0" green="0.56947511434555054" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="delaySliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="KBQ-CI-Sqm"/>
+                                    <action selector="delayslidertouched:" destination="BYZ-38-t0r" eventType="touchDown" id="opO-vF-ppu"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🕑" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2p-J8-YYa">
